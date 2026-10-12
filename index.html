@@ -1357,9 +1357,34 @@ async function snapshot(scale=2){
   }finally{host.remove()}
 }
 function download(href,name){const a=document.createElement('a');a.href=href;a.download=name;document.body.appendChild(a);a.click();a.remove()}
+/* Teléfonos: el navegador suele bloquear la descarga directa de imágenes grandes, así que se muestra la imagen
+   con botones Compartir / Descargar y la opción de mantener presionada para guardarla. */
+const esMovil=()=>/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||(navigator.maxTouchPoints>1&&/Macintosh/.test(navigator.userAgent));
+function mostrarImagen(blob,name){
+  const url=URL.createObjectURL(blob),file=new File([blob],name,{type:'image/png'});
+  const puedeCompartir=!!(navigator.canShare&&navigator.canShare({files:[file]}));
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(15,23,42,.9);display:flex;flex-direction:column;align-items:center;padding:14px;gap:10px;overflow:auto';
+  ov.innerHTML=`<img src="${url}" alt="${name}" style="max-width:100%;max-height:66vh;object-fit:contain;border-radius:8px;background:#fff">
+    <div style="color:#fff;font-size:13px;text-align:center">Mantén presionada la imagen y elige <b>Guardar imagen</b>, o usa los botones.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">${puedeCompartir?'<button class="btn pri" data-a="sh">Compartir</button>':''}<button class="btn" data-a="dl">Descargar</button><button class="btn" data-a="x">Cerrar</button></div>`;
+  const cerrar=()=>{ov.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+  ov.onclick=async e=>{
+    const a=e.target.dataset&&e.target.dataset.a;if(!a)return;
+    if(a==='x')cerrar();
+    else if(a==='dl')download(url,name);
+    else if(a==='sh'){try{await navigator.share({files:[file],title:name})}catch(err){if(err.name!=='AbortError')toast('No se pudo compartir; mantén presionada la imagen para guardarla')}}
+  };
+  document.body.appendChild(ov);
+}
 $('dlPng').onclick=async()=>{
-  try{toast('Generando imagen…');const cv=await snapshot(2);download(cv.toDataURL('image/png'),fileBase()+'.png');toast('Imagen descargada')}
-  catch(e){console.error(e);toast('Error al generar la imagen')}
+  try{
+    toast('Generando imagen…');const cv=await snapshot(2),name=fileBase()+'.png';
+    const blob=await new Promise(r=>cv.toBlob(r,'image/png'));
+    if(!blob)throw new Error('No se pudo crear la imagen');
+    if(esMovil()){mostrarImagen(blob,name);toast('Imagen lista')}
+    else{const u=URL.createObjectURL(blob);download(u,name);setTimeout(()=>URL.revokeObjectURL(u),4000);toast('Imagen descargada')}
+  }catch(e){console.error(e);toast('Error al generar la imagen')}
 };
 $('dlPdf').onclick=async()=>{
   try{
