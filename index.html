@@ -201,6 +201,11 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
 
 /* ===== Versión 2: panel con pestañas y vista previa ajustable ===== */
 .app{grid-template-columns:minmax(440px,560px) 1fr}
+.app.wide{grid-template-columns:minmax(700px,1fr) minmax(320px,440px)}
+.app.wide .scroll-x{overflow-x:visible}
+.app.wide .teams{width:100%}
+.app.wide .teams input.nm{min-width:140px;width:100%}
+.app.wide .teams input[type=number]{width:52px}
 .side{padding:0;display:flex;flex-direction:column;overflow:hidden;height:100vh}
 .side-head{padding:14px 18px 6px;flex:none}
 .side-head h1{font-size:17px}
@@ -219,7 +224,7 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
 .stage{margin:0 auto}
 .teams input[type=number]{width:38px;padding:6px 0}.teams input.nm{min-width:96px}.teams .calc{min-width:28px}
 .pvsize{border:1px solid var(--line);border-radius:8px;padding:7px 8px;background:#fff;font-weight:700;font-size:12px}
-@media(max-width:900px){.app{grid-template-columns:1fr}.side{height:auto;overflow:visible}.panes{overflow:visible}.main{position:static;height:auto}}
+@media(max-width:900px){.app,.app.wide{grid-template-columns:1fr}.side{height:auto;overflow:visible}.panes{overflow:visible}.main{position:static;height:auto}}
 </style>
 <style>.cta-demo{background:#7c2d12;color:#fff;text-align:center;font:600 13px/1.4 Arial,Helvetica,sans-serif;padding:9px 14px}.cta-demo a{color:#fed7aa;font-weight:800;text-decoration:underline;white-space:nowrap}.cta-demo span{opacity:.85;font-weight:500}</style>
 <meta name="description" content="Demostración del Generador de Tablas de Fútbol: tabla general, goleo, rol de juegos y liguilla listos para compartir.">
@@ -1546,6 +1551,8 @@ document.fonts&&document.fonts.ready.then(renderPreview);
     Array.from(nav.children).forEach((b,j)=>b.classList.toggle('on',j===i));
     panes.forEach((p,j)=>p.classList.toggle('on',j===i));
     wrap.scrollTop=0;
+    document.querySelector('.app').classList.toggle('wide',GROUPS[i].label==='Equipos');
+    if(typeof fit==='function')setTimeout(fit,0);
     try{localStorage.setItem('tg_pane',String(i))}catch(e){}
     if(sync&&GROUPS[i].view&&S.view!==GROUPS[i].view){S.view=GROUPS[i].view;save();renderTabs();renderPreview()}
   }
