@@ -1548,10 +1548,11 @@ document.fonts&&document.fonts.ready.then(renderPreview);
     panes.forEach((p,j)=>p.classList.toggle('on',j===i));
     wrap.scrollTop=0;
     document.querySelector('.app').classList.toggle('wide',GROUPS[i].label==='Equipos');
-    if(typeof fit==='function')setTimeout(fit,0);
+    if(typeof fit==='function'){setTimeout(fit,0);setTimeout(fit,120)}
     try{localStorage.setItem('tg_pane',String(i))}catch(e){}
     if(sync&&GROUPS[i].view&&S.view!==GROUPS[i].view){S.view=GROUPS[i].view;save();renderTabs();renderPreview()}
   }
+  if(window.ResizeObserver)new ResizeObserver(()=>{if(typeof fit==='function')fit()}).observe(document.querySelector('.main'));
   let start=0;try{start=+localStorage.getItem('tg_pane')||0}catch(e){}
   show(Math.min(start,GROUPS.length-1),false);
   // tamaño de la vista previa
