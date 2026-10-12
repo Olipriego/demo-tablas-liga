@@ -98,7 +98,7 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
 .stage-box .poster{position:absolute;left:0;top:0;transform-origin:top left}
 .toast{position:fixed;bottom:18px;right:18px;background:var(--ink);color:#fff;padding:10px 14px;border-radius:10px;font-weight:700;opacity:0;transition:.25s;pointer-events:none;z-index:50}
 .toast.on{opacity:1}
-@media(max-width:900px){.app{grid-template-columns:1fr}.side{position:static;max-height:none;border-right:0}}
+@media(max-width:900px){.app{grid-template-columns:minmax(0,1fr)}.side{position:static;max-height:none;border-right:0;min-width:0;max-width:100vw;overflow-x:hidden}.side *{min-width:0}.row.nowrap{flex-wrap:wrap}.stage-wrap,.main{min-width:0;max-width:100vw}}
 
 /* ============ PÓSTER (se exporta tal cual) ============ */
 .poster{--c1:#f6b07c;--c2:#e8935a;--ink:#4a2614;--ink2:#8a5a40;--muted:#a8806a;--line:#f3dccb;--soft:#fde4d1;--cream:#fff7f0;--cream2:#fde8d8;
