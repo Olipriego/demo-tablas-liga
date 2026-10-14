@@ -406,11 +406,11 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
       <label class="f" style="min-width:90px">Pts. victoria<input type="number" id="ptsW" min="0"></label>
       <label class="f" style="min-width:90px">Pts. empate<input type="number" id="ptsD" min="0"></label>
     </div>
+    <label class="f" style="margin-top:12px">Estilo de las imágenes de esta categoría<select id="catStyle"></select></label>
     <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:700;font-size:12px;cursor:pointer">
       <input type="checkbox" id="catOwn"> Usar colores propios en esta categoría <span style="color:var(--muted);font-weight:500">(si no, usa los de la liga)</span>
     </label>
     <div class="row" id="catColors" style="gap:10px;margin-top:8px">
-      <label class="cp" style="align-items:flex-start;min-width:150px">Estilo<select id="catStyle" style="font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:8px"></select></label>
       <label class="cp">Principal<input type="color" id="catColor"></label>
       <label class="cp">Degradado<input type="color" id="catColor2"></label>
       <label class="cp">Fondo<input type="color" id="catBg"></label>
@@ -919,6 +919,10 @@ const rgba=(h,a)=>{const [r,g,b]=hexRGB(h);return `rgba(${r},${g},${b},${a})`};
 const lum=h=>{const [r,g,b]=hexRGB(h).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
 const onC=h=>lum(h)>.5?shade(h,-.86):'#ffffff';
 const estiloDe=th=>(ESTILOS.some(e=>e[0]===(th&&th.estilo))?th.estilo:'clasico');
+/* El estilo de la categoría es independiente de los colores: si no elige uno, usa el de la liga */
+const estiloCat=(c,l)=>ESTILOS.some(e=>e[0]===(c&&c.estilo))?c.estilo:estiloDe(l);
+/* Los colores personalizados (degradado, fondo, texto) solo valen para el tipo de estilo (claro/oscuro) con el que se eligieron */
+const coloresOk=(th,est)=>!!th.dk===ESTILOS_OSCUROS.includes(est);
 /* Variables CSS de cada estilo a partir de los 4 colores (principal c2, degradado c1, fondo B, texto I).
    tgt: 'tab' (tabla, goleo, liguilla) o 'rol' (rol de juegos con encabezado arriba). */
 function skinVars(est,tgt,c1,c2,B,I){
@@ -1042,13 +1046,13 @@ function rolHtmlQ(l,c,style,c2,catT,est){
 }
 
 function posterHtml(){
-  const h=posterHtml0(),th=C().own?C():L(),est=estiloDe(th);
+  const h=posterHtml0(),est=estiloCat(C(),L());
   return est==='clasico'||S.view==='rol'?h:h.replace('class="poster h"','class="poster h sk sk-'+est+'"');
 }
 function posterHtml0(){
   const l=L(),c=C(),list=sorted(c),k=list.length;
-  const th=c.own?c:l,c2=th.color||l.color||ORANGE,est=estiloDe(th),A=autoColors(c2,est);
-  const c1=th.color2||A.c1,cream=th.bg||A.cream,ink=th.ink||A.ink;
+  const th=c.own?c:l,c2=th.color||l.color||ORANGE,est=estiloCat(c,l),A=autoColors(c2,est),ok=coloresOk(th,est);
+  const c1=(ok&&th.color2)||A.c1,cream=(ok&&th.bg)||A.cream,ink=(ok&&th.ink)||A.ink;
   const style=`--c2:${c2};--c1:${c1};--soft:${shade(c2,.82)};--cream:${cream};--cream2:${shade(cream,-.04)};--ink:${ink};--ink2:${shade(ink,.25)};--muted:${shade(ink,.45)};--line:${shade(cream,-.08)};`+(est==='clasico'?'':skinVars(est,S.view==='rol'?'rol':'tab',c1,c2,cream,ink));
   const jor=c.jor?`<span class="pill w">Jornada ${esc(c.jor)}</span>`:'';
   const fec=c.fecha?`<span class="pill g">${esc(c.fecha)}</span>`:'';
@@ -1121,17 +1125,18 @@ function renderLeagueForm(){
   const l=L();
   $('leagueName').value=l.name;const A=autoColors(l.color||ORANGE,estiloDe(l));
   $('leagueStyle').value=estiloDe(l);
-  $('leagueColor').value=l.color||ORANGE;$('leagueColor2').value=l.color2||A.c1;$('leagueBg').value=l.bg||A.cream;$('leagueInk').value=l.ink||A.ink;
+  const okL=coloresOk(l,estiloDe(l));
+  $('leagueColor').value=l.color||ORANGE;$('leagueColor2').value=(okL&&l.color2)||A.c1;$('leagueBg').value=(okL&&l.bg)||A.cream;$('leagueInk').value=(okL&&l.ink)||A.ink;
   const lp=$('leagueLogo');lp.style.backgroundImage=l.logo?`url(${l.logo})`:'';lp.textContent=l.logo?'':'Logo liga';
 }
 function renderCatForm(){
   const c=C();
   $('catName').value=c.name;$('catSub').value=c.sub;$('catJor').value=c.jor;$('catFecha').value=c.fecha;$('catCancha').value=c.cancha||'';
   $('ptsW').value=c.pw;$('ptsD').value=c.pd;
-  const A=autoColors(c.color||L().color||ORANGE,estiloDe(c.own?c:L()));
-  $('catStyle').value=estiloDe(c.own?c:L());
+  const A=autoColors(c.color||L().color||ORANGE,estiloCat(c,L())),okC=coloresOk(c,estiloCat(c,L()));
+  $('catStyle').value=ESTILOS.some(e=>e[0]===c.estilo)?c.estilo:'';
   $('catOwn').checked=!!c.own;$('catColors').style.display=c.own?'flex':'none';
-  $('catColor').value=c.color||L().color||ORANGE;$('catColor2').value=c.color2||A.c1;$('catBg').value=c.bg||A.cream;$('catInk').value=c.ink||A.ink;
+  $('catColor').value=c.color||L().color||ORANGE;$('catColor2').value=(okC&&c.color2)||A.c1;$('catBg').value=(okC&&c.bg)||A.cream;$('catInk').value=(okC&&c.ink)||A.ink;
 }
 function renderRules(){
   const c=C();
@@ -1520,27 +1525,23 @@ $('catTabs').onclick=e=>{const t=e.target.closest('.tab');if(!t)return;S.selC=+t
 $('leagueName').oninput=e=>{L().name=e.target.value;changed()};
 $('leagueName').onchange=renderTabs;
 $('leagueColor').oninput=e=>{L().color=e.target.value;changed()};
-$('leagueColor2').oninput=e=>{L().color2=e.target.value;changed()};
-$('leagueBg').oninput=e=>{L().bg=e.target.value;changed()};
-$('leagueInk').oninput=e=>{L().ink=e.target.value;changed()};
+$('leagueColor2').oninput=e=>{L().color2=e.target.value;L().dk=ESTILOS_OSCUROS.includes(estiloDe(L()));changed()};
+$('leagueBg').oninput=e=>{L().bg=e.target.value;L().dk=ESTILOS_OSCUROS.includes(estiloDe(L()));changed()};
+$('leagueInk').oninput=e=>{L().ink=e.target.value;L().dk=ESTILOS_OSCUROS.includes(estiloDe(L()));changed()};
 $('catOwn').onchange=e=>{const c=C();c.own=e.target.checked;if(c.own&&!c.color)c.color=L().color||ORANGE;save();renderCatForm();renderPreview()};
-[['catColor','color'],['catColor2','color2'],['catBg','bg'],['catInk','ink']].forEach(([id,k])=>{$(id).oninput=e=>{C()[k]=e.target.value;changed()}});
+[['catColor','color'],['catColor2','color2'],['catBg','bg'],['catInk','ink']].forEach(([id,k])=>{$(id).oninput=e=>{const c=C();c[k]=e.target.value;if(k!=='color')c.dk=ESTILOS_OSCUROS.includes(estiloCat(c,L()));changed()}});
 $('catResetColor').onclick=()=>{const c=C();c.color2=c.bg=c.ink='';save();renderCatForm();renderPreview()};
 $('resetColor').onclick=()=>{const l=L();l.color2=l.bg=l.ink='';save();renderLeagueForm();renderPreview()};
 [['catName','name'],['catSub','sub'],['catJor','jor'],['catFecha','fecha'],['catCancha','cancha']].forEach(([id,k])=>{
   $(id).oninput=e=>{C()[k]=e.target.value;changed()};
 });
 $('catName').onchange=renderTabs;
-/* Estilo de diseño: si cambia entre claro y oscuro, se recalculan degradado, fondo y texto */
-['leagueStyle','catStyle'].forEach(id=>{$(id).innerHTML=ESTILOS.map(e=>'<option value="'+e[0]+'">'+e[1]+'</option>').join('')});
-function cambiarEstilo(th,nuevo){
-  const antes=ESTILOS_OSCUROS.includes(estiloDe(th));
-  th.estilo=nuevo;
-  if(antes!==ESTILOS_OSCUROS.includes(nuevo))th.color2=th.bg=th.ink='';
-  save();renderLeagueForm();renderCatForm();renderPreview();
-}
-$('leagueStyle').onchange=e=>cambiarEstilo(L(),e.target.value);
-$('catStyle').onchange=e=>cambiarEstilo(C(),e.target.value);
+/* Estilo de diseño: el de la liga es el general y cada categoría puede elegir otro (independiente de los colores) */
+const optsEstilo=ESTILOS.map(e=>'<option value="'+e[0]+'">'+e[1]+'</option>').join('');
+$('leagueStyle').innerHTML=optsEstilo;
+$('catStyle').innerHTML='<option value="">Igual que la liga</option>'+optsEstilo;
+$('leagueStyle').onchange=e=>{L().estilo=e.target.value;save();renderLeagueForm();renderCatForm();renderPreview()};
+$('catStyle').onchange=e=>{C().estilo=e.target.value;save();renderCatForm();renderPreview()};
 [['ptsW','pw'],['ptsD','pd']].forEach(([id,k])=>{$(id).oninput=e=>{C()[k]=n(e.target.value);refreshCalcs();changed()}});
 
 $('addLeague').onclick=()=>{
