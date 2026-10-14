@@ -152,10 +152,10 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
 .poster.v .t-card{border-radius:28px;padding:20px 20px 12px}
 .poster.v .grid{grid-template-columns:58px 1fr 44px 44px 44px 44px 44px 44px 58px 78px;column-gap:4px}
 .poster.v .head{font-size:14px;padding:4px 10px 12px 8px}
-.poster.v .tr{height:72px;margin-bottom:9px;padding:0 10px 0 8px;font-size:21px;--ls:56px;--gap:14px}
-.poster.v .pos{width:42px;height:42px;font-size:19px}
-.poster.v .nm{font-size:19px}
-.poster.v .pts{width:66px;height:48px;font-size:26px;margin:0 auto}
+.poster.v .tr{height:var(--vrh,72px);margin-bottom:var(--vrg,9px);padding:0 10px 0 8px;font-size:var(--vfs,21px);--ls:calc(var(--vrh,72px) - 16px);--gap:14px}
+.poster.v .pos{width:min(42px,calc(var(--vrh,72px) - 10px));height:min(42px,calc(var(--vrh,72px) - 10px));font-size:var(--vpfs,19px)}
+.poster.v .nm{font-size:var(--vnfs,19px)}
+.poster.v .pts{width:66px;height:min(48px,calc(var(--vrh,72px) - 12px));font-size:var(--vptf,26px);margin:0 auto}
 .poster.v .foot{padding:6px 38px 30px;display:flex;justify-content:space-between;gap:20px;font-size:12px;font-weight:700;color:var(--ink2);line-height:1.7}
 .poster.v .foot .lg{text-align:right;letter-spacing:.14em;text-transform:uppercase;font-weight:800;color:var(--ink)}
 
@@ -174,10 +174,10 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
 .poster.h .grid{grid-template-columns:64px 1fr 46px 46px 46px 46px 46px 46px 64px 84px;column-gap:6px}
 .poster.h .head{font-size:13px;padding:2px 8px 8px 6px}
 .poster.h .rows{flex:1;display:flex;flex-direction:column;gap:var(--rg,7px);min-height:0}
-.poster.h .tr{height:var(--rh,48px);padding:0 8px 0 6px;font-size:var(--fs,20px);--ls:calc(var(--rh,48px) - 12px);--gap:12px}
-.poster.h .pos{width:min(34px,calc(var(--rh,48px) - 14px));height:min(34px,calc(var(--rh,48px) - 14px));font-size:16px}
+.poster.h .tr{height:var(--rh,48px);padding:0 8px 0 6px;font-size:var(--fs,20px);--ls:calc(var(--rh,48px) - var(--pd2,12px));--gap:12px;border-radius:var(--rad,16px)}
+.poster.h .pos{width:min(34px,calc(var(--rh,48px) - var(--pd,14px)));height:min(34px,calc(var(--rh,48px) - var(--pd,14px)));font-size:var(--pfs,16px);border-radius:var(--rad2,10px)}
 .poster.h .nm{font-size:var(--nfs,19px)}
-.poster.h .pts{width:60px;height:calc(var(--rh,48px) - 12px);font-size:calc(var(--fs,20px) + 4px);margin:0 auto}
+.poster.h .pts{width:60px;height:calc(var(--rh,48px) - var(--pd2,12px));font-size:calc(var(--fs,20px) + 4px);margin:0 auto}
 .poster.h .grid.gs{grid-template-columns:64px 1fr 250px 96px}
 .poster.h .tm{text-align:left;text-transform:uppercase;font-weight:700;font-size:calc(var(--nfs,19px) - 2px);color:var(--muted)}
 .poster.h .grid.rl{grid-template-columns:104px 1fr 56px 62px 56px 1fr;column-gap:6px}
@@ -827,9 +827,9 @@ function rolHtml(l,c,style,c2,catT){
   const gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
   const sH=sancAlto(gr,obs),oH=0;
   const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[],np=Math.min(pend.length,4),pH=np?10+52+Math.ceil(np/2)*46:0;
-  const avail=545-sH-oH-pH,rg=k>8?5:8;
-  const rh=Math.max(28,Math.min(70,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
-  const fs=rh<44?14:rh<56?17:20,nfs=rh<44?13:rh<56?16:19;
+  const avail=545-sH-oH-pH,rg=k>14?2:k>8?5:8;
+  const rh=Math.max(18,Math.min(70,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
+  const fs=rh<44?Math.min(14,fsFor(rh)):rh<56?17:20,nfs=rh<44?Math.min(13,nfsFor(rh)):rh<56?16:19,hx=hxVars(rh);
   const bigfs=Math.max(34,Math.min(64,Math.floor(312/(catT.length*0.76))));
   const T=id=>c.teams.find(t=>t.id===id);
   const rows=k?ms.map(m=>{const h=T(m.h),a=T(m.a);return `<div class="tr grid rl">
@@ -840,7 +840,7 @@ function rolHtml(l,c,style,c2,catT){
   const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
   const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name).map(t=>t.name):[];
   const jn=r?fx.sel+1:(c.jor||'');const fecha=(r&&r.fecha)||c.fecha;
-  return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px">
+  return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
     <div class="left">
       ${leagueLogo(l)}
       <div class="sub1">Rol de juegos</div>
@@ -868,16 +868,16 @@ function scorersSorted(c){
 }
 function goleoHtml(l,c,style,c2,catT){
   const list=scorersSorted(c),k=list.length;
-  const avail=545,rg=k>12?4:7;
-  const rh=Math.max(26,Math.min(58,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
-  const fs=rh<40?14:rh<46?17:20,nfs=rh<40?13:rh<46?16:19;
+  const avail=545,rg=k>24?1:k>18?2:k>12?4:7;
+  const rh=Math.max(12,Math.min(58,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
+  const fs=fsFor(rh),nfs=nfsFor(rh),hx=hxVars(rh);
   const bigfs=Math.max(34,Math.min(64,Math.floor(312/(catT.length*0.76))));
   const rows=k?list.map(x=>`<div class="tr grid gs">
       <div class="pos" style="margin:0 auto">${x.pos}</div>
       <div class="nm">${x.team?teamLogo(x.team,c2):''}<span>${esc(x.name)}</span></div>
       <div class="tm">${esc(x.team?x.team.name:'')}</div>
       <div class="pts">${x.g}</div></div>`).join(''):`<div class="empty">Agrega goleadores para ver la tabla</div>`;
-  return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px">
+  return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
     <div class="left">
       ${leagueLogo(l)}
       <div class="sub1">Goleo individual</div>
@@ -1045,6 +1045,10 @@ function rolHtmlQ(l,c,style,c2,catT,est){
     <div class="ban" style="font-size:${banfs}px"><i>★</i> ${esc(bantxt)} <i>★</i></div><div class="stripe b"></div></div>`;
 }
 
+/* Ajuste automatico: con muchos equipos la fila se encoge y tipografia/adornos la siguen (sin tope fijo de equipos) */
+function hxVars(rh){const sm=rh<30;return `--pd:${sm?6:14}px;--pd2:${sm?4:12}px;--pfs:${rh<20?9:sm?12:16}px;--rad:${sm?6:16}px;--rad2:${sm?4:10}px;`}
+function fsFor(rh){return rh<20?Math.max(8,rh-6):rh<26?12:rh<40?14:rh<46?17:20}
+function nfsFor(rh){return rh<20?Math.max(8,rh-7):rh<26?11:rh<40?13:rh<46?16:19}
 function posterHtml(){
   const h=posterHtml0(),est=estiloCat(C(),L());
   return est==='clasico'||S.view==='rol'?h:h.replace('class="poster h"','class="poster h sk sk-'+est+'"');
@@ -1060,7 +1064,10 @@ function posterHtml0(){
 
   if(S.fmt==='v'){
     const big=Math.max(40,Math.min(68,Math.floor(560/ (('TABLA GENERAL').length*0.74))));
-    return `<div class="poster v" style="${style}--bigfs:${big}px">
+    // hasta 12 equipos tamano normal; con mas, las filas se reducen para que el cartel no crezca sin limite
+    const unit=k>12?Math.max(24,Math.floor(12*81/k)):81, vrg=Math.max(2,Math.round(unit*.11)), vrh=unit-vrg, vsc=vrh/72;
+    const vx=k>12?`--vrh:${vrh}px;--vrg:${vrg}px;--vfs:${Math.max(10,Math.round(21*vsc))}px;--vnfs:${Math.max(10,Math.round(19*vsc))}px;--vpfs:${Math.max(10,Math.round(19*vsc))}px;--vptf:${Math.max(11,Math.round(26*vsc))}px;`:'';
+    return `<div class="poster v" style="${style}--bigfs:${big}px;${vx}">
       <div class="top">
         ${leagueLogo(l)}
         <div>
@@ -1077,11 +1084,11 @@ function posterHtml0(){
   if(S.view==='goleo')return goleoHtml(l,c,style,c2,catT);
   if(S.view==='rol')return est==='clasico'?rolHtml(l,c,style,c2,catT):rolHtmlQ(l,c,style,c2,catT,est);
   if(S.view==='lig')return ligHtml(l,c,style,c2,catT);
-  const avail=545, rg=k>12?4:7;
-  const rh=Math.max(26,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
-  const fs=rh<40?14:rh<46?17:20, nfs=rh<40?13:rh<46?16:19;
+  const avail=545, rg=k>24?1:k>18?2:k>12?4:7;
+  const rh=Math.max(12,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
+  const fs=fsFor(rh), nfs=nfsFor(rh), hx=hxVars(rh);
   const bigfs=Math.max(34,Math.min(64,Math.floor(312/(catT.length*0.76))));
-  return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px">
+  return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
     <div class="left">
       ${leagueLogo(l)}
       <div class="sub1">Tabla General</div>
