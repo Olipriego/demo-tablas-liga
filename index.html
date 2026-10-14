@@ -212,6 +212,112 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
 .poster.h .ch small{font-size:12px;letter-spacing:.14em;color:var(--c2)}
 .poster.h .ch span{font-size:16px;line-height:1.1}
 .poster.h .foot{text-align:center;font-size:12px;font-weight:700;color:var(--ink2);padding-top:9px}
+/* ===== Estilos de diseño (selector «Estilo»): usan los 4 colores de la liga/categoría ===== */
+.poster.sk{background:var(--bg)}
+.poster.sk.h .left{background:var(--left);color:var(--leftink);border-right:var(--leftbd)}
+.poster.sk.h h2.big,.poster.sk.h .sub2,.poster.sk.h .lgn{color:var(--leftink)}
+.poster.sk.h .sub1{color:var(--leftacc)}
+.poster.sk.h .lg-wrap{border-color:var(--ring);box-shadow:var(--ringsh)}
+.poster.sk .pill.w{background:var(--ja);color:var(--jainks)}
+.poster.sk .pill.g{background:var(--jb);color:var(--jbink);border:var(--pgbd)}
+.poster.sk .t-card{background:var(--crd);border:var(--crdbd);box-shadow:var(--crdsh)}
+.poster.sk .head{color:var(--hdink)}
+.poster.sk .tr{background:var(--card);border:var(--cbd);border-radius:var(--rad);color:var(--cink);box-shadow:var(--csh)}
+.poster.sk .pos{background:var(--posbg);color:var(--posink)}
+.poster.sk .pts{background:var(--ptsbg);color:var(--ptsink);box-shadow:var(--ptssh);border-radius:var(--ptsrad)}
+.poster.sk .up{color:var(--upc)}.poster.sk .dn{color:var(--dnc)}
+.poster.sk .tm{color:var(--muted)}
+.poster.sk .foot,.poster.sk .legend{color:var(--ft,var(--ink2))}
+.poster.sk .empty{color:var(--ink2)}
+.poster.sk .mc{background:var(--card);border-color:var(--line1);color:var(--cink);box-shadow:var(--csh)}
+.poster.sk .mc .inf,.poster.sk .bc h4{color:var(--ink2)}
+.poster.sk .mr .sd{background:var(--chip);color:var(--chipink)}
+.poster.sk .mr .sc{background:var(--chip);color:var(--cink)}
+.poster.sk .mr.w .sc{background:var(--ptsbg);color:var(--ptsink)}
+.poster.sk .mr+.mr{border-color:var(--line1)}
+.poster.sk .bk{background:transparent;border:0;border-radius:0;margin:0}
+.poster.sk-retro,.poster.sk-retro *{font-family:Georgia,'Times New Roman',serif}
+.poster.sk-tv.h .rows .tr{transform:skewX(-8deg);margin:0 8px;border-left:6px solid var(--acc)}
+.poster.sk-tv.h .rows .tr>*{transform:skewX(8deg)}
+.poster.sk-tv.h h2.big{font-style:italic}
+.poster.sk-oro.h .rows .tr:nth-child(1){border-color:#d4af37;background:linear-gradient(90deg,#3b2f0d,#17150e)}
+.poster.sk-oro.h .rows .tr:nth-child(2){border-color:#b8bcc2;background:linear-gradient(90deg,#2d2f33,#17150e)}
+.poster.sk-oro.h .rows .tr:nth-child(3){border-color:#c77d3a;background:linear-gradient(90deg,#3a2410,#17150e)}
+.poster.sk-oro.h h2.big{color:var(--gl);text-shadow:0 2px 14px rgba(0,0,0,.4)}
+.poster.sk-neon.h h2.big{text-shadow:0 0 26px var(--acc)}
+.poster.sk-retro.h .left:after{content:'';position:absolute;left:8px;right:8px;top:8px;bottom:8px;border:1.5px solid var(--ring);pointer-events:none}
+.poster.sk-cancha.h .t-card{border-radius:8px}
+.poster.sk .deco{position:absolute;inset:0;pointer-events:none;background:var(--deco)}
+
+/* ===== Rol de juegos con encabezado arriba (estilos nuevos) ===== */
+.poster.pq{width:1280px;display:flex;flex-direction:column;padding:0 38px 34px;background:var(--bg);color:var(--ink)}
+.pq .stripe{position:absolute;left:0;right:0;top:0;height:10px;background:var(--stripe);z-index:3}
+.pq .stripe.b{top:auto;bottom:0}
+.pq .deco{position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--deco)}
+.pq .hd{display:flex;align-items:center;gap:22px;height:196px;padding-top:22px;position:relative;z-index:2}
+.pq .lgo{width:150px;height:150px;border-radius:50%;flex:none;overflow:hidden;background:#fff;border:6px solid var(--ring);box-shadow:var(--ringsh);display:grid;place-items:center}
+.pq .lgo img{width:100%;height:100%;object-fit:cover}
+.pq .lgo b{font-size:42px;font-weight:900;color:var(--acc)}
+.pq .ti{flex:1;min-width:0}
+.pq .ti .s{font-size:28px;font-weight:900;letter-spacing:.02em;text-transform:uppercase;line-height:1;color:var(--ink);white-space:nowrap}
+.pq .ti h1{margin:2px 0 8px;line-height:.95;font-weight:900;text-transform:uppercase;white-space:nowrap;color:var(--ink)}
+.pq .ti h1 em{font-style:normal;color:var(--acc)}
+.pq .rib{display:inline-block;background:var(--rib);color:var(--ribink);font-weight:800;font-size:17px;letter-spacing:.14em;text-transform:uppercase;padding:8px 22px 8px 16px;border-bottom:4px solid var(--ribline);border-radius:4px 14px 4px 4px;max-width:100%}
+.pq .jb{display:flex;align-items:stretch;height:74px;border-radius:6px;overflow:hidden;flex:none;box-shadow:var(--jsh)}
+.pq .jb .a{background:var(--ja);color:var(--jainks);padding:0 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.pq .jb .a small{font-size:11px;letter-spacing:.3em;font-weight:800;margin-bottom:3px}
+.pq .jb .a b{font-size:38px;font-weight:900}
+.pq .jb .b{background:var(--jb);color:var(--jbink);padding:0 24px;display:flex;flex-direction:column;justify-content:center;line-height:1.05}
+.pq .jb .b small{font-size:15px;letter-spacing:.14em;font-weight:800;text-transform:uppercase;color:var(--jbsm)}
+.pq .jb .b b{font-weight:900;text-transform:uppercase;white-space:nowrap}
+.pq .sec{display:flex;align-items:center;gap:18px;margin:2px 0 8px;height:34px;font-size:23px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);position:relative;z-index:2}
+.pq .sec:before,.pq .sec:after{content:"";flex:1;height:2px;background:var(--line1)}
+.pq .sec.r{color:var(--red)}.pq .sec.r:before,.pq .sec.r:after{background:var(--redline)}
+.pq .sec.sm{font-size:17px;height:26px;margin-top:12px}
+.pq .rows{display:flex;flex-direction:column;gap:9px;position:relative;z-index:2}
+.pq .m{display:flex;align-items:center;height:64px;background:var(--card);border-radius:var(--rad);overflow:hidden;box-shadow:var(--csh);border:var(--cbd)}
+.pq .m .t{width:116px;align-self:stretch;background:var(--tbg);color:var(--tink);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;flex:none}
+.pq .m .t b{font-size:33px;font-weight:900}.pq .m .t i{font-style:normal;font-size:11px;letter-spacing:.2em;color:var(--tsm);font-weight:800;margin-top:2px;white-space:nowrap}
+.pq .m .n{flex:1;text-align:center;font-size:21px;font-weight:800;text-transform:uppercase;padding:0 10px;color:var(--cink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.pq .m .n.h{text-align:right;padding-right:16px}.pq .m .n.a{text-align:left;padding-left:16px}
+.pq .l{width:56px;height:56px;border-radius:50%;background:#fff;border:3px solid var(--lring);overflow:hidden;flex:none;display:grid;place-items:center}
+.pq .l img{width:100%;height:100%;object-fit:cover}
+.pq .l b.ini{display:grid;place-items:center;width:100%;height:100%;background:var(--vbg);color:var(--vink);font-size:18px;font-weight:900}
+.pq .m .v{min-width:36px;height:36px;padding:0 8px;border-radius:999px;background:var(--vbg);color:var(--vink);border:2px solid var(--vring);font-size:13px;font-weight:900;display:grid;place-items:center;margin:0 14px;flex:none;white-space:nowrap}
+.pq .m .v.sc{font-size:17px}.pq .m .v.ap{font-size:9px;letter-spacing:.04em}
+.pq .sg{display:grid;gap:12px;position:relative;z-index:2}
+.pq .sk{background:var(--card);border-left:6px solid var(--red);border-radius:6px;padding:8px 12px 10px;box-shadow:var(--csh);border-top:var(--cbd);min-height:104px;min-width:0}
+.pq .sk .st{display:flex;align-items:center;gap:8px;font-weight:900;font-size:15px;text-transform:uppercase;color:var(--cink);border-bottom:1.5px dashed var(--line1);padding-bottom:5px;margin-bottom:4px}
+.pq .sk .st .l{width:28px;height:28px;border-width:2px}
+.pq .sk .st .l b.ini{font-size:10px}
+.pq .sk .st span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pq .sp{display:flex;align-items:center;gap:6px;height:28px;font-weight:800;font-size:11px;text-transform:uppercase;color:var(--cink)}
+.pq .sp .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pq .sp .c{font-size:9px;background:var(--chip);color:var(--chipink);padding:2px 5px;border-radius:999px;flex:none}
+.pq .sp .j{background:var(--red);color:#fff;font-size:10px;padding:3px 6px;border-radius:5px;flex:none}
+.pq .ob{display:flex;align-items:stretch;margin-top:12px;min-height:46px;border-radius:7px;overflow:hidden;background:var(--card);border:2px solid var(--obline);position:relative;z-index:2}
+.pq .ob b{background:var(--obbg);color:var(--obink);padding:0 20px;display:flex;align-items:center;font-size:17px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;flex:none}
+.pq .ob span{padding:6px 18px;display:flex;align-items:center;font-size:15px;font-weight:600;color:var(--cink);line-height:1.3}
+.pq .pgr{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative;z-index:2}
+.pq .pc{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:8px;height:42px;padding:0 12px;font-weight:800;font-size:12.5px;text-transform:uppercase;color:var(--cink);box-shadow:var(--csh);border:var(--cbd)}
+.pq .pc .pn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pq .pc .pn.r{text-align:right}
+.pq .pc .pj{background:var(--chip);color:var(--chipink);border-radius:6px;padding:3px 7px;font-size:11px;flex:none}
+.pq .pc .l{width:28px;height:28px;border-width:2px}.pq .pc .l b.ini{font-size:10px}
+.pq .pc .pv{font-size:10px;color:var(--acc);flex:none}
+.pq .pc .pw{font-size:10px;opacity:.7;flex:none}
+.pq .ban{margin:14px auto 0;background:var(--banbg);color:var(--banink);font-weight:900;letter-spacing:.04em;text-transform:uppercase;padding:10px 60px;border-radius:10px;border:3px solid var(--banline);position:relative;z-index:2;display:flex;gap:18px;align-items:center;max-width:100%}
+.pq .ban i{font-style:normal;color:var(--banstar)}
+.pq .empty{padding:50px 0;text-align:center;font-weight:800;color:var(--ink2)}
+.poster.pq.sk-retro,.poster.pq.sk-retro *{font-family:Georgia,'Times New Roman',serif}
+.poster.pq.sk-tv .m{transform:skewX(-8deg);margin:0 8px}
+.poster.pq.sk-tv .m>*{transform:skewX(8deg)}
+.poster.pq.sk-tv .m .t{margin-left:-12px;padding-left:12px;width:128px}
+.poster.pq.sk-tv .ti h1{font-style:italic}
+.poster.pq.sk-oro .ti h1{color:var(--gl)}.poster.pq.sk-oro .ti h1 em{color:var(--gl)}
+.poster.pq.sk-neon .m .n,.poster.pq.sk-neon .ti h1{text-shadow:0 0 14px var(--acc)}
+.poster.pq.sk-retro .sec,.poster.pq.sk-retro .m .n,.poster.pq.sk-retro .ti h1,.poster.pq.sk-retro .ban{font-weight:700}
+.poster.sk .legend b,.poster.sk .foot b{color:var(--lgb,var(--acc))}
+.poster.pq.sk-moderno .sec.r{color:#fff}
 
 /* ===== Versión 2: panel con pestañas y vista previa ajustable ===== */
 .app{grid-template-columns:minmax(620px,660px) 1fr}
@@ -271,6 +377,7 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
             <label class="cp">Degradado<input type="color" id="leagueColor2"></label>
             <label class="cp">Fondo<input type="color" id="leagueBg"></label>
             <label class="cp">Texto<input type="color" id="leagueInk"></label>
+            <label class="cp" style="align-items:flex-start;min-width:150px">Estilo<select id="leagueStyle" style="font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:8px"></select></label>
             <button class="btn sm" id="resetColor" title="Calcular degradado, fondo y texto a partir del color principal">Automático</button>
           </div>
         </div>
@@ -293,6 +400,7 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
     <div class="row" style="margin-top:8px">
       <label class="f" style="min-width:90px">Jornada<input type="text" id="catJor" placeholder="6"></label>
       <label class="f">Fecha<input type="text" id="catFecha" placeholder="27 de septiembre"></label>
+      <label class="f">Cancha (rol de juegos)<input type="text" id="catCancha" placeholder="Cancha Municipal"></label>
     </div>
     <div class="row" style="margin-top:8px">
       <label class="f" style="min-width:90px">Pts. victoria<input type="number" id="ptsW" min="0"></label>
@@ -302,6 +410,7 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
       <input type="checkbox" id="catOwn"> Usar colores propios en esta categoría <span style="color:var(--muted);font-weight:500">(si no, usa los de la liga)</span>
     </label>
     <div class="row" id="catColors" style="gap:10px;margin-top:8px">
+      <label class="cp" style="align-items:flex-start;min-width:150px">Estilo<select id="catStyle" style="font-size:12px;padding:6px 8px;border:1px solid var(--line);border-radius:8px"></select></label>
       <label class="cp">Principal<input type="color" id="catColor"></label>
       <label class="cp">Degradado<input type="color" id="catColor2"></label>
       <label class="cp">Fondo<input type="color" id="catBg"></label>
@@ -623,7 +732,10 @@ function sorted(cat){
   return out;
 }
 const fmtDif=d=>d>0?'+'+d:d<0?'−'+Math.abs(d):'0';
-function autoColors(c2){return {c1:shade(c2,.28),cream:shade(c2,.93),ink:shade(c2,-.72)}}
+function autoColors(c2,est){
+  if(ESTILOS_OSCUROS.includes(est))return {c1:shade(c2,.45),cream:shade(c2,est==='oro'?-.93:-.9),ink:'#f2f6f4'};
+  return {c1:shade(c2,.28),cream:shade(c2,.93),ink:shade(c2,-.72)}
+}
 function shade(hex,amt){ // amt -1..1
   const h=hex.replace('#','');const v=parseInt(h.length===3?h.replace(/./g,'$&$&'):h,16);
   let r=v>>16,g=(v>>8)&255,b=v&255;
@@ -799,11 +911,145 @@ function pendHtml(pend,c,c2,max=6){
     return `<div class="pi">${p.j?`<span class="pj">${esc(p.j)}</span>`:''}<span class="pn r">${esc(h?h.name:'')}</span>${h?teamLogo(h,c2):''}<span class="pv">VS</span>${a?teamLogo(a,c2):''}<span class="pn">${esc(a?a.name:'')}</span>${p.when?`<span class="pw">${esc(p.when)}</span>`:''}</div>`};
   return `<div class="pend"><h5>Juegos pendientes${more>0?` (+${more} más)`:''}</h5><div class="pg${show.length===1?' one':''}">${show.map(item).join('')}</div></div>`;
 }
+/* ====================== ESTILOS DE DISEÑO ====================== */
+const ESTILOS=[['clasico','Original'],['neon','Noche neón'],['tv','Transmisión TV'],['oro','Oro y negro'],['moderno','Moderno a color'],['retro','Clásico retro'],['cancha','Cancha / verde']];
+const ESTILOS_OSCUROS=['neon','tv','oro'];
+const hexRGB=h=>{h=h.replace('#','');const v=parseInt(h.length===3?h.replace(/./g,'$&$&'):h,16);return [v>>16,(v>>8)&255,v&255]};
+const rgba=(h,a)=>{const [r,g,b]=hexRGB(h);return `rgba(${r},${g},${b},${a})`};
+const lum=h=>{const [r,g,b]=hexRGB(h).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
+const onC=h=>lum(h)>.5?shade(h,-.86):'#ffffff';
+const estiloDe=th=>(ESTILOS.some(e=>e[0]===(th&&th.estilo))?th.estilo:'clasico');
+/* Variables CSS de cada estilo a partir de los 4 colores (principal c2, degradado c1, fondo B, texto I).
+   tgt: 'tab' (tabla, goleo, liguilla) o 'rol' (rol de juegos con encabezado arriba). */
+function skinVars(est,tgt,c1,c2,B,I){
+  const P=c2,S=c1,oP=onC(P),oS=onC(S),dk=lum(B)<.35;
+  const gl=shade(P,.55),gd=shade(P,-.45),dkg=shade(P,-.86);
+  const v={gl:gl,red:'#c62828',redline:rgba('#c62828',.35),deco:'none',pgbd:'1px solid rgba(255,255,255,.5)',ptsrad:'12px',ptssh:'none',
+    leftbd:'0',crdbd:'0',crdsh:'none',crd:'transparent',upc:'#3f8f4c',dnc:'#c0552d',cbd:'0',csh:'none',rad:'12px'};
+  if(dk){Object.assign(v,{muted:rgba(I,.62),ink2:rgba(I,.8),line:rgba(I,.18),soft:rgba(P,.22),red:'#ff5a64',redline:'rgba(255,90,100,.45)',upc:shade(P,.45),dnc:'#ff7a80'})}
+  const base=(o)=>Object.assign(v,o);
+  if(est==='neon')base({
+    bg:`radial-gradient(800px 460px at 85% -5%,${rgba(P,.28)},transparent 60%),radial-gradient(700px 420px at 0% 105%,${rgba(P,.18)},transparent 60%),${B}`,
+    ink:I,acc:P,stripe:`linear-gradient(90deg,${P},${S})`,ring:P,ringsh:`0 0 0 7px ${rgba(P,.15)},0 0 44px ${rgba(P,.6)}`,
+    rib:P,ribink:oP,ribline:S,ja:P,jainks:oP,jb:'rgba(255,255,255,.08)',jbink:I,jbsm:P,jsh:'none',pgbd:`2px solid ${P}`,
+    line1:rgba(P,.5),card:'rgba(255,255,255,.07)',cink:I,rad:'12px',cbd:'1px solid rgba(255,255,255,.1)',
+    tbg:`linear-gradient(180deg,${P},${S})`,tink:oP,tsm:oP,lring:P,vbg:B,vink:P,vring:P,chip:rgba(P,.2),chipink:shade(P,.5),
+    obline:P,obbg:P,obink:oP,banbg:`linear-gradient(90deg,${S},${P},${S})`,banink:oP,banline:I,banstar:oP,
+    deco:'repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 2px,transparent 2px 26px)',
+    left:`linear-gradient(170deg,${rgba(P,.16)},transparent 70%)`,leftink:I,leftbd:`1px solid ${rgba(P,.35)}`,leftacc:P,
+    hdink:P,posbg:'transparent',posink:P,ptsbg:P,ptsink:oP,ptssh:'none',ptsrad:'9px'});
+  else if(est==='tv')base({
+    bg:`linear-gradient(135deg,${B} 0%,${shade(B,-.3)} 62%,${shade(B,-.1)} 100%)`,
+    ink:I,acc:S,stripe:`linear-gradient(90deg,${P},${S},${I})`,ring:I,ringsh:`10px 10px 0 ${P}`,
+    rib:S,ribink:oS,ribline:P,ja:P,jainks:oP,jb:'#ffffff',jbink:shade(B,-.4),jbsm:P,jsh:`8px 8px 0 ${rgba(S,.6)}`,pgbd:'0',
+    line1:rgba(I,.25),card:`linear-gradient(90deg,${shade(B,.2)},${shade(B,.1)})`,cink:I,rad:'0',csh:'none',
+    tbg:S,tink:oS,tsm:oS,lring:S,vbg:P,vink:oP,vring:I,chip:rgba(S,.25),chipink:shade(S,.4),
+    obline:S,obbg:S,obink:oS,banbg:`linear-gradient(90deg,${P},${S})`,banink:oP,banline:I,banstar:oP,
+    deco:`linear-gradient(115deg,transparent 62%,${rgba(P,.5)} 62.2%,${rgba(P,.5)} 70%,transparent 70.2%),linear-gradient(115deg,transparent 72%,${rgba(S,.25)} 72.2%,${rgba(S,.25)} 75%,transparent 75.2%)`,
+    left:'transparent',leftink:I,leftacc:S,hdink:S,posbg:'transparent',posink:S,ptsbg:S,ptsink:oS,ptsrad:'0',ptssh:'none',upc:shade(S,.4),dnc:'#ff7a95'});
+  else if(est==='oro')base({
+    bg:`radial-gradient(800px 460px at 85% 0%,${shade(B,.14)},transparent 60%),${B}`,
+    ink:I,acc:P,stripe:`linear-gradient(90deg,${gd},${gl},${gd})`,ring:P,ringsh:`0 0 0 5px ${B},0 0 0 7px ${P}`,
+    rib:'transparent',ribink:P,ribline:P,ja:`linear-gradient(180deg,${gl},${P})`,jainks:dkg,jb:shade(B,.1),jbink:I,jbsm:P,jsh:`0 0 0 1.5px ${P}`,pgbd:`1px solid ${P}`,
+    line1:shade(P,-.35),card:`linear-gradient(90deg,${shade(B,.12)},${shade(B,.05)})`,cink:I,rad:'4px',cbd:`1px solid ${shade(B,.22)}`,
+    tbg:`linear-gradient(180deg,${gl},${P})`,tink:dkg,tsm:dkg,lring:P,vbg:B,vink:P,vring:P,chip:shade(B,.22),chipink:P,
+    obline:shade(P,-.35),obbg:`linear-gradient(180deg,${gl},${P})`,obink:dkg,banbg:`linear-gradient(180deg,${gl},${P})`,banink:dkg,banline:shade(P,.8),banstar:dkg,red:'#e0564f',
+    left:'transparent',leftink:I,leftbd:`1px solid ${shade(P,-.35)}`,leftacc:P,hdink:P,posbg:'transparent',posink:shade(P,-.1),
+    ptsbg:`linear-gradient(180deg,${gl},${P})`,ptsink:dkg,ptsrad:'4px',ptssh:'none'});
+  else if(est==='moderno'){const tx=lum(P)>.6?shade(P,-.8):'#ffffff';base({
+    bg:`linear-gradient(120deg,${S} 0%,${P} 52%,${shade(P,-.45)} 100%)`,
+    ink:tx,acc:shade(S,.8),stripe:'repeating-linear-gradient(90deg,#fff 0 40px,transparent 40px 80px)',ring:'#ffffff',ringsh:'0 0 0 4px rgba(255,255,255,.35)',
+    rib:'#ffffff',ribink:shade(P,-.3),ribline:shade(S,.5),ja:shade(S,.6),jainks:I,jb:'#ffffff',jbink:I,jbsm:P,jsh:'none',pgbd:'1px solid rgba(255,255,255,.55)',
+    line1:'rgba(255,255,255,.55)',red:'#d6184b',redline:'rgba(255,255,255,.6)',card:'#ffffff',cink:I,rad:'18px',
+    tbg:`linear-gradient(135deg,${shade(P,-.35)},${P})`,tink:'#ffffff',tsm:shade(P,.8),lring:shade(P,.9),vbg:`linear-gradient(135deg,${S},${P})`,vink:'#ffffff',vring:'#ffffff',
+    chip:shade(P,.9),chipink:shade(P,-.3),obline:'#ffffff',obbg:I,obink:'#ffffff',banbg:I,banink:'#ffffff',banline:shade(S,.5),banstar:shade(S,.5),
+    deco:'radial-gradient(circle at 92% 90%,rgba(255,255,255,.14) 0 220px,transparent 222px)',
+    left:'rgba(255,255,255,.12)',leftink:tx,leftacc:shade(S,.85),hdink:tx,posbg:shade(P,.9),posink:shade(P,-.2),
+    ptsbg:`linear-gradient(135deg,${P},${shade(P,-.4)})`,ptsink:'#ffffff',ptsrad:'11px',ptssh:'none',upc:'#1a9d5c',dnc:'#d6184b',
+    muted:shade(I,.45),ink2:tx,lgb:shade(S,.85)})}
+  else if(est==='retro')base({
+    bg:`radial-gradient(rgba(120,80,30,.08) 1px,transparent 1.5px) 0 0/6px 6px ${B}`,
+    ink:I,acc:P,stripe:`repeating-linear-gradient(90deg,${P} 0 30px,${S} 30px 60px)`,ring:S,ringsh:`0 0 0 3px ${P}`,
+    rib:P,ribink:B,ribline:S,ja:shade(S,.6),jainks:I,jb:S,jbink:I,jbsm:P,jsh:'none',pgbd:`1.5px solid ${S}`,
+    line1:shade(S,-.1),red:P,redline:shade(P,.6),card:shade(B,.6),cink:I,rad:'2px',cbd:`1.5px solid ${S}`,
+    tbg:P,tink:B,tsm:S,lring:S,vbg:S,vink:I,vring:P,chip:shade(S,.7),chipink:I,obline:P,obbg:P,obink:B,banbg:P,banink:B,banline:S,banstar:S,
+    left:P,leftink:B,leftacc:S,hdink:P,posbg:'transparent',posink:P,ptsbg:P,ptsink:B,ptsrad:'0',ptssh:'none',upc:'#2d6a3a',dnc:'#b3261e'});
+  else if(est==='cancha'){
+    const grass=`repeating-linear-gradient(90deg,${shade(P,-.1)} 0 70px,${shade(P,-.18)} 70px 140px)`;
+    base({
+    bg:tgt==='rol'?`linear-gradient(135deg,${B} 0%,${shade(B,.5)} 55%,${shade(S,.75)} 100%)`:grass,
+    ink:I,acc:P,stripe:`repeating-linear-gradient(90deg,${P} 0 60px,${S} 60px 120px)`,ring:S,ringsh:'none',
+    rib:P,ribink:oP,ribline:S,ja:S,jainks:oS,jb:P,jbink:oP,jbsm:S,jsh:'none',pgbd:'1px solid rgba(255,255,255,.4)',
+    line1:shade(P,.5),card:'rgba(255,255,255,.95)',cink:I,rad:'12px',cbd:`1px solid ${shade(P,.65)}`,
+    tbg:`linear-gradient(180deg,${P},${shade(P,-.3)})`,tink:oP,tsm:S,lring:P,vbg:S,vink:oS,vring:P,chip:shade(P,.88),chipink:shade(P,-.2),
+    obline:S,obbg:S,obink:oS,banbg:P,banink:oP,banline:S,banstar:S,
+    deco:tgt==='rol'?`radial-gradient(circle at 50% 55%,${rgba(P,.07)} 0 260px,transparent 262px)`:'none',
+    left:`linear-gradient(180deg,${shade(P,-.62)},${shade(P,-.75)})`,leftink:'#ffffff',leftacc:S,
+    crd:shade(B,.6),hdink:shade(P,-.1),posbg:shade(P,.88),posink:shade(P,-.2),
+    ptsbg:`linear-gradient(180deg,${shade(P,-.1)},${shade(P,-.45)})`,ptsink:'#ffffff',ptsrad:'8px',
+    muted:shade(I,.45),ink2:shade(I,.25)});
+    if(tgt==='tab'){v.ft='#ffffff';v.lgb=S}
+  }
+  return Object.entries(v).map(([k,x])=>`--${k}:${x};`).join('');
+}
+
+/* Rol de juegos con encabezado arriba (para los estilos nuevos): rol, sanciones, observación, pendientes y banner */
+function rolHtmlQ(l,c,style,c2,catT,est){
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?r.m:[],T=id=>c.teams.find(t=>t.id===id);
+  const A=color=>color;
+  const lg=t=>t&&t.logo?`<img src="${t.logo}">`:`<b class="ini">${esc(t?initials(t.name):'')}</b>`;
+  const words=(l.name||'').trim().split(/\s+/).filter(Boolean);
+  let small='',big=l.name||'Liga';
+  if(words.length>=3){big=words.slice(-2).join(' ');small=words.slice(0,-2).join(' ')}
+  const bw=big.split(' '),first=bw[0],rest2=bw.slice(1).join(' ');
+  const h1fs=Math.max(30,Math.min(60,Math.floor(620/(big.length*0.8))));
+  const jn=r?fx.sel+1:(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
+  const days=[...new Set(ms.map(m=>(m.day||'').trim()).filter(Boolean))],multi=days.length>1,dia=days.length===1?days[0]:'';
+  const tm=m=>{
+    const mm=/^(\d{1,2}:\d{2})\s*([ap])\.?\s*m\.?/i.exec((m.time||'').trim());
+    let b=mm?mm[1]:((m.time||'').trim()||'—'),lab=mm?(mm[2].toLowerCase()==='a'?'A.M.':'P.M.'):'';
+    if(multi&&m.day)lab=lab?m.day.slice(0,3).toUpperCase()+' · '+lab:m.day.toUpperCase();
+    return `<div class="t"><b>${esc(b)}</b>${lab?`<i>${esc(lab)}</i>`:''}</div>`;
+  };
+  const vq=m=>{
+    if(m.st==='post')return '<div class="v ap">APLAZADO</div>';
+    const g=matchGoals(m,c);
+    return g?`<div class="v sc">${g[0]}–${g[1]}</div>`:'<div class="v">VS</div>';
+  };
+  const rows=ms.length?ms.map(m=>{const h=T(m.h),a=T(m.a);
+    return `<div class="m">${tm(m)}<div class="n h">${esc(h?h.name:'')}</div><div class="l">${lg(h)}</div>${vq(m)}<div class="l">${lg(a)}</div><div class="n a">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
+  const gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
+  const sg=gr.length?`<div class="sec r" style="margin-top:12px">Sanciones</div><div class="sg" style="grid-template-columns:repeat(${Math.max(2,Math.min(4,gr.length))},1fr)">${gr.map(x=>`<div class="sk"><div class="st"><div class="l">${lg(x.team)}</div><span>${esc(x.team?x.team.name:'Sin equipo')}</span></div>${x.list.map(s=>`<div class="sp"><span class="nm">${esc(s.p)}</span>${sancCausal(s.c)?`<span class="c">${esc(sancCausal(s.c))}</span>`:''}${sancJuegos(s.g)?`<span class="j">${esc(sancJuegos(s.g))}</span>`:''}</div>`).join('')}</div>`).join('')}</div>`:'';
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[];
+  const pshow=pend.slice(0,6),pmore=pend.length-pshow.length;
+  const pd=pshow.length?`<div class="sec sm">Juegos pendientes${pmore>0?` (+${pmore} más)`:''}</div><div class="pgr">${pshow.map(p=>{const h=T(p.h),a=T(p.a);
+    return `<div class="pc">${p.j?`<span class="pj">${esc(p.j)}</span>`:''}<span class="pn r">${esc(h?h.name:'')}</span><div class="l">${lg(h)}</div><span class="pv">VS</span><div class="l">${lg(a)}</div><span class="pn">${esc(a?a.name:'')}</span>${p.when?`<span class="pw">${esc(p.when)}</span>`:''}</div>`}).join('')}</div>`:'';
+  const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
+  const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name).map(t=>t.name):[];
+  const bantxt=rest.length?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
+  const banfs=bantxt.length>46?17:bantxt.length>30?21:25;
+  const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
+  const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>#${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:${fecha.length>22?18:fecha.length>16?23:28}px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
+  return `<div class="poster pq sk-${est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
+    <div class="hd"><div class="lgo">${lgo}</div>
+      <div class="ti">${small?`<div class="s">${esc(small)}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(first)}${rest2?` <em>${esc(rest2)}</em>`:''}</h1>${(c.sub||catT)?`<span class="rib">${esc([c.sub,c.name].filter(Boolean).join(' · '))}</span>`:''}</div>
+      ${jb}</div>
+    <div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>
+    ${sg}
+    ${obs?`<div class="ob"><b>Observación</b><span>${esc(obs)}</span></div>`:''}
+    ${pd}
+    <div class="ban" style="font-size:${banfs}px"><i>★</i> ${esc(bantxt)} <i>★</i></div><div class="stripe b"></div></div>`;
+}
+
 function posterHtml(){
+  const h=posterHtml0(),th=C().own?C():L(),est=estiloDe(th);
+  return est==='clasico'||S.view==='rol'?h:h.replace('class="poster h"','class="poster h sk sk-'+est+'"');
+}
+function posterHtml0(){
   const l=L(),c=C(),list=sorted(c),k=list.length;
-  const th=c.own?c:l,c2=th.color||l.color||ORANGE,A=autoColors(c2);
+  const th=c.own?c:l,c2=th.color||l.color||ORANGE,est=estiloDe(th),A=autoColors(c2,est);
   const c1=th.color2||A.c1,cream=th.bg||A.cream,ink=th.ink||A.ink;
-  const style=`--c2:${c2};--c1:${c1};--soft:${shade(c2,.82)};--cream:${cream};--cream2:${shade(cream,-.04)};--ink:${ink};--ink2:${shade(ink,.25)};--muted:${shade(ink,.45)};--line:${shade(cream,-.08)};`;
+  const style=`--c2:${c2};--c1:${c1};--soft:${shade(c2,.82)};--cream:${cream};--cream2:${shade(cream,-.04)};--ink:${ink};--ink2:${shade(ink,.25)};--muted:${shade(ink,.45)};--line:${shade(cream,-.08)};`+(est==='clasico'?'':skinVars(est,S.view==='rol'?'rol':'tab',c1,c2,cream,ink));
   const jor=c.jor?`<span class="pill w">Jornada ${esc(c.jor)}</span>`:'';
   const fec=c.fecha?`<span class="pill g">${esc(c.fecha)}</span>`:'';
   const catT=(c.name||'Categoría').toUpperCase();
@@ -825,7 +1071,7 @@ function posterHtml(){
   }
   // horizontal
   if(S.view==='goleo')return goleoHtml(l,c,style,c2,catT);
-  if(S.view==='rol')return rolHtml(l,c,style,c2,catT);
+  if(S.view==='rol')return est==='clasico'?rolHtml(l,c,style,c2,catT):rolHtmlQ(l,c,style,c2,catT,est);
   if(S.view==='lig')return ligHtml(l,c,style,c2,catT);
   const avail=545, rg=k>12?4:7;
   const rh=Math.max(26,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
@@ -873,15 +1119,17 @@ function renderTabs(){
 }
 function renderLeagueForm(){
   const l=L();
-  $('leagueName').value=l.name;const A=autoColors(l.color||ORANGE);
+  $('leagueName').value=l.name;const A=autoColors(l.color||ORANGE,estiloDe(l));
+  $('leagueStyle').value=estiloDe(l);
   $('leagueColor').value=l.color||ORANGE;$('leagueColor2').value=l.color2||A.c1;$('leagueBg').value=l.bg||A.cream;$('leagueInk').value=l.ink||A.ink;
   const lp=$('leagueLogo');lp.style.backgroundImage=l.logo?`url(${l.logo})`:'';lp.textContent=l.logo?'':'Logo liga';
 }
 function renderCatForm(){
   const c=C();
-  $('catName').value=c.name;$('catSub').value=c.sub;$('catJor').value=c.jor;$('catFecha').value=c.fecha;
+  $('catName').value=c.name;$('catSub').value=c.sub;$('catJor').value=c.jor;$('catFecha').value=c.fecha;$('catCancha').value=c.cancha||'';
   $('ptsW').value=c.pw;$('ptsD').value=c.pd;
-  const A=autoColors(c.color||L().color||ORANGE);
+  const A=autoColors(c.color||L().color||ORANGE,estiloDe(c.own?c:L()));
+  $('catStyle').value=estiloDe(c.own?c:L());
   $('catOwn').checked=!!c.own;$('catColors').style.display=c.own?'flex':'none';
   $('catColor').value=c.color||L().color||ORANGE;$('catColor2').value=c.color2||A.c1;$('catBg').value=c.bg||A.cream;$('catInk').value=c.ink||A.ink;
 }
@@ -1279,10 +1527,20 @@ $('catOwn').onchange=e=>{const c=C();c.own=e.target.checked;if(c.own&&!c.color)c
 [['catColor','color'],['catColor2','color2'],['catBg','bg'],['catInk','ink']].forEach(([id,k])=>{$(id).oninput=e=>{C()[k]=e.target.value;changed()}});
 $('catResetColor').onclick=()=>{const c=C();c.color2=c.bg=c.ink='';save();renderCatForm();renderPreview()};
 $('resetColor').onclick=()=>{const l=L();l.color2=l.bg=l.ink='';save();renderLeagueForm();renderPreview()};
-[['catName','name'],['catSub','sub'],['catJor','jor'],['catFecha','fecha']].forEach(([id,k])=>{
+[['catName','name'],['catSub','sub'],['catJor','jor'],['catFecha','fecha'],['catCancha','cancha']].forEach(([id,k])=>{
   $(id).oninput=e=>{C()[k]=e.target.value;changed()};
 });
 $('catName').onchange=renderTabs;
+/* Estilo de diseño: si cambia entre claro y oscuro, se recalculan degradado, fondo y texto */
+['leagueStyle','catStyle'].forEach(id=>{$(id).innerHTML=ESTILOS.map(e=>'<option value="'+e[0]+'">'+e[1]+'</option>').join('')});
+function cambiarEstilo(th,nuevo){
+  const antes=ESTILOS_OSCUROS.includes(estiloDe(th));
+  th.estilo=nuevo;
+  if(antes!==ESTILOS_OSCUROS.includes(nuevo))th.color2=th.bg=th.ink='';
+  save();renderLeagueForm();renderCatForm();renderPreview();
+}
+$('leagueStyle').onchange=e=>cambiarEstilo(L(),e.target.value);
+$('catStyle').onchange=e=>cambiarEstilo(C(),e.target.value);
 [['ptsW','pw'],['ptsD','pd']].forEach(([id,k])=>{$(id).oninput=e=>{C()[k]=n(e.target.value);refreshCalcs();changed()}});
 
 $('addLeague').onclick=()=>{
