@@ -430,6 +430,9 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
         <label class="f">Nombre de la liga (pie del póster)
           <input type="text" id="leagueName">
         </label>
+        <label class="f">Nombre corto (para la pestaña)
+          <input type="text" id="leagueShort" maxlength="24" placeholder="Si lo dejas vacío se arma solo">
+        </label>
         <div class="f">Colores de la liga (todas sus categorías)
           <div class="row" style="gap:10px">
             <label class="cp">Principal<input type="color" id="leagueColor"></label>
@@ -1199,14 +1202,21 @@ function fit(){
 window.addEventListener('resize',fit);
 
 /* ====================== PANEL ====================== */
+/* Texto de la pestaña de la liga: el nombre corto si lo hay; si no, el nombre sin palabras genericas (liga, de, futbol…) */
+const PAL_GENERICAS=new Set(['liga','de','del','la','las','los','el','futbol','fútbol']);
+function tabName(l){
+  const corto=(l.short||'').trim();if(corto)return corto;
+  const w=(l.name||'').trim().split(/\s+/).filter(Boolean),u=w.filter(x=>!PAL_GENERICAS.has(x.toLowerCase()));
+  return (u.length>1?u:w).slice(0,3).join(' ')||'Liga';
+}
 function renderTabs(){
-  $('leagueTabs').innerHTML=S.leagues.map((l,i)=>`<div class="tab ${i===S.selL?'on':''}" data-i="${i}">${esc(l.name.split(' ').slice(0,3).join(' '))}</div>`).join('');
+  $('leagueTabs').innerHTML=S.leagues.map((l,i)=>`<div class="tab ${i===S.selL?'on':''}" data-i="${i}">${esc(tabName(l))}</div>`).join('');
   document.querySelectorAll('#viewTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.v===(S.view||'tabla')));
   $('catTabs').innerHTML=L().cats.map((c,i)=>`<div class="tab ${i===S.selC?'on':''}" data-i="${i}">${esc(c.name||'Sin nombre')}</div>`).join('');
 }
 function renderLeagueForm(){
   const l=L();
-  $('leagueName').value=l.name;const A=autoColors(l.color||ORANGE,estiloDe(l));
+  $('leagueName').value=l.name;$('leagueShort').value=l.short||'';const A=autoColors(l.color||ORANGE,estiloDe(l));
   $('leagueStyle').value=estiloDe(l);
   const okL=coloresOk(l,estiloDe(l));
   $('leagueColor').value=l.color||ORANGE;$('leagueColor2').value=(okL&&l.color2)||A.c1;$('leagueBg').value=(okL&&l.bg)||A.cream;$('leagueInk').value=(okL&&l.ink)||A.ink;
@@ -1607,6 +1617,7 @@ $('catTabs').onclick=e=>{const t=e.target.closest('.tab');if(!t)return;S.selC=+t
 
 $('leagueName').oninput=e=>{L().name=e.target.value;changed()};
 $('leagueName').onchange=renderTabs;
+$('leagueShort').oninput=e=>{L().short=e.target.value;changed();renderTabs()};
 $('leagueColor').oninput=e=>{L().color=e.target.value;changed()};
 $('leagueColor2').oninput=e=>{L().color2=e.target.value;L().dk=ESTILOS_OSCUROS.includes(estiloDe(L()));changed()};
 $('leagueBg').oninput=e=>{L().bg=e.target.value;L().dk=ESTILOS_OSCUROS.includes(estiloDe(L()));changed()};
