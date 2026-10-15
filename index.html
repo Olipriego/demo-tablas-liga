@@ -9,6 +9,7 @@
 <script src="lib/demo.js"></script>
 <style>
 @font-face{font-family:'Montserrat';font-weight:500;font-style:normal;src:url(lib/fonts/montserrat-500.woff2) format('woff2')}@font-face{font-family:'Montserrat';font-weight:600;font-style:normal;src:url(lib/fonts/montserrat-600.woff2) format('woff2')}@font-face{font-family:'Montserrat';font-weight:700;font-style:normal;src:url(lib/fonts/montserrat-700.woff2) format('woff2')}@font-face{font-family:'Montserrat';font-weight:800;font-style:normal;src:url(lib/fonts/montserrat-800.woff2) format('woff2')}@font-face{font-family:'Montserrat';font-weight:900;font-style:normal;src:url(lib/fonts/montserrat-900.woff2) format('woff2')}
+@font-face{font-family:'Oswald';font-weight:400 700;font-style:normal;src:url(lib/fonts/oswald.woff2) format('woff2')}
 :root{
   --bg:#eef1f5; --panel:#ffffff; --line:#d9dee6; --ink:#1f2937; --muted:#6b7280;
   --accent:#334155; --accent2:#64748b; --danger:#c0392b;
@@ -318,6 +319,64 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
 .poster.pq.sk-retro .sec,.poster.pq.sk-retro .m .n,.poster.pq.sk-retro .ti h1,.poster.pq.sk-retro .ban{font-weight:700}
 .poster.sk .legend b,.poster.sk .foot b{color:var(--lgb,var(--acc))}
 .poster.pq.sk-moderno .sec.r{color:#fff}
+/* ===== Diseños v2: tipografía Oswald y detalles por estilo (tabla y rol) ===== */
+.poster.sk.h .sub1,.poster.sk.h h2.big,.poster.sk.h .sub2,.poster.sk.h .pill,.poster.sk.h .head,.poster.sk.h .pts,.poster.sk.h .pos{font-family:'Oswald','Montserrat',sans-serif}
+.poster.sk.h .tl{border-radius:50%}
+.poster.sk.h .grid:not(.gs):not(.rl){grid-template-columns:54px 1fr 44px 44px 44px 44px 48px 48px 52px 70px;column-gap:4px}
+.poster.sk.h .tr:not(.gs):not(.rl) .nm{font-size:calc(var(--nfs,19px) - 2px)}
+.poster.sk.h .pts{font-weight:700}
+.poster.sk.h .pos{font-weight:700}
+.poster.sk-neon.h .rows .tr:nth-child(-n+3),.poster.sk-cancha.h .rows .tr:nth-child(-n+3),.poster.sk-moderno.h .rows .tr:nth-child(-n+3){background:var(--t3bg);border-color:var(--t3bd);box-shadow:var(--t3sh)}
+.poster.sk-tv.h .rows .tr:nth-child(-n+3){background:var(--t3bg);border-left-color:var(--c2)}
+.poster.sk-neon.h .tr{border-radius:12px}
+.poster.sk-neon.h .pos{font-weight:900}
+.poster.sk-moderno.h .rows .tr:nth-child(-n+3) .pos{background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff}
+.poster.sk-moderno.h .pos{border-radius:10px}
+/* cancha: líneas de campo, panel lateral inset, filas con franja y posición en círculo */
+.poster.sk-cancha.h:before{content:"";position:absolute;left:50%;top:50%;width:520px;height:520px;margin:-260px 0 0 -120px;border:6px solid rgba(255,255,255,.3);border-radius:50%}
+.poster.sk-cancha.h:after{content:"";position:absolute;left:8px;top:8px;right:8px;bottom:8px;border:5px solid rgba(255,255,255,.45);border-radius:6px;pointer-events:none;z-index:3}
+.poster.sk-cancha.h .left{left:8px;top:8px;bottom:8px;width:372px;border-radius:6px 0 0 6px;border-right:0}
+.poster.sk-cancha.h .t-card{border-radius:8px}
+.poster.sk-cancha.h .head{border-bottom:3px solid var(--c2);margin-bottom:6px}
+.poster.sk-cancha.h .tr{border-left:6px solid var(--t3bd)}
+.poster.sk-cancha.h .rows .tr:nth-child(-n+3){border-left-color:var(--c1)}
+.poster.sk-cancha.h .pos{border-radius:50%;background:var(--c2);color:#fff}
+/* TV: formas diagonales y logo con sombra desplazada */
+.poster.sk-tv.h:before{content:"";position:absolute;right:-120px;top:-120px;width:560px;height:560px;background:linear-gradient(135deg,var(--c2),var(--c1));transform:rotate(45deg);opacity:.9}
+.poster.sk-tv.h:after{content:"";position:absolute;left:300px;bottom:-200px;width:900px;height:260px;background:var(--c1);transform:skewY(-6deg);opacity:.12}
+.poster.sk-tv.h .left,.poster.sk-tv.h .right{z-index:2}
+.poster.sk-tv.h .lg-wrap{border-radius:18px;border:0;border-right:12px solid var(--c2);border-bottom:12px solid var(--c2);box-shadow:none;background:#fff}
+.poster.sk-tv.h .lg-wrap img{object-fit:contain;padding:8px}
+.poster.sk-tv.h .pill{border-radius:0;transform:skewX(-12deg)}
+.poster.sk-tv.h h2.big{transform:skewX(-8deg);transform-origin:left}
+/* retro: marco doble, panel inset y filas alternadas */
+.poster.sk-retro.h:before{content:"";position:absolute;left:8px;top:8px;right:8px;bottom:8px;border:3px double var(--acc);pointer-events:none;z-index:3}
+.poster.sk-retro.h .left{left:8px;top:8px;bottom:8px;width:372px}
+.poster.sk-retro.h .tr{border-width:0 0 1px 0;box-shadow:none;background:transparent}
+.poster.sk-retro.h .rows .tr:nth-child(even){background:var(--t3bg)}
+.poster.sk-retro.h .pos{font-style:italic;font-size:20px}
+.poster.sk-retro.h .head{border-bottom:2px solid var(--acc);margin-bottom:4px}
+.poster.sk-oro.h .head{border-bottom:1px solid var(--line1);margin-bottom:4px}
+/* rol de juegos (diseño con encabezado arriba) */
+.pq .ti .s,.pq .ti h1,.pq .jb .a small,.pq .jb .a b,.pq .jb .b small,.pq .jb .b b,.pq .sec,.pq .m .t b,.pq .m .v,.pq .sk .st,.pq .ob b,.pq .ban{font-family:'Oswald','Montserrat',sans-serif}
+.pq .ti .s{font-size:26px;font-weight:700;letter-spacing:.08em}
+.pq .ti h1{letter-spacing:.02em;font-weight:700}
+.pq .rib{font-size:16px;letter-spacing:.12em;padding:8px 24px 8px 18px;border-radius:2px 18px 2px 2px}
+.pq .jb{height:78px;border-radius:8px}
+.pq .jb .a{padding:0 24px}.pq .jb .a b{font-size:40px;font-weight:700}
+.pq .jb .b{padding:0 26px}.pq .jb .b b{font-weight:700}
+.pq .sec{font-size:24px;font-weight:700;letter-spacing:.05em}
+.pq .m{height:64px}
+.pq .m .t{width:120px}.pq .m .t b{font-size:32px;font-weight:700}.pq .m .t i{letter-spacing:.28em}
+.pq .m .v{min-width:38px;height:38px;font-size:14px;margin:0 16px}
+.pq .sk{border-radius:8px;padding:9px 14px 11px}
+.pq .sk .st{font-weight:700}
+.pq .sp .c{font-size:9.5px;padding:3px 7px;font-weight:700}.pq .sp .j{padding:3px 7px;font-weight:800}
+.pq .ob{border-radius:8px;box-shadow:var(--csh)}.pq .ob b{padding:0 22px;font-weight:700}
+.pq .ban{font-size:25px;font-weight:700}
+.poster.pq.sk-tv .ti h1{transform:skewX(-8deg);transform-origin:left}
+.poster.pq.sk-oro .rib{border:1.5px solid var(--ribink)}
+.poster.pq.sk-retro .ti h1,.poster.pq.sk-retro .sec,.poster.pq.sk-retro .ban{font-weight:700}
 
 /* ===== Versión 2: panel con pestañas y vista previa ajustable ===== */
 .app{grid-template-columns:minmax(620px,660px) 1fr}
@@ -766,7 +825,7 @@ const headHtml=`<div class="head grid"><div>LUGAR</div><div style="text-align:le
 const legendHtml=`<b>JJ</b> Jugados &nbsp;<b>JG</b> Ganados &nbsp;<b>JE</b> Empatados &nbsp;<b>JP</b> Perdidos<br><b>GF</b> Goles a favor &nbsp;<b>GC</b> Goles en contra &nbsp;<b>DIF</b> Diferencia`;
 
 function ligHtml(l,c,style,c2,catT){
-  const L=c.lig,bigfs=Math.max(34,Math.min(64,Math.floor(312/(catT.length*0.76))));
+  const L=c.lig,bigfs=bigFor(catT,c,l);
   const T=id=>c.teams.find(t=>t.id===id);
   let body;
   if(!L)body='<div class="empty">Crea la liguilla para ver las llaves</div>';
@@ -830,7 +889,7 @@ function rolHtml(l,c,style,c2,catT){
   const avail=545-sH-oH-pH,rg=k>14?2:k>8?5:8;
   const rh=Math.max(18,Math.min(70,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
   const fs=rh<44?Math.min(14,fsFor(rh)):rh<56?17:20,nfs=rh<44?Math.min(13,nfsFor(rh)):rh<56?16:19,hx=hxVars(rh);
-  const bigfs=Math.max(34,Math.min(64,Math.floor(312/(catT.length*0.76))));
+  const bigfs=bigFor(catT,c,l);
   const T=id=>c.teams.find(t=>t.id===id);
   const rows=k?ms.map(m=>{const h=T(m.h),a=T(m.a);return `<div class="tr grid rl">
       <div class="hr"><b>${esc(m.time||'—')}</b>${m.day?`<i>${esc(m.day)}</i>`:''}</div>
@@ -871,7 +930,7 @@ function goleoHtml(l,c,style,c2,catT){
   const avail=545,rg=k>24?1:k>18?2:k>12?4:7;
   const rh=Math.max(12,Math.min(58,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
   const fs=fsFor(rh),nfs=nfsFor(rh),hx=hxVars(rh);
-  const bigfs=Math.max(34,Math.min(64,Math.floor(312/(catT.length*0.76))));
+  const bigfs=bigFor(catT,c,l);
   const rows=k?list.map(x=>`<div class="tr grid gs">
       <div class="pos" style="margin:0 auto">${x.pos}</div>
       <div class="nm">${x.team?teamLogo(x.team,c2):''}<span>${esc(x.name)}</span></div>
@@ -925,6 +984,8 @@ const estiloCat=(c,l)=>ESTILOS.some(e=>e[0]===(c&&c.estilo))?c.estilo:estiloDe(l
 const coloresOk=(th,est)=>!!th.dk===ESTILOS_OSCUROS.includes(est);
 /* Variables CSS de cada estilo a partir de los 4 colores (principal c2, degradado c1, fondo B, texto I).
    tgt: 'tab' (tabla, goleo, liguilla) o 'rol' (rol de juegos con encabezado arriba). */
+/* Franjas verticales alternas con paradas explicitas (html2canvas no dibuja repeating-linear-gradient) */
+const bandas=(a,b,w,n=Math.ceil(1280/w))=>`linear-gradient(90deg,${Array.from({length:n},(_,i)=>`${i%2?b:a} ${i*w}px ${(i+1)*w}px`).join(',')})`;
 function skinVars(est,tgt,c1,c2,B,I){
   const P=c2,S=c1,oP=onC(P),oS=onC(S),dk=lum(B)<.35;
   const gl=shade(P,.55),gd=shade(P,-.45),dkg=shade(P,-.86);
@@ -941,7 +1002,8 @@ function skinVars(est,tgt,c1,c2,B,I){
     obline:P,obbg:P,obink:oP,banbg:`linear-gradient(90deg,${S},${P},${S})`,banink:oP,banline:I,banstar:oP,
     deco:'repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 2px,transparent 2px 26px)',
     left:`linear-gradient(170deg,${rgba(P,.16)},transparent 70%)`,leftink:I,leftbd:`1px solid ${rgba(P,.35)}`,leftacc:P,
-    hdink:P,posbg:'transparent',posink:P,ptsbg:P,ptsink:oP,ptssh:'none',ptsrad:'9px'});
+    hdink:P,posbg:'transparent',posink:P,ptsbg:P,ptsink:oP,ptssh:`0 0 14px ${rgba(P,.7)}`,ptsrad:'9px',
+    t3bd:rgba(P,.7),t3bg:`linear-gradient(90deg,${rgba(P,.28)},${rgba(P,.06)})`,t3sh:`0 0 18px ${rgba(P,.25)}`});
   else if(est==='tv')base({
     bg:`linear-gradient(135deg,${B} 0%,${shade(B,-.3)} 62%,${shade(B,-.1)} 100%)`,
     ink:I,acc:S,stripe:`linear-gradient(90deg,${P},${S},${I})`,ring:I,ringsh:`10px 10px 0 ${P}`,
@@ -950,7 +1012,8 @@ function skinVars(est,tgt,c1,c2,B,I){
     tbg:S,tink:oS,tsm:oS,lring:S,vbg:P,vink:oP,vring:I,chip:rgba(S,.25),chipink:shade(S,.4),
     obline:S,obbg:S,obink:oS,banbg:`linear-gradient(90deg,${P},${S})`,banink:oP,banline:I,banstar:oP,
     deco:`linear-gradient(115deg,transparent 62%,${rgba(P,.5)} 62.2%,${rgba(P,.5)} 70%,transparent 70.2%),linear-gradient(115deg,transparent 72%,${rgba(S,.25)} 72.2%,${rgba(S,.25)} 75%,transparent 75.2%)`,
-    left:'transparent',leftink:I,leftacc:S,hdink:S,posbg:'transparent',posink:S,ptsbg:S,ptsink:oS,ptsrad:'0',ptssh:'none',upc:shade(S,.4),dnc:'#ff7a95'});
+    left:'transparent',leftink:I,leftacc:S,hdink:S,posbg:'transparent',posink:S,ptsbg:S,ptsink:oS,ptsrad:'0',ptssh:'none',upc:shade(S,.4),dnc:'#ff7a95',
+    t3bg:`linear-gradient(90deg,${shade(B,.45)},${shade(B,.25)})`});
   else if(est==='oro')base({
     bg:`radial-gradient(800px 460px at 85% 0%,${shade(B,.14)},transparent 60%),${B}`,
     ink:I,acc:P,stripe:`linear-gradient(90deg,${gd},${gl},${gd})`,ring:P,ringsh:`0 0 0 5px ${B},0 0 0 7px ${P}`,
@@ -962,7 +1025,7 @@ function skinVars(est,tgt,c1,c2,B,I){
     ptsbg:`linear-gradient(180deg,${gl},${P})`,ptsink:dkg,ptsrad:'4px',ptssh:'none'});
   else if(est==='moderno'){const tx=lum(P)>.6?shade(P,-.8):'#ffffff';base({
     bg:`linear-gradient(120deg,${S} 0%,${P} 52%,${shade(P,-.45)} 100%)`,
-    ink:tx,acc:shade(S,.8),stripe:'repeating-linear-gradient(90deg,#fff 0 40px,transparent 40px 80px)',ring:'#ffffff',ringsh:'0 0 0 4px rgba(255,255,255,.35)',
+    ink:tx,acc:shade(S,.8),stripe:bandas('#ffffff','rgba(255,255,255,0)',40),ring:'#ffffff',ringsh:'0 0 0 4px rgba(255,255,255,.35)',
     rib:'#ffffff',ribink:shade(P,-.3),ribline:shade(S,.5),ja:shade(S,.6),jainks:I,jb:'#ffffff',jbink:I,jbsm:P,jsh:'none',pgbd:'1px solid rgba(255,255,255,.55)',
     line1:'rgba(255,255,255,.55)',red:'#d6184b',redline:'rgba(255,255,255,.6)',card:'#ffffff',cink:I,rad:'18px',
     tbg:`linear-gradient(135deg,${shade(P,-.35)},${P})`,tink:'#ffffff',tsm:shade(P,.8),lring:shade(P,.9),vbg:`linear-gradient(135deg,${S},${P})`,vink:'#ffffff',vring:'#ffffff',
@@ -970,27 +1033,38 @@ function skinVars(est,tgt,c1,c2,B,I){
     deco:'radial-gradient(circle at 92% 90%,rgba(255,255,255,.14) 0 220px,transparent 222px)',
     left:'rgba(255,255,255,.12)',leftink:tx,leftacc:shade(S,.85),hdink:tx,posbg:shade(P,.9),posink:shade(P,-.2),
     ptsbg:`linear-gradient(135deg,${P},${shade(P,-.4)})`,ptsink:'#ffffff',ptsrad:'11px',ptssh:'none',upc:'#1a9d5c',dnc:'#d6184b',
-    muted:shade(I,.45),ink2:tx,lgb:shade(S,.85)})}
+    muted:shade(I,.45),ink2:tx,lgb:shade(S,.85),
+    t3bg:`linear-gradient(90deg,#ffffff,${shade(S,.88)})`,t3bd:'#ffffff',t3sh:'none'})}
   else if(est==='retro')base({
     bg:`radial-gradient(rgba(120,80,30,.08) 1px,transparent 1.5px) 0 0/6px 6px ${B}`,
-    ink:I,acc:P,stripe:`repeating-linear-gradient(90deg,${P} 0 30px,${S} 30px 60px)`,ring:S,ringsh:`0 0 0 3px ${P}`,
+    ink:I,acc:P,stripe:bandas(P,S,30),ring:S,ringsh:`0 0 0 3px ${P}`,
     rib:P,ribink:B,ribline:S,ja:shade(S,.6),jainks:I,jb:S,jbink:I,jbsm:P,jsh:'none',pgbd:`1.5px solid ${S}`,
     line1:shade(S,-.1),red:P,redline:shade(P,.6),card:shade(B,.6),cink:I,rad:'2px',cbd:`1.5px solid ${S}`,
     tbg:P,tink:B,tsm:S,lring:S,vbg:S,vink:I,vring:P,chip:shade(S,.7),chipink:I,obline:P,obbg:P,obink:B,banbg:P,banink:B,banline:S,banstar:S,
-    left:P,leftink:B,leftacc:S,hdink:P,posbg:'transparent',posink:P,ptsbg:P,ptsink:B,ptsrad:'0',ptssh:'none',upc:'#2d6a3a',dnc:'#b3261e'});
+    left:P,leftink:B,leftacc:S,hdink:P,posbg:'transparent',posink:P,ptsbg:P,ptsink:B,ptsrad:'0',ptssh:'none',upc:'#2d6a3a',dnc:'#b3261e',t3bg:rgba(P,.06)});
   else if(est==='cancha'){
-    const grass=`repeating-linear-gradient(90deg,${shade(P,-.1)} 0 70px,${shade(P,-.18)} 70px 140px)`;
-    base({
-    bg:tgt==='rol'?`linear-gradient(135deg,${B} 0%,${shade(B,.5)} 55%,${shade(S,.75)} 100%)`:grass,
-    ink:I,acc:P,stripe:`repeating-linear-gradient(90deg,${P} 0 60px,${S} 60px 120px)`,ring:S,ringsh:'none',
+    const grass=bandas(shade(P,-.1),shade(P,-.18),70);
+    if(tgt==='rol')base({
+    /* rol: verde profundo con detalles dorados (mismo esquema que «Verde y oro») */
+    bg:`radial-gradient(circle at 50% 30%,${shade(P,-.32)} 0%,${shade(P,-.62)} 60%,${shade(P,-.78)} 100%)`,
+    ink:'#ffffff',acc:S,stripe:bandas(P,S,60),ring:S,ringsh:`0 0 0 4px ${rgba(S,.3)}`,
+    rib:`linear-gradient(135deg,${P},${shade(P,-.3)})`,ribink:'#ffffff',ribline:S,ja:`linear-gradient(180deg,${S},${shade(S,-.15)})`,jainks:shade(P,-.8),
+    jb:`linear-gradient(180deg,${P},${shade(P,-.45)})`,jbink:'#ffffff',jbsm:S,jsh:'none',pgbd:'1px solid rgba(255,255,255,.4)',
+    line1:rgba(S,.6),red:'#ff6b6b',redline:'rgba(255,107,107,.5)',card:`linear-gradient(180deg,rgba(255,255,255,.98),${shade(P,.94)})`,cink:shade(P,-.8),rad:'10px',
+    csh:'none',cbd:'1px solid rgba(255,255,255,.8)',tbg:`linear-gradient(180deg,${shade(P,-.3)},${shade(P,-.62)})`,tink:'#ffffff',tsm:S,lring:P,
+    vbg:`linear-gradient(180deg,${S},${shade(S,-.15)})`,vink:shade(P,-.8),vring:'#ffffff',chip:shade(P,.88),chipink:shade(P,-.4),
+    obline:S,obbg:`linear-gradient(180deg,${S},${shade(S,-.15)})`,obink:shade(P,-.8),banbg:`linear-gradient(90deg,${shade(P,-.45)},${P},${shade(P,-.45)})`,banink:'#ffffff',banline:S,banstar:S,
+    deco:'radial-gradient(circle at 50% 50%,rgba(255,255,255,.05) 0%,transparent 70%)',muted:'rgba(255,255,255,.65)',ink2:'rgba(255,255,255,.85)'});
+    else base({
+    bg:grass,ink:I,acc:P,stripe:bandas(P,S,60),ring:S,ringsh:'none',
     rib:P,ribink:oP,ribline:S,ja:S,jainks:oS,jb:P,jbink:oP,jbsm:S,jsh:'none',pgbd:'1px solid rgba(255,255,255,.4)',
-    line1:shade(P,.5),card:'rgba(255,255,255,.95)',cink:I,rad:'12px',cbd:`1px solid ${shade(P,.65)}`,
+    line1:shade(P,.5),card:shade(P,.93),cink:I,rad:'6px',cbd:`1px solid ${shade(P,.8)}`,
     tbg:`linear-gradient(180deg,${P},${shade(P,-.3)})`,tink:oP,tsm:S,lring:P,vbg:S,vink:oS,vring:P,chip:shade(P,.88),chipink:shade(P,-.2),
-    obline:S,obbg:S,obink:oS,banbg:P,banink:oP,banline:S,banstar:S,
-    deco:tgt==='rol'?`radial-gradient(circle at 50% 55%,${rgba(P,.07)} 0 260px,transparent 262px)`:'none',
+    obline:S,obbg:S,obink:oS,banbg:P,banink:oP,banline:S,banstar:S,deco:'none',
     left:`linear-gradient(180deg,${shade(P,-.62)},${shade(P,-.75)})`,leftink:'#ffffff',leftacc:S,
     crd:shade(B,.6),hdink:shade(P,-.1),posbg:shade(P,.88),posink:shade(P,-.2),
-    ptsbg:`linear-gradient(180deg,${shade(P,-.1)},${shade(P,-.45)})`,ptsink:'#ffffff',ptsrad:'8px',
+    ptsbg:shade(P,-.78),ptsink:S,ptsrad:'6px',
+    t3bd:shade(P,.75),t3bg:shade(S,.88),t3sh:'none',
     muted:shade(I,.45),ink2:shade(I,.25)});
     if(tgt==='tab'){v.ft='#ffffff';v.lgb=S}
   }
@@ -1006,7 +1080,7 @@ function rolHtmlQ(l,c,style,c2,catT,est){
   let small='',big=l.name||'Liga';
   if(words.length>=3){big=words.slice(-2).join(' ');small=words.slice(0,-2).join(' ')}
   const bw=big.split(' '),first=bw[0],rest2=bw.slice(1).join(' ');
-  const h1fs=Math.max(30,Math.min(60,Math.floor(620/(big.length*0.8))));
+  const h1fs=Math.max(30,Math.min(66,Math.floor(600/(big.length*(est==='retro'?0.85:0.62)))));
   const jn=r?fx.sel+1:(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
   const days=[...new Set(ms.map(m=>(m.day||'').trim()).filter(Boolean))],multi=days.length>1,dia=days.length===1?days[0]:'';
   const tm=m=>{
@@ -1049,6 +1123,8 @@ function rolHtmlQ(l,c,style,c2,catT,est){
 function hxVars(rh){const sm=rh<30;return `--pd:${sm?6:14}px;--pd2:${sm?4:12}px;--pfs:${rh<20?9:sm?12:16}px;--rad:${sm?6:16}px;--rad2:${sm?4:10}px;`}
 function fsFor(rh){return rh<20?Math.max(8,rh-6):rh<26?12:rh<40?14:rh<46?17:20}
 function nfsFor(rh){return rh<20?Math.max(8,rh-7):rh<26?11:rh<40?13:rh<46?16:19}
+/* tamano del titulo lateral: con los estilos nuevos (Oswald, mas angosta) cabe una letra mas grande */
+function bigFor(catT,c,l){return Math.max(34,Math.min(64,Math.floor(312/(catT.length*(estiloCat(c,l)==='clasico'?0.76:0.56)))))}
 function posterHtml(){
   const h=posterHtml0(),est=estiloCat(C(),L());
   return est==='clasico'||S.view==='rol'?h:h.replace('class="poster h"','class="poster h sk sk-'+est+'"');
@@ -1087,7 +1163,7 @@ function posterHtml0(){
   const avail=545, rg=k>24?1:k>18?2:k>12?4:7;
   const rh=Math.max(12,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
   const fs=fsFor(rh), nfs=nfsFor(rh), hx=hxVars(rh);
-  const bigfs=Math.max(34,Math.min(64,Math.floor(312/(catT.length*0.76))));
+  const bigfs=bigFor(catT,c,l);
   return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
     <div class="left">
       ${leagueLogo(l)}
