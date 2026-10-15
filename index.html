@@ -357,6 +357,30 @@ input:focus,select:focus{outline:2px solid var(--accent2);border-color:transpare
 .poster.sk-retro.h .pos{font-style:italic;font-size:20px}
 .poster.sk-retro.h .head{border-bottom:2px solid var(--acc);margin-bottom:4px}
 .poster.sk-oro.h .head{border-bottom:1px solid var(--line1);margin-bottom:4px}
+/* vista «Sanciones» */
+.poster.h.sancv .sanc{margin-top:0}
+.poster.h.sancv .obs{margin-top:14px}
+.poster.h.sancv .obs b{font-size:15px;padding:0 18px}
+.poster.h.sancv .obs span{font-size:18px;padding:12px 18px}
+.poster.h.sancv.sbig .sanc h5{font-size:24px;margin-bottom:14px}
+.poster.h.sancv.sbig .sanc .sg{grid-template-columns:repeat(2,1fr);gap:14px}
+.poster.h.sancv.sbig .sanc .sk{padding:10px 16px 12px;--ls:40px;border-radius:12px}
+.poster.h.sancv.sbig .sanc .st{font-size:20px;gap:12px;padding-bottom:8px;margin-bottom:6px}
+.poster.h.sancv.sbig .sanc .sp{height:38px;font-size:17px}
+.poster.h.sancv.sbig .sanc .sp .c{font-size:13px;padding:3px 9px}
+.poster.h.sancv.sbig .sanc .sp .j{font-size:14px;padding:4px 10px}
+.poster.pq.sancv{min-height:640px}
+.poster.pq.sancv .ban{margin-top:auto}
+.poster.pq.sancv .sg{gap:16px}
+.poster.pq.sancv .sk{padding:12px 18px 14px;min-height:150px;border-radius:10px}
+.poster.pq.sancv .sk .st{font-size:21px;gap:10px;padding-bottom:8px;margin-bottom:8px}
+.poster.pq.sancv .sk .st .l{width:40px;height:40px}
+.poster.pq.sancv .sp{height:38px;font-size:15px}
+.poster.pq.sancv .sp .c{font-size:12px;padding:3px 9px}
+.poster.pq.sancv .sp .j{font-size:13px;padding:4px 10px}
+.poster.pq.sancv .ob{margin-top:18px;min-height:64px}
+.poster.pq.sancv .ob b{font-size:20px}
+.poster.pq.sancv .ob span{font-size:18px}
 /* rol de juegos (diseño con encabezado arriba) */
 .pq .ti .s,.pq .ti h1,.pq .jb .a small,.pq .jb .a b,.pq .jb .b small,.pq .jb .b b,.pq .sec,.pq .m .t b,.pq .m .v,.pq .sk .st,.pq .ob b,.pq .ban{font-family:'Oswald','Montserrat',sans-serif}
 .pq .ti .s{font-size:26px;font-weight:700;letter-spacing:.08em}
@@ -589,6 +613,7 @@ Atlético Norte vs Racing del Puerto (aplazado)</pre>
       <div class="tab on" data-v="tabla">Tabla general</div>
       <div class="tab" data-v="goleo">Goleo individual</div>
       <div class="tab" data-v="rol">Rol de juegos</div>
+      <div class="tab" data-v="sanc">Sanciones</div>
       <div class="tab" data-v="lig">Liguilla</div>
     </div>
     <div class="sp"></div>
@@ -884,11 +909,32 @@ function sancAlto(gr,obs){
   let sH=0;if(gr.length){sH=8+17;for(let i=0;i<gr.length;i+=3)sH+=(i?6:0)+30+22*Math.max(...gr.slice(i,i+3).map(x=>x.list.length))}
   return sH+(obs?(obs.length>120?60:42)+8:0);
 }
-function rolHtml(l,c,style,c2,catT){
-  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?r.m:[],k=ms.length;
-  const gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
+/* modo 'rol': rol de juegos + juegos pendientes · modo 'sanc': solo sanciones y observación de la jornada */
+function rolHtml(l,c,style,c2,catT,modo){
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?r.m:[],k=ms.length,solo=modo==='sanc';
+  let gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
+  const jn0=r?fx.sel+1:(c.jor||''),fecha0=(r&&r.fecha)||c.fecha;
+  if(solo){
+    const tot=gr.reduce((a,x)=>a+x.list.length,0),big=(gr.length*58+tot*38)/2<=470,bigfs0=bigFor(catT,c,l);
+    return `<div class="poster h sancv${big?' sbig':''}" style="${style}--bigfs:${bigfs0}px">
+    <div class="left">
+      ${leagueLogo(l)}
+      <div class="sub1">Sanciones</div>
+      <h2 class="big">${esc(catT)}</h2>
+      <div class="sub2">${esc(c.sub)}</div>
+      ${jn0?`<span class="pill w">Jornada ${esc(jn0)}</span>`:''}
+      ${fecha0?`<span class="pill g">${esc(fecha0)}</span>`:''}
+      <div class="lgn">${esc(l.name)}</div>
+    </div>
+    <div class="right">
+      <div class="t-card">${gr.length?sancHtml(gr,c2):''}${obs?`<div class="obs"><b>Observación</b><span>${esc(obs)}</span></div>`:''}${(gr.length||obs)?'':'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'}</div>
+      <div class="foot">¡Puntualidad, respeto y juego limpio!</div>
+    </div>
+  </div>`;
+  }
+  gr=[];obs='';
   const sH=sancAlto(gr,obs),oH=0;
-  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[],np=Math.min(pend.length,4),pH=np?10+52+Math.ceil(np/2)*46:0;
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[],np=Math.min(pend.length,6),pH=np?10+52+Math.ceil(np/2)*46:0;
   const avail=545-sH-oH-pH,rg=k>14?2:k>8?5:8;
   const rh=Math.max(18,Math.min(70,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
   const fs=rh<44?Math.min(14,fsFor(rh)):rh<56?17:20,nfs=rh<44?Math.min(13,nfsFor(rh)):rh<56?16:19,hx=hxVars(rh);
@@ -916,7 +962,7 @@ function rolHtml(l,c,style,c2,catT){
       <div class="t-card"><div class="head grid rl"><div>HORA</div><div style="text-align:right">LOCAL</div><div></div><div></div><div></div><div style="text-align:left">VISITANTE</div></div><div class="rows">${rows}</div></div>
       ${sancHtml(gr,c2)}
       ${obs?`<div class="obs"><b>Observación</b><span>${esc(obs)}</span></div>`:''}
-      ${pendHtml(pend,c,c2,4)}
+      ${pendHtml(pend,c,c2,6)}
       <div class="foot">${rest.length?`<b style="color:var(--c2)">Descansa:</b> ${esc(rest.join(', '))}`:'¡Puntualidad y juego limpio!'}</div>
     </div>
   </div>`;
@@ -1075,8 +1121,8 @@ function skinVars(est,tgt,c1,c2,B,I){
 }
 
 /* Rol de juegos con encabezado arriba (para los estilos nuevos): rol, sanciones, observación, pendientes y banner */
-function rolHtmlQ(l,c,style,c2,catT,est){
-  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?r.m:[],T=id=>c.teams.find(t=>t.id===id);
+function rolHtmlQ(l,c,style,c2,catT,est,modo){
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?r.m:[],T=id=>c.teams.find(t=>t.id===id),solo=modo==='sanc';
   const A=color=>color;
   const lg=t=>t&&t.logo?`<img src="${t.logo}">`:`<b class="ini">${esc(t?initials(t.name):'')}</b>`;
   const words=(l.name||'').trim().split(/\s+/).filter(Boolean);
@@ -1100,25 +1146,24 @@ function rolHtmlQ(l,c,style,c2,catT,est){
   const rows=ms.length?ms.map(m=>{const h=T(m.h),a=T(m.a);
     return `<div class="m">${tm(m)}<div class="n h">${esc(h?h.name:'')}</div><div class="l">${lg(h)}</div>${vq(m)}<div class="l">${lg(a)}</div><div class="n a">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
   const gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
-  const sg=gr.length?`<div class="sec r" style="margin-top:12px">Sanciones</div><div class="sg" style="grid-template-columns:repeat(${Math.max(2,Math.min(4,gr.length))},1fr)">${gr.map(x=>`<div class="sk"><div class="st"><div class="l">${lg(x.team)}</div><span>${esc(x.team?x.team.name:'Sin equipo')}</span></div>${x.list.map(s=>`<div class="sp"><span class="nm">${esc(s.p)}</span>${sancCausal(s.c)?`<span class="c">${esc(sancCausal(s.c))}</span>`:''}${sancJuegos(s.g)?`<span class="j">${esc(sancJuegos(s.g))}</span>`:''}</div>`).join('')}</div>`).join('')}</div>`:'';
+  const sg=gr.length?`${solo?'':'<div class="sec r" style="margin-top:12px">Sanciones</div>'}<div class="sg" style="grid-template-columns:repeat(${Math.max(2,Math.min(solo?3:4,gr.length))},1fr)">${gr.map(x=>`<div class="sk"><div class="st"><div class="l">${lg(x.team)}</div><span>${esc(x.team?x.team.name:'Sin equipo')}</span></div>${x.list.map(s=>`<div class="sp"><span class="nm">${esc(s.p)}</span>${sancCausal(s.c)?`<span class="c">${esc(sancCausal(s.c))}</span>`:''}${sancJuegos(s.g)?`<span class="j">${esc(sancJuegos(s.g))}</span>`:''}</div>`).join('')}</div>`).join('')}</div>`:'';
   const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[];
-  const pshow=pend.slice(0,6),pmore=pend.length-pshow.length;
+  const pshow=pend.slice(0,solo?0:8),pmore=pend.length-pshow.length;
   const pd=pshow.length?`<div class="sec sm">Juegos pendientes${pmore>0?` (+${pmore} más)`:''}</div><div class="pgr">${pshow.map(p=>{const h=T(p.h),a=T(p.a);
     return `<div class="pc">${p.j?`<span class="pj">${esc(p.j)}</span>`:''}<span class="pn r">${esc(h?h.name:'')}</span><div class="l">${lg(h)}</div><span class="pv">VS</span><div class="l">${lg(a)}</div><span class="pn">${esc(a?a.name:'')}</span>${p.when?`<span class="pw">${esc(p.when)}</span>`:''}</div>`}).join('')}</div>`:'';
   const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
   const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name).map(t=>t.name):[];
-  const bantxt=rest.length?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
+  const bantxt=solo?'¡Puntualidad, respeto y juego limpio!':rest.length?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
   const banfs=bantxt.length>46?17:bantxt.length>30?21:25;
   const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
   const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>#${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:${fecha.length>22?18:fecha.length>16?23:28}px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
-  return `<div class="poster pq sk-${est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
+  const obsH=obs?`<div class="ob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
+  const cuerpo=solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${pd}`;
+  return `<div class="poster pq${solo?' sancv':''} sk-${est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
     <div class="hd"><div class="lgo">${lgo}</div>
       <div class="ti">${small?`<div class="s">${esc(small)}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(first)}${rest2?` <em>${esc(rest2)}</em>`:''}</h1>${(c.sub||catT)?`<span class="rib">${esc([c.sub,c.name].filter(Boolean).join(' · '))}</span>`:''}</div>
       ${jb}</div>
-    <div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>
-    ${sg}
-    ${obs?`<div class="ob"><b>Observación</b><span>${esc(obs)}</span></div>`:''}
-    ${pd}
+    ${cuerpo}
     <div class="ban" style="font-size:${banfs}px"><i>★</i> ${esc(bantxt)} <i>★</i></div><div class="stripe b"></div></div>`;
 }
 
@@ -1130,13 +1175,13 @@ function nfsFor(rh){return rh<20?Math.max(8,rh-7):rh<26?11:rh<40?13:rh<46?16:19}
 function bigFor(catT,c,l){return Math.max(34,Math.min(64,Math.floor(312/(catT.length*(estiloCat(c,l)==='clasico'?0.76:0.56)))))}
 function posterHtml(){
   const h=posterHtml0(),est=estiloCat(C(),L());
-  return est==='clasico'||S.view==='rol'?h:h.replace('class="poster h"','class="poster h sk sk-'+est+'"');
+  return est==='clasico'||S.view==='rol'||S.view==='sanc'?h:h.replace('class="poster h"','class="poster h sk sk-'+est+'"');
 }
 function posterHtml0(){
   const l=L(),c=C(),list=sorted(c),k=list.length;
   const th=c.own?c:l,c2=th.color||l.color||ORANGE,est=estiloCat(c,l),A=autoColors(c2,est),ok=coloresOk(th,est);
   const c1=(ok&&th.color2)||A.c1,cream=(ok&&th.bg)||A.cream,ink=(ok&&th.ink)||A.ink;
-  const style=`--c2:${c2};--c1:${c1};--soft:${shade(c2,.82)};--cream:${cream};--cream2:${shade(cream,-.04)};--ink:${ink};--ink2:${shade(ink,.25)};--muted:${shade(ink,.45)};--line:${shade(cream,-.08)};`+(est==='clasico'?'':skinVars(est,S.view==='rol'?'rol':'tab',c1,c2,cream,ink));
+  const style=`--c2:${c2};--c1:${c1};--soft:${shade(c2,.82)};--cream:${cream};--cream2:${shade(cream,-.04)};--ink:${ink};--ink2:${shade(ink,.25)};--muted:${shade(ink,.45)};--line:${shade(cream,-.08)};`+(est==='clasico'?'':skinVars(est,(S.view==='rol'||S.view==='sanc')?'rol':'tab',c1,c2,cream,ink));
   const jor=c.jor?`<span class="pill w">Jornada ${esc(c.jor)}</span>`:'';
   const fec=c.fecha?`<span class="pill g">${esc(c.fecha)}</span>`:'';
   const catT=(c.name||'Categoría').toUpperCase();
@@ -1161,7 +1206,7 @@ function posterHtml0(){
   }
   // horizontal
   if(S.view==='goleo')return goleoHtml(l,c,style,c2,catT);
-  if(S.view==='rol')return est==='clasico'?rolHtml(l,c,style,c2,catT):rolHtmlQ(l,c,style,c2,catT,est);
+  if(S.view==='rol'||S.view==='sanc'){const modo=S.view;return est==='clasico'?rolHtml(l,c,style,c2,catT,modo):rolHtmlQ(l,c,style,c2,catT,est,modo)}
   if(S.view==='lig')return ligHtml(l,c,style,c2,catT);
   const avail=545, rg=k>24?1:k>18?2:k>12?4:7;
   const rh=Math.max(12,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
@@ -1407,7 +1452,7 @@ function importarJornadas(){
 }
 $('impGo').onclick=importarJornadas;
 function autoSyncFx(){const c=C();if(!c.fx)return;const msg=syncFx(c);save();renderFixtures();toast(msg)}
-function fxTouch(){S.view='rol';save();renderTabs();renderPreview()}
+function fxTouch(v){S.view=v||'rol';save();renderTabs();renderPreview()}
 
 function renderFixtures(){
   const c=C(),fx=c.fx,nt=c.teams.length,exp=nt*(nt-1)/2*(c.fxDouble?2:1);
@@ -1449,10 +1494,10 @@ function renderFixtures(){
     +'<div style="margin-top:8px">'+rows+'</div>'
     +'<div class="row" style="margin-top:8px"><button class="btn sm" data-act="addm">+ Partido</button><button class="btn sm del" data-act="delr">Eliminar jornada</button></div>'
     +'<div style="margin-top:12px;border-top:1px dashed var(--line);padding-top:10px"><b style="font-size:12px">Sanciones de la jornada '+(fx.sel+1)+'</b>'
-    +'<p class="hint" style="margin:3px 0 8px">Salen en la imagen del rol de juegos, agrupadas por equipo. En «Juegos» puedes escribir un número (2) o un texto (Expulsión definitiva).</p>'
+    +'<p class="hint" style="margin:3px 0 8px">Salen en la imagen «Sanciones» (pestaña de la vista previa), agrupadas por equipo. En «Juegos» puedes escribir un número (2) o un texto (Expulsión definitiva).</p>'
     +sancRows+'<button class="btn sm" data-act="adds">+ Sanción</button>'
-    +'<label class="f" style="margin-top:10px">Observación (sale al pie del rol)<textarea data-rk="obs" rows="2" style="border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;resize:vertical" placeholder="Ej.: Por favor háganle llegar a sus jugadores el Reglamento de Competencia">'+esc(r.obs||'')+'</textarea></label>'
-    +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="pendrol"'+(c.pendRol!==false?' checked':'')+'> Mostrar los juegos pendientes en el rol</label></div>'
+    +'<label class="f" style="margin-top:10px">Observación (sale en la imagen «Sanciones»)<textarea data-rk="obs" rows="2" style="border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;resize:vertical" placeholder="Ej.: Por favor háganle llegar a sus jugadores el Reglamento de Competencia">'+esc(r.obs||'')+'</textarea></label>'
+    +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="pendrol"'+(c.pendRol!==false?' checked':'')+'> Mostrar los juegos pendientes en el rol de juegos</label></div>'
     +(rest.length?'<div class="hint" style="margin:8px 0 0">Descansa: '+esc(rest.join(', '))+'</div>':'')+'</div>';
 }
 $('fxDouble').onchange=e=>{const c=C();c.fxDouble=e.target.checked;if(c.fx)autoSyncFx();else{save();renderFixtures()}};
@@ -1474,9 +1519,9 @@ $('fxTabs').onclick=e=>{
 $('fxRound').addEventListener('input',e=>{
   const fx=C().fx,r=fx.rounds[fx.sel],tr=e.target.closest('[data-m]'),k=e.target.dataset.k;
   if(e.target.dataset.rk==='fecha'){r.fecha=e.target.value;fxTouch();return}
-  if(e.target.dataset.rk==='obs'){r.obs=e.target.value;fxTouch();return}
+  if(e.target.dataset.rk==='obs'){r.obs=e.target.value;fxTouch('sanc');return}
   const sr=e.target.closest('[data-s]');
-  if(sr&&e.target.dataset.sk&&e.target.tagName!=='SELECT'){r.sanc.find(s=>s.id===sr.dataset.s)[e.target.dataset.sk]=e.target.value;fxTouch();return}
+  if(sr&&e.target.dataset.sk&&e.target.tagName!=='SELECT'){r.sanc.find(s=>s.id===sr.dataset.s)[e.target.dataset.sk]=e.target.value;fxTouch('sanc');return}
   if(tr&&(k==='day'||k==='time'||k==='gh'||k==='ga')){
     r.m.find(m=>m.id===tr.dataset.m)[k]=e.target.value;fxTouch();
     if(k==='gh'||k==='ga'){if(C().autoTable)renderTeams();renderPend()}
@@ -1487,7 +1532,7 @@ $('fxRound').addEventListener('change',e=>{
   if(e.target.dataset.rk==='done'){r.done=e.target.checked;save();renderFixtures();renderPend();return}
   if(e.target.dataset.rk==='pendrol'){C().pendRol=e.target.checked;fxTouch();return}
   const sr=e.target.closest('[data-s]');
-  if(sr&&e.target.dataset.sk==='t'){r.sanc.find(s=>s.id===sr.dataset.s).t=e.target.value;save();fxTouch();return}
+  if(sr&&e.target.dataset.sk==='t'){r.sanc.find(s=>s.id===sr.dataset.s).t=e.target.value;save();fxTouch('sanc');return}
   if(tr&&k==='st'){r.m.find(m=>m.id===tr.dataset.m).st=e.target.value;save();if(C().autoTable)renderTeams();renderPend();fxTouch();return}
   if(tr&&k==='mv'&&e.target.value!==''){
     const to=+e.target.value,m=r.m.find(x=>x.id===tr.dataset.m),dest=fx.rounds[to];
@@ -1509,7 +1554,7 @@ $('fxRound').addEventListener('click',e=>{
     if(!confirm('¿Eliminar la jornada '+(fx.sel+1)+' y sus '+r.m.length+' partido(s)? Podrás recuperarlos con «Ajustar a los equipos».'))return;
     fx.rounds.splice(fx.sel,1);fx.sel=Math.max(0,fx.sel-1);
   }
-  save();renderFixtures();if(C().autoTable)renderTeams();fxTouch();
+  save();renderFixtures();if(C().autoTable)renderTeams();fxTouch(b.dataset.act==='adds'||b.dataset.act==='dels'?'sanc':undefined);
 });
 
 /* ====================== LIGUILLA ====================== */
@@ -1744,7 +1789,7 @@ function pickLogo(cb,current){
 
 /* ====================== EXPORTAR ====================== */
 const slug=s=>(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'').toLowerCase();
-function fileBase(){const c=C();return `${({goleo:'goleo',rol:'rol',lig:'liguilla'})[S.view]||'tabla'}_${slug(c.name)||'categoria'}_j${slug(c.jor)||'0'}`}
+function fileBase(){const c=C();return `${({goleo:'goleo',rol:'rol',sanc:'sanciones',lig:'liguilla'})[S.view]||'tabla'}_${slug(c.name)||'categoria'}_j${slug(c.jor)||'0'}`}
 async function snapshot(scale=2){
   if(!LIC.ok())throw new Error('Licencia requerida');
   await document.fonts.ready;
