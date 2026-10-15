@@ -986,7 +986,7 @@ function scorersSorted(c){
 }
 function goleoHtml(l,c,style,c2,catT){
   const list=scorersSorted(c),k=list.length;
-  const avail=545,rg=k>24?1:k>18?2:k>12?4:7;
+  const avail=545,rg=k>24?1:k>18?2:k>12?4:(estiloCat(c,l)==='tv'?9:7);
   const rh=Math.max(12,Math.min(58,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
   const fs=fsFor(rh),nfs=nfsFor(rh),hx=hxVars(rh);
   const bigfs=bigFor(catT,c,l);
@@ -1218,7 +1218,7 @@ function posterHtml0(){
   if(S.view==='goleo')return goleoHtml(l,c,style,c2,catT);
   if(S.view==='rol'||S.view==='sanc'){const modo=S.view;return est==='clasico'?rolHtml(l,c,style,c2,catT,modo):rolHtmlQ(l,c,style,c2,catT,est,modo)}
   if(S.view==='lig')return ligHtml(l,c,style,c2,catT);
-  const avail=545, rg=k>24?1:k>18?2:k>12?4:7;
+  const avail=545, rg=k>24?1:k>18?2:k>12?4:(est==='tv'?9:7); // TV: filas inclinadas, necesitan mas aire
   const rh=Math.max(12,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
   const fs=fsFor(rh), nfs=nfsFor(rh), hx=hxVars(rh);
   const bigfs=bigFor(catT,c,l);
