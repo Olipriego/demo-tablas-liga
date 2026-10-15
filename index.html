@@ -361,6 +361,12 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.sk-retro.h .pos{font-style:italic;font-size:20px}
 .poster.sk-retro.h .head{border-bottom:2px solid var(--acc);margin-bottom:4px}
 .poster.sk-oro.h .head{border-bottom:1px solid var(--line1);margin-bottom:4px}
+/* logo principal: fondo transparente y borde fino; el color del borde lo da cada estilo (dorado en Verde y oro) */
+.poster .lg-wrap{background:transparent;box-shadow:none}
+.poster.h .lg-wrap,.poster.v .lg-wrap,.poster.sk.h .lg-wrap{border-width:3px}
+.pq .lgo{background:transparent;border-width:3px}
+/* cancha: la leyenda inferior queda sobre el pasto, se refuerza para que se lea */
+.poster.sk-cancha.h .foot,.poster.sk-cancha.h .legend{color:#fff;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.7)}
 /* vista «Sanciones» */
 .poster.h.sancv .sanc{margin-top:0}
 .poster.h.sancv .obs{margin-top:14px}
