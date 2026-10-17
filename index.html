@@ -155,7 +155,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.v .pill{padding:9px 24px;font-size:15px;margin-right:10px}
 .poster.v .body{padding:0 38px 20px;margin-top:-34px;position:relative;z-index:1}
 .poster.v .t-card{border-radius:28px;padding:20px 20px 12px}
-.poster.v .grid{grid-template-columns:58px 1fr 44px 44px 44px 44px 44px 44px 58px 78px;column-gap:4px}
+.poster.v .grid{grid-template-columns:58px minmax(0,1fr) 44px 44px 44px 44px 44px 44px 58px 78px;column-gap:4px}
 .poster.v .head{font-size:14px;padding:4px 10px 12px 8px}
 .poster.v .tr{height:var(--vrh,72px);margin-bottom:var(--vrg,9px);padding:0 10px 0 8px;font-size:var(--vfs,21px);--ls:calc(var(--vrh,72px) - 16px);--gap:14px}
 .poster.v .pos{width:min(42px,calc(var(--vrh,72px) - 10px));height:min(42px,calc(var(--vrh,72px) - 10px));font-size:var(--vpfs,19px)}
@@ -195,7 +195,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.h .rl .vs{width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;margin:0 auto}
 .poster.h .rl .hr{background:linear-gradient(180deg,var(--c1),var(--c2));color:#fff;border-radius:12px;height:calc(var(--rh,48px) - 12px);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.05;margin-left:2px}
 .poster.h .rl .hr b{font-size:calc(var(--fs,20px) - 1px);font-weight:800}
-.poster.h .rl .hr i{font-style:normal;font-size:10px;font-weight:700;opacity:.9;text-transform:uppercase}
+.poster.h .rl .hr i{font-style:normal;font-size:13px;font-weight:800;opacity:1;text-transform:uppercase;margin-top:1px}
 .poster.h .bk{flex:1;display:flex;gap:22px;min-height:0;padding:4px 6px 0}
 .poster.h .bc{flex:1;display:flex;flex-direction:column;min-width:0}
 .poster.h .bc h4{margin:0 0 6px;text-align:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:800}
@@ -273,7 +273,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .jb .a small{font-size:11px;letter-spacing:.3em;font-weight:800;margin-bottom:3px}
 .pq .jb .a b{font-size:38px;font-weight:900}
 .pq .jb .b{background:var(--jb);color:var(--jbink);padding:0 24px;display:flex;flex-direction:column;justify-content:center;line-height:1.05}
-.pq .jb .b small{font-size:15px;letter-spacing:.14em;font-weight:800;text-transform:uppercase;color:var(--jbsm)}
+.pq .jb .b small{font-size:21px;letter-spacing:.14em;font-weight:800;text-transform:uppercase;color:var(--jbsm)}
 .pq .jb .b b{font-weight:900;text-transform:uppercase;white-space:nowrap}
 .pq .sec{display:flex;align-items:center;gap:18px;margin:2px 0 8px;height:34px;font-size:23px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);position:relative;z-index:2}
 .pq .sec:before,.pq .sec:after{content:"";flex:1;height:2px;background:var(--line1)}
@@ -282,6 +282,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .rows{display:flex;flex-direction:column;gap:9px;position:relative;z-index:2}
 .pq .m{display:flex;align-items:center;height:64px;background:var(--card);border-radius:var(--rad);overflow:hidden;box-shadow:var(--csh);border:var(--cbd)}
 .pq .m .t{width:116px;align-self:stretch;background:var(--tbg);color:var(--tink);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;flex:none}
+.pq .m .t.d u{text-decoration:none;font-size:16px;font-weight:900;letter-spacing:.03em;white-space:nowrap;margin-bottom:2px}.pq .m .t.d b{font-size:27px}.pq .m .t.d i{margin-top:1px}
 .pq .m .t b{font-size:33px;font-weight:900}.pq .m .t i{font-style:normal;font-size:11px;letter-spacing:.2em;color:var(--tsm);font-weight:800;margin-top:2px;white-space:nowrap}
 .pq .m .n{flex:1;text-align:center;font-size:21px;font-weight:800;text-transform:uppercase;padding:0 10px;color:var(--cink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .pq .m .n.h{text-align:right;padding-right:16px}.pq .m .n.a{text-align:left;padding-left:16px}
@@ -410,6 +411,48 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .ban{font-size:25px;font-weight:700}
 .poster.pq.sk-tv .ti h1{transform:skewX(-8deg);transform-origin:left}
 .poster.pq.sk-oro .rib{border:1.5px solid var(--ribink)}
+/* Formato vertical con los estilos nuevos */
+.poster.v.sk .sub,.poster.v.sk h2.big,.poster.v.sk .pill,.poster.v.sk .head,.poster.v.sk .pts,.poster.v.sk .pos{font-family:'Oswald','Montserrat',sans-serif}
+.poster.v.sk .lg-wrap{border-color:var(--ring);box-shadow:var(--ringsh)}
+.poster.v.sk .tl{border-radius:50%}
+.poster.v.sk .pts,.poster.v.sk .pos{font-weight:700}
+.poster.v.sk-estadio .top{background:transparent;padding-bottom:36px}
+.poster.v.sk-estadio .top:after{display:none}
+.poster.v.sk-estadio .body{margin-top:0}
+.poster.v.sk-estadio .sub{color:#fff;letter-spacing:.14em;font-size:17px}
+.poster.v.sk-estadio h2.big{color:var(--g1);text-shadow:2px 3px 0 rgba(0,0,0,.5)}
+.poster.v.sk-estadio .head{color:var(--g1)}
+.poster.v.sk-estadio .tr{border:2px solid var(--g2);border-radius:14px;background:var(--card)}
+.poster.v.sk-estadio .pts{border-radius:8px}
+.poster.v.sk .nm{font-size:calc(var(--vnfs,19px) - 3px);line-height:1.1}
+.poster.v.sk .grid{grid-template-columns:54px minmax(0,1fr) 40px 40px 40px 40px 42px 42px 52px 72px}
+.poster.v.sk-estadio .foot{border-top:1px solid rgba(242,217,138,.35);margin:0 38px;padding:12px 0 28px}
+.poster.v.sk-estadio .foot .lg{color:#fff}
+/* Estadio (azul y oro): filas oscuras con borde que alterna dorado / azul */
+.poster.pq.sk-estadio .ti .s{color:#fff;letter-spacing:.08em}
+.poster.pq.sk-estadio .ti h1,.poster.pq.sk-estadio .ti h1 em{color:var(--g1);text-shadow:2px 3px 0 rgba(0,0,0,.5)}
+.poster.pq.sk-estadio .rib{border:2px solid var(--g2);border-radius:10px;letter-spacing:.1em}
+.poster.pq.sk-estadio .lgo{border-color:var(--g1);background:#fff}
+.poster.pq.sk-estadio .jb{border:1px solid rgba(255,255,255,.14);border-radius:12px}
+.poster.pq.sk-estadio .jb .a{border-right:1px solid rgba(255,255,255,.25)}
+.poster.pq.sk-estadio .sec{color:#fff}.poster.pq.sk-estadio .sec:before,.poster.pq.sk-estadio .sec:after{background:var(--g2)}
+.poster.pq.sk-estadio .rows{gap:10px}
+.poster.pq.sk-estadio .m{height:68px;border-radius:12px}
+.poster.pq.sk-estadio .m:nth-child(even){border-color:var(--bl1)}
+.poster.pq.sk-estadio .m:nth-child(even) .t{background:var(--blue);color:var(--bink)}
+.poster.pq.sk-estadio .m:nth-child(even) .t i{color:var(--bink)}
+.poster.pq.sk-estadio .m .t{width:128px}
+.poster.pq.sk-estadio .m .t b{font-size:34px}.poster.pq.sk-estadio .m .t.d b{font-size:30px}
+.poster.pq.sk-estadio .m .t.d u{font-size:17px}
+.poster.pq.sk-estadio .m .n{font-size:26px;font-weight:700;letter-spacing:.01em}
+.poster.pq.sk-estadio .l{width:62px;height:62px;border:3px solid #ffffff}
+.poster.pq.sk-estadio .m .v{background:var(--vbg);border:2.5px solid var(--vring);min-width:44px;height:44px;font-size:16px;font-weight:700}
+.poster.pq.sk-estadio .pc{border:1.5px solid var(--g2);border-radius:10px;height:52px;font-size:17px;font-weight:700;font-family:'Oswald','Montserrat',sans-serif;gap:10px}
+.poster.pq.sk-estadio .pc .l{width:38px;height:38px;border-width:2px}.poster.pq.sk-estadio .pc .pv{font-size:13px;color:var(--bl1)}
+.poster.pq.sk-estadio .pc .pj{font-size:13px;padding:4px 9px}.poster.pq.sk-estadio .pgr{gap:10px}
+.poster.pq.sk-estadio .pc .pj{background:var(--g2);color:#1b1405}
+.poster.pq.sk-estadio .ban{border-radius:12px;border-width:3px;padding:10px 70px}
+.poster.pq.sk-estadio .sk{border:1.5px solid var(--g2);border-left:6px solid var(--red)}
 .poster.pq.sk-retro .ti h1,.poster.pq.sk-retro .sec,.poster.pq.sk-retro .ban{font-weight:700}
 
 /* ===== Versión 2: panel con pestañas y vista previa ajustable ===== */
@@ -440,7 +483,6 @@ input::placeholder,textarea::placeholder{color:#64748b}
 </head>
 <body>
 <div class="cta-demo"><span>Versión de demostración con datos ficticios.</span> ¿Te interesa para tu liga? Escríbenos a <a href="mailto:ojpriegot@ticsdemx.com?subject=Generador%20de%20tablas%20de%20f%C3%BAtbol">ojpriegot@ticsdemx.com</a></div>
-
 <div class="app">
 
 <!-- ===================== PANEL DE CAPTURA ===================== -->
@@ -612,6 +654,10 @@ Atlético Norte vs Racing del Puerto (aplazado)</pre>
     <button class="btn sm" id="bkOff">Desactivar</button>
   </div>
   <div class="hint" id="bkStatus" style="margin-top:6px"></div>
+  <div id="nubeBox" style="display:none;margin-top:10px">
+    <div class="hint" id="nubeStatus"></div>
+    <div class="row" style="margin-top:6px"><button class="btn sm" id="nubeNow">Respaldar en la nube ahora</button><button class="btn sm" id="nubeGet">Restaurar de la nube</button></div>
+  </div>
   <input type="file" id="fileJson" accept=".json,application/json,text/plain" hidden>
   <input type="file" id="fileLogo" accept="image/*" hidden>
 </aside>
@@ -625,6 +671,10 @@ Atlético Norte vs Racing del Puerto (aplazado)</pre>
       <div class="tab" data-v="rol">Rol de juegos</div>
       <div class="tab" data-v="sanc">Sanciones</div>
       <div class="tab" data-v="lig">Liguilla</div>
+    </div>
+    <div class="tabs" style="margin:0" id="fmtTabs" title="Formato de la imagen de la tabla general">
+      <div class="tab on" data-f="h">Horizontal</div>
+      <div class="tab" data-f="v">Vertical</div>
     </div>
     <div class="sp"></div>
     <select class="pvsize" id="pvSize" title="Tamaño de la vista previa"><option value="560">Vista pequeña</option><option value="760">Vista mediana</option><option value="1400">Vista grande</option></select>
@@ -678,9 +728,9 @@ function defaultState(){
     ]};
 }
 let S=load();
-function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.leagues&&s.leagues.length){s.fmt='h';return s}}catch(e){}return defaultState()}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.leagues&&s.leagues.length){s.fmt=s.fmt==='v'?'v':'h';return s}}catch(e){}return defaultState()}
 let saveWarned=false;
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){if(!saveWarned){saveWarned=true;toast('No se pudo guardar (logos muy pesados). Usa «Guardar / compartir respaldo».')}}if(typeof bkSchedule==='function')bkSchedule()}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){if(!saveWarned){saveWarned=true;toast('No se pudo guardar (logos muy pesados). Usa «Guardar / compartir respaldo».')}}if(typeof bkSchedule==='function')bkSchedule();if(typeof nubeSchedule==='function')nubeSchedule()}
 const L=()=>S.leagues[S.selL];
 const C=()=>{const l=L();if(S.selC>=l.cats.length)S.selC=Math.max(0,l.cats.length-1);return l.cats[S.selC]};
 const $=id=>document.getElementById(id);
@@ -715,7 +765,7 @@ const LIC=(function(){
       const key=await crypto.subtle.importKey('jwk',PUB_JWK,{name:'ECDSA',namedCurve:'P-256'},false,['verify']);
       if(!(await crypto.subtle.verify({name:'ECDSA',hash:'SHA-256'},key,sig,payload)))return {ok:false,msg:'La clave no es válida.'};
       const d=JSON.parse(new TextDecoder().decode(payload));
-      if(norm(d.m)!==norm(mid))return {ok:false,msg:'Esta clave pertenece a otro equipo. Pide una clave para el código de este equipo.'};
+      if(d.m!=='WEB'&&norm(d.m)!==norm(mid))return {ok:false,msg:'Esta clave pertenece a otro equipo. Pide una clave para el código de este equipo.'};
       if(d.e){
         const now=Date.now();let seen=0;try{seen=+localStorage.getItem('tg_seen')||0}catch(e){}
         if(now<seen-864e5)return {ok:false,msg:'La fecha de esta computadora parece alterada. Corrígela para continuar.'};
@@ -724,6 +774,21 @@ const LIC=(function(){
       }
       return {ok:true,info:d};
     }catch(e){return {ok:false,msg:'No se pudo verificar la clave.'}}
+  }
+  /* Claves web (m:'WEB'): valen en cualquier equipo, pero el servidor limita cuántos equipos distintos las usan */
+  async function devId(){
+    const sc=[Math.min(screen.width,screen.height),Math.max(screen.width,screen.height)];
+    const s=[navigator.platform,sc.join('x'),window.devicePixelRatio,navigator.maxTouchPoints,navigator.language,(Intl.DateTimeFormat().resolvedOptions()||{}).timeZone].join('|');
+    const h=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));
+    return Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,16);
+  }
+  async function reg(str,d){
+    if(d.m!=='WEB'||!/^https?:$/.test(location.protocol))return {ok:true};
+    try{
+      const r=await fetch('/api/activar',{method:'POST',headers:{'X-Licencia':str,'Content-Type':'application/json'},body:JSON.stringify({d:await devId()})});
+      if(r.status===403){const j=await r.json().catch(()=>({}));return {ok:false,msg:j.error||'Esta clave ya se usa en el máximo de equipos permitidos.'}}
+      return r.ok?{ok:true}:{ok:null}
+    }catch(e){return {ok:null}}
   }
   const gate=show=>{g('licGate').style.display=show?'grid':'none'};
   async function saved(){let v=null;try{v=localStorage.getItem('tg_lic')}catch(e){}if(!v){try{v=await idbGet('tg_lic')}catch(e){}}return v}
@@ -744,16 +809,18 @@ const LIC=(function(){
     gate(true);
     if(!PUB_JWK||!(window.crypto&&crypto.subtle)){g('licMsg').textContent='Este navegador no permite verificar la licencia. Abre el aplicativo en Chrome o Edge, desde el archivo o por https.';return}
     const mid=await getMid(),v=await saved();
-    if(v){const r=await verify(v,mid);if(r.ok){ok=true;showInfo(r.info);gate(false);return}ask(r.msg,mid);return}
+    if(v){const r=await verify(v,mid);if(r.ok){const g2=await reg(v,r.info);if(g2.ok===false){ask(g2.msg,mid);return}ok=true;showInfo(r.info);gate(false);window.nubeInit&&nubeInit();return}ask(r.msg,mid);return}
     ask('',mid);
   }
   g('licCopy')&&(g('licCopy').onclick=async()=>{try{navigator.clipboard.writeText(g('licCode').textContent);g('licCopy').textContent='Copiado ✔'}catch(e){}});
   g('licGo')&&(g('licGo').onclick=async()=>{
     const mid=g('licCode').textContent,k=g('licKey').value,r=await verify(k,mid);
     if(!r.ok){g('licErr').textContent=r.msg;return}
-    await keep(k.trim().replace(/\s+/g,''));ok=true;showInfo(r.info);gate(false);toast('Aplicativo activado');
+    const kk=k.trim().replace(/\s+/g,''),g2=await reg(kk,r.info);
+    if(g2.ok!==true){g('licErr').textContent=g2.msg||'Necesitas internet para activar esta clave.';return}
+    await keep(kk);ok=true;showInfo(r.info);gate(false);toast('Aplicativo activado');window.nubeInit&&nubeInit();
   });
-  return {ok:()=>ok,init};
+  return {ok:()=>ok,init,key:saved};
 })();
 LIC.init();
 
@@ -830,7 +897,7 @@ function sorted(cat){
 }
 const fmtDif=d=>d>0?'+'+d:d<0?'−'+Math.abs(d):'0';
 function autoColors(c2,est){
-  if(ESTILOS_OSCUROS.includes(est))return {c1:shade(c2,.45),cream:shade(c2,est==='oro'?-.93:-.9),ink:'#f2f6f4'};
+  if(ESTILOS_OSCUROS.includes(est))return {c1:shade(c2,.45),cream:shade(c2,est==='oro'?-.93:est==='estadio'?-.8:-.9),ink:'#f2f6f4'};
   return {c1:shade(c2,.28),cream:shade(c2,.93),ink:shade(c2,-.72)}
 }
 function shade(hex,amt){ // amt -1..1
@@ -919,9 +986,19 @@ function sancAlto(gr,obs){
   let sH=0;if(gr.length){sH=8+17;for(let i=0;i<gr.length;i+=3)sH+=(i?6:0)+30+22*Math.max(...gr.slice(i,i+3).map(x=>x.list.length))}
   return sH+(obs?(obs.length>120?60:42)+8:0);
 }
+/* Orden del rol: por dia de la semana (lunes a domingo) y luego por hora; sin dia o sin hora van al final */
+const DIAS_SEM=['lun','mar','mie','jue','vie','sab','dom'];
+function dayIdx(s){const t=normN(s).slice(0,3);const i=DIAS_SEM.indexOf(t);return i<0?99:i}
+function timeMin(s){
+  const m=/^(\d{1,2})(?:[:.](\d{2}))?\s*(?:([ap])\.?\s*m\.?|h(?:rs?)?\.?)?$/i.exec(String(s||'').trim());if(!m)return 9999;
+  let h=+m[1];const mi=+(m[2]||0),ap=(m[3]||'').toLowerCase();
+  if(ap==='p'&&h<12)h+=12;if(ap==='a'&&h===12)h=0;
+  return h*60+mi;
+}
+function sortMs(ms){return ms.map((m,i)=>[m,i]).sort((x,y)=>dayIdx(x[0].day)-dayIdx(y[0].day)||timeMin(x[0].time)-timeMin(y[0].time)||x[1]-y[1]).map(x=>x[0])}
 /* modo 'rol': rol de juegos + juegos pendientes · modo 'sanc': solo sanciones y observación de la jornada */
 function rolHtml(l,c,style,c2,catT,modo){
-  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?r.m:[],k=ms.length,solo=modo==='sanc';
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?sortMs(r.m):[],k=ms.length,solo=modo==='sanc';
   let gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
   const jn0=r?fx.sel+1:(c.jor||''),fecha0=(r&&r.fecha)||c.fecha;
   if(solo){
@@ -1030,8 +1107,8 @@ function pendHtml(pend,c,c2,max=6){
   return `<div class="pend"><h5>Juegos pendientes${more>0?` (+${more} más)`:''}</h5><div class="pg${show.length===1?' one':''}">${show.map(item).join('')}</div></div>`;
 }
 /* ====================== ESTILOS DE DISEÑO ====================== */
-const ESTILOS=[['clasico','Original'],['neon','Noche neón'],['tv','Transmisión TV'],['oro','Oro y negro'],['moderno','Moderno a color'],['retro','Clásico retro'],['cancha','Cancha / verde']];
-const ESTILOS_OSCUROS=['neon','tv','oro'];
+const ESTILOS=[['clasico','Original'],['neon','Noche neón'],['tv','Transmisión TV'],['oro','Oro y negro'],['moderno','Moderno a color'],['retro','Clásico retro'],['cancha','Cancha / verde'],['estadio','Estadio (azul y oro)']];
+const ESTILOS_OSCUROS=['neon','tv','oro','estadio'];
 const hexRGB=h=>{h=h.replace('#','');const v=parseInt(h.length===3?h.replace(/./g,'$&$&'):h,16);return [v>>16,(v>>8)&255,v&255]};
 const rgba=(h,a)=>{const [r,g,b]=hexRGB(h);return `rgba(${r},${g},${b},${a})`};
 const lum=h=>{const [r,g,b]=hexRGB(h).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
@@ -1045,6 +1122,22 @@ const coloresOk=(th,est)=>!!th.dk===ESTILOS_OSCUROS.includes(est);
    tgt: 'tab' (tabla, goleo, liguilla) o 'rol' (rol de juegos con encabezado arriba). */
 /* Franjas verticales alternas con paradas explicitas (html2canvas no dibuja repeating-linear-gradient) */
 const bandas=(a,b,w,n=Math.ceil(1280/w))=>`linear-gradient(90deg,${Array.from({length:n},(_,i)=>`${i%2?b:a} ${i*w}px ${(i+1)*w}px`).join(',')})`;
+/* Fondo «estadio»: cielo oscuro, haces de luz, destellos y cancha iluminada (SVG incrustado; html2canvas lo dibuja como imagen) */
+function stadiumBg(P){
+  const top=shade(P,-.7),mid=shade(P,-.8),bot=shade(P,-.9),lit=shade(P,.35);
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 900" preserveAspectRatio="none">'
+  +'<defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="'+top+'"/><stop offset=".55" stop-color="'+mid+'"/><stop offset="1" stop-color="'+bot+'"/></linearGradient>'
+  +'<linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".22"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>'
+  +'<radialGradient id="c"><stop offset="0" stop-color="#ffffff" stop-opacity=".85"/><stop offset=".25" stop-color="'+lit+'" stop-opacity=".35"/><stop offset="1" stop-color="'+lit+'" stop-opacity="0"/></radialGradient>'
+  +'<radialGradient id="d" cx=".5" cy="1" r=".7"><stop offset="0" stop-color="'+lit+'" stop-opacity=".45"/><stop offset="1" stop-color="'+lit+'" stop-opacity="0"/></radialGradient></defs>'
+  +'<rect width="1280" height="900" fill="url(#a)"/>'
+  +'<polygon points="60,0 330,0 760,900 420,900" fill="url(#b)" opacity=".38"/><polygon points="360,0 560,0 1010,900 640,900" fill="url(#b)" opacity=".26"/>'
+  +'<polygon points="1220,0 960,0 520,900 900,900" fill="url(#b)" opacity=".38"/><polygon points="930,0 760,0 300,900 640,900" fill="url(#b)" opacity=".22"/>'
+  +'<circle cx="70" cy="40" r="90" fill="url(#c)"/><circle cx="1210" cy="40" r="90" fill="url(#c)"/><circle cx="640" cy="10" r="70" fill="url(#c)" opacity=".7"/>'
+  +'<ellipse cx="640" cy="900" rx="900" ry="260" fill="url(#d)"/>'
+  +'<g fill="#ffffff" opacity=".35"><circle cx="40" cy="330" r="2"/><circle cx="130" cy="560" r="2.5"/><circle cx="1240" cy="300" r="2"/><circle cx="1180" cy="620" r="2.5"/><circle cx="1255" cy="820" r="2"/><circle cx="25" cy="760" r="2"/><circle cx="610" cy="120" r="1.8"/><circle cx="905" cy="95" r="2"/></g></svg>';
+  return "url('data:image/svg+xml,"+encodeURIComponent(svg)+"') 0 0/100% 100% no-repeat "+bot;
+}
 function skinVars(est,tgt,c1,c2,B,I){
   const P=c2,S=c1,oP=onC(P),oS=onC(S),dk=lum(B)<.35;
   const gl=shade(P,.55),gd=shade(P,-.45),dkg=shade(P,-.86);
@@ -1082,6 +1175,18 @@ function skinVars(est,tgt,c1,c2,B,I){
     obline:shade(P,-.35),obbg:`linear-gradient(180deg,${gl},${P})`,obink:dkg,banbg:`linear-gradient(180deg,${gl},${P})`,banink:dkg,banline:shade(P,.8),banstar:dkg,red:'#e0564f',
     left:'transparent',leftink:I,leftbd:`1px solid ${shade(P,-.35)}`,leftacc:P,hdink:P,posbg:'transparent',posink:shade(P,-.1),
     ptsbg:`linear-gradient(180deg,${gl},${P})`,ptsink:dkg,ptsrad:'4px',ptssh:'none'});
+  else if(est==='estadio'){
+    const G1='#fceabb',G2='#f8b500',G3='#c78000',DK='#2a1b00',b1='#35d6ff',b2='#4facfe',gold='linear-gradient(180deg,#fceabb,#f8b500 55%,#c78000)',blue='linear-gradient(180deg,#00f2fe,#4facfe)',nv=shade(P,-.8);
+    base({
+    bg:stadiumBg(P),ink:'#ffffff',acc:G1,stripe:'linear-gradient(90deg,'+G3+','+G1+','+G3+')',ring:G1,ringsh:'0 0 0 4px '+rgba(G1,.3),
+    rib:rgba(nv,.7),ribink:G1,ribline:G2,ja:blue,jainks:'#ffffff',jb:rgba(nv,.75),jbink:'#ffffff',jbsm:G1,jsh:'none',pgbd:'1px solid '+G2,
+    line1:G2,red:'#ff7a7a',redline:rgba('#ff7a7a',.5),card:'linear-gradient(180deg,'+rgba(shade(P,-.66),.97)+','+rgba(shade(P,-.82),.97)+')',cink:'#ffffff',rad:'12px',cbd:'2px solid '+G2,csh:'none',
+    tbg:gold,tink:DK,tsm:DK,lring:'#ffffff',vbg:rgba(nv,.9),vink:b1,vring:'#aeb9c7',chip:rgba(G1,.2),chipink:G1,
+    obline:G2,obbg:gold,obink:DK,banbg:'linear-gradient(180deg,#f7fafd,#aab6c6)',banink:'#101a30',banline:'#dbe4ef',banstar:'#101a30',deco:'none',
+    left:'transparent',leftink:'#ffffff',leftbd:'1px solid '+rgba(G1,.4),leftacc:G1,hdink:G1,posbg:'transparent',posink:G1,
+    ptsbg:gold,ptsink:DK,ptsrad:'6px',ptssh:'none',t3bd:rgba(G1,.7),t3bg:'linear-gradient(90deg,'+rgba(G1,.22)+','+rgba(G1,.04)+')',t3sh:'none',
+    muted:'rgba(255,255,255,.65)',ink2:'rgba(255,255,255,.85)',line:'rgba(255,255,255,.18)',soft:rgba(P,.3),upc:'#6fe39a',dnc:'#ff8a8a',
+    g1:G1,g2:G2,gold:gold,blue:blue,bl1:b1,bl2:b2,bink:'#04243b'})}
   else if(est==='moderno'){const tx=lum(P)>.6?shade(P,-.8):'#ffffff';base({
     bg:`linear-gradient(120deg,${S} 0%,${P} 52%,${shade(P,-.45)} 100%)`,
     ink:tx,acc:shade(S,.8),stripe:bandas('#ffffff','rgba(255,255,255,0)',40),ring:'#ffffff',ringsh:'0 0 0 4px rgba(255,255,255,.35)',
@@ -1132,7 +1237,7 @@ function skinVars(est,tgt,c1,c2,B,I){
 
 /* Rol de juegos con encabezado arriba (para los estilos nuevos): rol, sanciones, observación, pendientes y banner */
 function rolHtmlQ(l,c,style,c2,catT,est,modo){
-  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?r.m:[],T=id=>c.teams.find(t=>t.id===id),solo=modo==='sanc';
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?sortMs(r.m):[],T=id=>c.teams.find(t=>t.id===id),solo=modo==='sanc';
   const A=color=>color;
   const lg=t=>t&&t.logo?`<img src="${t.logo}">`:`<b class="ini">${esc(t?initials(t.name):'')}</b>`;
   const words=(l.name||'').trim().split(/\s+/).filter(Boolean);
@@ -1145,7 +1250,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const tm=m=>{
     const mm=/^(\d{1,2}:\d{2})\s*([ap])\.?\s*m\.?/i.exec((m.time||'').trim());
     let b=mm?mm[1]:((m.time||'').trim()||'—'),lab=mm?(mm[2].toLowerCase()==='a'?'A.M.':'P.M.'):'';
-    if(multi&&m.day)lab=lab?m.day.slice(0,3).toUpperCase()+' · '+lab:m.day.toUpperCase();
+    if(multi&&m.day)return `<div class="t d"><u>${esc(m.day.trim().toUpperCase())}</u><b>${esc(b)}</b>${lab?`<i>${esc(lab)}</i>`:''}</div>`;
     return `<div class="t"><b>${esc(b)}</b>${lab?`<i>${esc(lab)}</i>`:''}</div>`;
   };
   const vq=m=>{
@@ -1185,7 +1290,9 @@ function nfsFor(rh){return rh<20?Math.max(8,rh-7):rh<26?11:rh<40?13:rh<46?16:19}
 function bigFor(catT,c,l){return Math.max(34,Math.min(64,Math.floor(312/(catT.length*(estiloCat(c,l)==='clasico'?0.76:0.56)))))}
 function posterHtml(){
   const h=posterHtml0(),est=estiloCat(C(),L());
-  return est==='clasico'||S.view==='rol'||S.view==='sanc'?h:h.replace('class="poster h"','class="poster h sk sk-'+est+'"');
+  const esV=h.indexOf('class="poster v"')>=0;
+  if(est==='clasico'||(!esV&&(S.view==='rol'||S.view==='sanc')))return h;
+  return h.replace('class="poster h"','class="poster h sk sk-'+est+'"').replace('class="poster v"','class="poster v sk sk-'+est+'"');
 }
 function posterHtml0(){
   const l=L(),c=C(),list=sorted(c),k=list.length;
@@ -1196,7 +1303,7 @@ function posterHtml0(){
   const fec=c.fecha?`<span class="pill g">${esc(c.fecha)}</span>`:'';
   const catT=(c.name||'Categoría').toUpperCase();
 
-  if(S.fmt==='v'){
+  if(S.fmt==='v'&&(S.view||'tabla')==='tabla'){
     const big=Math.max(40,Math.min(68,Math.floor(560/ (('TABLA GENERAL').length*0.74))));
     // hasta 12 equipos tamano normal; con mas, las filas se reducen para que el cartel no crezca sin limite
     const unit=k>12?Math.max(24,Math.floor(12*81/k)):81, vrg=Math.max(2,Math.round(unit*.11)), vrh=unit-vrg, vsc=vrh/72;
@@ -1267,6 +1374,8 @@ function tabName(l){
 function renderTabs(){
   $('leagueTabs').innerHTML=S.leagues.map((l,i)=>`<div class="tab ${i===S.selL?'on':''}" data-i="${i}">${esc(tabName(l))}</div>`).join('');
   document.querySelectorAll('#viewTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.v===(S.view||'tabla')));
+  $('fmtTabs').style.display=(S.view||'tabla')==='tabla'?'':'none';
+  document.querySelectorAll('#fmtTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.f===(S.fmt==='v'?'v':'h')));
   $('catTabs').innerHTML=L().cats.map((c,i)=>`<div class="tab ${i===S.selC?'on':''}" data-i="${i}">${esc(c.name||'Sin nombre')}</div>`).join('');
 }
 function renderLeagueForm(){
@@ -1526,6 +1635,13 @@ $('fxTabs').onclick=e=>{
   else fx.sel=+t.dataset.i;
   save();renderFixtures();fxTouch();
 };
+/* Al capturar marcadores o marcar una jornada como jugada, la tabla debe alimentarse del calendario: si la opción estaba apagada se activa */
+function autoOn(){
+  const c=C();if(c.autoTable||!c.fx)return;
+  const manual=c.teams.some(t=>n(t.jg)||n(t.je)||n(t.jp)||n(t.gf)||n(t.gc));
+  if(manual&&!confirm('La tabla tiene resultados escritos a mano. ¿Calcularla con los marcadores del calendario? (los datos a mano dejan de usarse)'))return;
+  c.autoTable=true;$('autoTable').checked=true;save();renderRules();renderTeams();toast('Tabla general ahora se calcula con los marcadores del calendario.')
+}
 $('fxRound').addEventListener('input',e=>{
   const fx=C().fx,r=fx.rounds[fx.sel],tr=e.target.closest('[data-m]'),k=e.target.dataset.k;
   if(e.target.dataset.rk==='fecha'){r.fecha=e.target.value;fxTouch();return}
@@ -1534,16 +1650,17 @@ $('fxRound').addEventListener('input',e=>{
   if(sr&&e.target.dataset.sk&&e.target.tagName!=='SELECT'){r.sanc.find(s=>s.id===sr.dataset.s)[e.target.dataset.sk]=e.target.value;fxTouch('sanc');return}
   if(tr&&(k==='day'||k==='time'||k==='gh'||k==='ga')){
     r.m.find(m=>m.id===tr.dataset.m)[k]=e.target.value;fxTouch();
-    if(k==='gh'||k==='ga'){if(C().autoTable)renderTeams();renderPend()}
+    if(k==='gh'||k==='ga'){autoOn();if(C().autoTable)renderTeams();renderPend()}
   }
 });
 $('fxRound').addEventListener('change',e=>{
   const fx=C().fx,r=fx.rounds[fx.sel],tr=e.target.closest('[data-m]'),k=e.target.dataset.k;
-  if(e.target.dataset.rk==='done'){r.done=e.target.checked;save();renderFixtures();renderPend();return}
+  if(tr&&(k==='day'||k==='time')){r.m=sortMs(r.m);save();renderFixtures();renderPreview();return}
+  if(e.target.dataset.rk==='done'){r.done=e.target.checked;if(r.done)autoOn();save();renderFixtures();if(C().autoTable)renderTeams();renderPend();renderPreview();return}
   if(e.target.dataset.rk==='pendrol'){C().pendRol=e.target.checked;fxTouch();return}
   const sr=e.target.closest('[data-s]');
   if(sr&&e.target.dataset.sk==='t'){r.sanc.find(s=>s.id===sr.dataset.s).t=e.target.value;save();fxTouch('sanc');return}
-  if(tr&&k==='st'){r.m.find(m=>m.id===tr.dataset.m).st=e.target.value;save();if(C().autoTable)renderTeams();renderPend();fxTouch();return}
+  if(tr&&k==='st'){r.m.find(m=>m.id===tr.dataset.m).st=e.target.value;autoOn();save();if(C().autoTable)renderTeams();renderPend();fxTouch();return}
   if(tr&&k==='mv'&&e.target.value!==''){
     const to=+e.target.value,m=r.m.find(x=>x.id===tr.dataset.m),dest=fx.rounds[to];
     const busy=dest.m.some(x=>x.h===m.h||x.a===m.h||x.h===m.a||x.a===m.a);
@@ -1719,6 +1836,7 @@ $('delCat').onclick=()=>{
   if(!confirm(`¿Eliminar la categoría «${C().name}»?`))return;
   l.cats.splice(S.selC,1);S.selC=0;save();renderAll();
 };
+$('fmtTabs').onclick=e=>{const t=e.target.closest('.tab');if(!t)return;S.fmt=t.dataset.f==='v'?'v':'h';save();renderTabs();renderPreview()};
 $('viewTabs').onclick=e=>{const t=e.target.closest('.tab');if(!t)return;S.view=t.dataset.v;save();renderTabs();renderPreview()};
 $('scTop').oninput=e=>{C().scTop=Math.max(1,Math.min(20,n(e.target.value)||10));changed()};
 $('addScorer').onclick=()=>{
@@ -1879,15 +1997,77 @@ function renderBk(){
   let html='',cls='bk';
   if(BK.h&&BK.perm){cls='bk ok';html='✔ Respaldo automático activo en <b>'+esc(BK.h.name)+'</b>'+(lb?' · último: '+new Date(lb).toLocaleString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'')}
   else if(BK.h){html='⚠ El respaldo automático está en pausa (el navegador pide permiso al abrir la página).<br><button class="btn sm pri" data-bk="auto">Reactivar</button>'}
-  else if(hasData()&&(!lb||days>=7)){html='⚠ '+(lb?'Hace '+days+' días que no respaldas tus datos.':'Todavía no has respaldado tus datos.')+'<br><button class="btn sm pri" data-bk="now">Respaldar ahora</button><button class="btn sm" data-bk="auto">Activar respaldo automático</button>'}
+  else if(hasData()&&(!lb||days>=7)&&!(NUBE.on&&!NUBE.pause&&!NUBE.err&&Date.now()-NUBE.last<864e5)){html='⚠ '+(lb?'Hace '+days+' días que no respaldas tus datos.':'Todavía no has respaldado tus datos.')+'<br><button class="btn sm pri" data-bk="now">Respaldar ahora</button><button class="btn sm" data-bk="auto">Activar respaldo automático</button>'}
   b.style.display=html?'block':'none';b.className=cls;b.innerHTML=html;
-  st.textContent=BK.h?(BK.perm?'Activo en: '+BK.h.name:'En pausa: '+BK.h.name):'Desactivado (disponible en Chrome y Edge).';
+  st.textContent=BK.h?(BK.perm?'Activo en: '+BK.h.name:'En pausa: '+BK.h.name):(NUBE.on?'Respaldo en archivo: solo en Chrome/Edge de computadora. Aquí se usa el respaldo en la nube.':'Desactivado (disponible en Chrome y Edge).');
   $('bkAuto').textContent=BK.h&&BK.perm?'Cambiar archivo de respaldo':BK.h?'Reactivar respaldo automático':'Activar respaldo automático';
   $('bkOff').style.display=BK.h?'':'none';
 }
+/* Respaldo en la nube (versión licenciada publicada en internet): guarda solo, por cliente, y permite recuperar en otra tableta */
+var NUBE={on:false,pause:false,err:'',last:0,t:null,sent:'',started:false};
+const NUBE_KEY=KEY+'_nube';
+const nubeMark=()=>{try{return +localStorage.getItem(NUBE_KEY)||0}catch(e){return 0}};
+const nubeSetMark=v=>{try{localStorage.setItem(NUBE_KEY,String(v))}catch(e){}};
+const nubeFecha=t=>new Date(t).toLocaleString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+async function nubeReq(method,body){
+  const lic=await LIC.key();if(!lic)throw new Error('sin licencia');
+  const r=await fetch('/api/backup',{method,headers:{'X-Licencia':lic,...(body?{'Content-Type':'application/json'}:{})},body});
+  if(r.status===404)return null;
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  const j=await r.json();
+  if(method==='GET'&&!(j.data&&Array.isArray(j.data.leagues)&&j.data.leagues.every(l=>l&&Array.isArray(l.cats))))return null;
+  return j;
+}
+function renderNube(){
+  const box=$('nubeBox');if(!box)return;box.style.display=NUBE.on?'block':'none';if(!NUBE.on)return;
+  let t='☁ Respaldo en la nube: ';
+  if(NUBE.err)t+='sin conexión o no disponible ('+NUBE.err+'). Se reintenta al guardar.';
+  else if(NUBE.pause)t+='en pausa (no se sobrescribe la nube). Usa «Respaldar en la nube ahora» o «Restaurar de la nube».';
+  else t+='activo'+(NUBE.last?' · último: '+nubeFecha(NUBE.last):' · esperando el primer guardado');
+  $('nubeStatus').textContent=t;
+}
+async function nubeSave(force){
+  if(!NUBE.on||(NUBE.pause&&!force))return;
+  const body=JSON.stringify(S);if(!force&&body===NUBE.sent)return;
+  try{const r=await nubeReq('PUT',body);NUBE.sent=body;NUBE.last=r.updated;nubeSetMark(r.updated);NUBE.err='';NUBE.pause=false;markBk()}
+  catch(e){NUBE.err=String(e.message||e).slice(0,40)}
+  renderNube();renderBk();
+}
+function nubeSchedule(){if(!NUBE||!NUBE.on||NUBE.pause)return;clearTimeout(NUBE.t);NUBE.t=setTimeout(nubeSave,45000)}
+function nubeLoad(d,t){
+  try{localStorage.setItem(KEY+'_backup',JSON.stringify(S))}catch(_){}
+  S=d;S.selL=0;S.selC=0;NUBE.sent=JSON.stringify(S);NUBE.last=t;nubeSetMark(t);NUBE.pause=false;
+  save();renderAll();toast('Datos cargados desde la nube');
+}
+async function nubeInit(){
+  if(NUBE.started||!LICENCIA||!/^https?:$/.test(location.protocol))return;NUBE.started=true;
+  try{
+    const c=await nubeReq('GET');NUBE.on=true;NUBE.err='';
+    if(!c){NUBE.last=0;if(hasData())nubeSave()}
+    else{
+      NUBE.last=c.updated;
+      if(!hasData()){
+        if(confirm('Se encontró un respaldo de tu información en la nube ('+nubeFecha(c.updated)+'). ¿Cargarlo?'))nubeLoad(c.data,c.updated);else NUBE.pause=true;
+      }else if(nubeMark()===c.updated){NUBE.sent=JSON.stringify(S)}
+      else if(confirm('Hay un respaldo en la nube del '+nubeFecha(c.updated)+' distinto a lo que hay en este equipo.\n\nAceptar = cargar el de la nube (se guarda copia de lo actual).\nCancelar = mantener lo de este equipo (la nube no se modifica hasta que tú lo indiques).'))nubeLoad(c.data,c.updated);
+      else NUBE.pause=true;
+    }
+  }catch(e){NUBE.on=true;NUBE.err=String(e.message||e).slice(0,40)}
+  renderNube();renderBk();
+}
+$('nubeNow').onclick=async()=>{
+  if(NUBE.pause&&!confirm('Esto reemplaza el respaldo que hay en la nube con lo de este equipo. ¿Continuar?'))return;
+  await nubeSave(true);if(!NUBE.err)toast('Respaldo guardado en la nube')
+};
+$('nubeGet').onclick=async()=>{
+  try{const c=await nubeReq('GET');if(!c){toast('Todavía no hay respaldo en la nube');return}
+    if(confirm('Cargar el respaldo de la nube del '+nubeFecha(c.updated)+'? (se guarda copia de lo actual)'))nubeLoad(c.data,c.updated)}
+  catch(e){toast('No se pudo conectar con la nube')}
+};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&NUBE.t){clearTimeout(NUBE.t);NUBE.t=null;nubeSave()}});
 $('bkBanner').addEventListener('click',e=>{const b=e.target.closest('[data-bk]');if(!b)return;if(b.dataset.bk==='now')$('exportJson').click();else $('bkAuto').click()});
 $('bkAuto').onclick=async()=>{
-  if(!window.showSaveFilePicker){toast('Este navegador no permite respaldo automático. Usa Chrome o Edge.');return}
+  if(!window.showSaveFilePicker){toast(NUBE.on?'Este equipo usa el respaldo en la nube (automático).':'Este navegador no permite respaldo automático. Usa Chrome o Edge.');return}
   if(BK.h&&!BK.perm){
     try{BK.perm=(await BK.h.requestPermission({mode:'readwrite'}))==='granted'}catch(e){}
     if(BK.perm){await bkWrite();toast('Respaldo automático reactivado');return}
@@ -1970,7 +2150,7 @@ $('undoReset').onclick=()=>{
   });
   save();
 })();
-renderAll();bkInit();
+renderAll();bkInit();if(LIC.ok())nubeInit();
 document.fonts&&document.fonts.ready.then(renderPreview);
 
 /* ===== Versión 2: agrupa el panel en pestañas ===== */
