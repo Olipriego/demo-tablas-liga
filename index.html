@@ -452,8 +452,9 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.v.sk .tl{border-radius:50%}
 .poster.v.sk .pts,.poster.v.sk .pos{font-weight:700}
 .poster.v.sk-estadio .top{background:transparent;padding-bottom:36px}
-.poster.v.sk-estadio .top:after{display:none}
-.poster.v.sk-estadio .body{margin-top:0}
+.poster.v.sk .top:after{display:none}
+.poster.v.sk .top{padding-bottom:40px}
+.poster.v.sk .body{margin-top:0;padding-top:10px}
 .poster.v.sk-estadio .sub{color:#fff;letter-spacing:.14em;font-size:17px}
 .poster.v.sk-estadio h2.big{color:var(--g1);text-shadow:2px 3px 0 rgba(0,0,0,.5)}
 .poster.v.sk-estadio .head{color:var(--g1)}
@@ -1175,7 +1176,7 @@ function stadiumBg(P){
 }
 function skinVars(est,tgt,c1,c2,B,I){
   const P=c2,S=c1,oP=onC(P),oS=onC(S),dk=lum(B)<.35;
-  const gl=shade(P,.55),gd=shade(P,-.45),dkg=shade(P,-.86);
+  const gl=shade(P,.55),gd=shade(P,-.45),dkg=shade(P,-.86),Pb=dk&&lum(P)<.3?shade(P,.6):P;
   const v={gl:gl,red:'#c62828',redline:rgba('#c62828',.35),deco:'none',pgbd:'1px solid rgba(255,255,255,.5)',ptsrad:'12px',ptssh:'none',
     leftbd:'0',crdbd:'0',crdsh:'none',crd:'transparent',upc:'#3f8f4c',dnc:'#c0552d',cbd:'0',csh:'none',rad:'12px'};
   if(dk){Object.assign(v,{muted:rgba(I,.62),ink2:rgba(I,.8),line:rgba(I,.18),soft:rgba(P,.22),red:'#ff5a64',redline:'rgba(255,90,100,.45)',upc:shade(P,.45),dnc:'#ff7a80'})}
@@ -1189,7 +1190,7 @@ function skinVars(est,tgt,c1,c2,B,I){
     obline:P,obbg:P,obink:oP,banbg:`linear-gradient(90deg,${S},${P},${S})`,banink:oP,banline:I,banstar:oP,
     deco:'repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 2px,transparent 2px 26px)',
     left:`linear-gradient(170deg,${rgba(P,.16)},transparent 70%)`,leftink:I,leftbd:`1px solid ${rgba(P,.35)}`,leftacc:P,
-    hdink:P,posbg:'transparent',posink:P,ptsbg:P,ptsink:oP,ptssh:`0 0 14px ${rgba(P,.7)}`,ptsrad:'9px',
+    hdink:Pb,posbg:'transparent',posink:Pb,ptsbg:P,ptsink:oP,ptssh:`0 0 14px ${rgba(P,.7)}`,ptsrad:'9px',
     t3bd:rgba(P,.7),t3bg:`linear-gradient(90deg,${rgba(P,.28)},${rgba(P,.06)})`,t3sh:`0 0 18px ${rgba(P,.25)}`});
   else if(est==='tv')base({
     bg:`linear-gradient(135deg,${B} 0%,${shade(B,-.3)} 62%,${shade(B,-.1)} 100%)`,
@@ -1208,7 +1209,7 @@ function skinVars(est,tgt,c1,c2,B,I){
     line1:shade(P,-.35),card:`linear-gradient(90deg,${shade(B,.12)},${shade(B,.05)})`,cink:I,rad:'4px',cbd:`1px solid ${shade(B,.22)}`,
     tbg:`linear-gradient(180deg,${gl},${P})`,tink:dkg,tsm:dkg,lring:P,vbg:B,vink:P,vring:P,chip:shade(B,.22),chipink:P,
     obline:shade(P,-.35),obbg:`linear-gradient(180deg,${gl},${P})`,obink:dkg,banbg:`linear-gradient(180deg,${gl},${P})`,banink:dkg,banline:shade(P,.8),banstar:dkg,red:'#e0564f',
-    left:'transparent',leftink:I,leftbd:`1px solid ${shade(P,-.35)}`,leftacc:P,hdink:P,posbg:'transparent',posink:shade(P,-.1),
+    left:'transparent',leftink:I,leftbd:`1px solid ${shade(P,-.35)}`,leftacc:P,hdink:Pb,posbg:'transparent',posink:dk&&lum(P)<.3?Pb:shade(P,-.1),
     ptsbg:`linear-gradient(180deg,${gl},${P})`,ptsink:dkg,ptsrad:'4px',ptssh:'none'});
   else if(est==='estadio'){
     const G1='#fceabb',G2='#f8b500',G3='#c78000',DK='#2a1b00',b1='#35d6ff',b2='#4facfe',gold='linear-gradient(180deg,#fceabb,#f8b500 55%,#c78000)',blue='linear-gradient(180deg,#00f2fe,#4facfe)',nv=shade(P,-.8);
