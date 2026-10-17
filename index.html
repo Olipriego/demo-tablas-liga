@@ -411,6 +411,41 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .ban{font-size:25px;font-weight:700}
 .poster.pq.sk-tv .ti h1{transform:skewX(-8deg);transform-origin:left}
 .poster.pq.sk-oro .rib{border:1.5px solid var(--ribink)}
+/* ===== Formato vertical para goleo, rol, sanciones y liguilla (.hv = diseño con panel lateral, .pv = rol con encabezado arriba) ===== */
+.poster.h.hv{width:830px;height:auto;min-height:820px;display:flex;flex-direction:column;--rh:66px!important;--rg:9px!important;--fs:21px!important;--nfs:19px!important;--pd:14px!important;--pd2:12px!important;--pfs:17px!important;--rad:16px!important;--rad2:10px!important}
+.poster.h.hv .left{position:relative;width:auto;left:auto;top:auto;bottom:auto;display:grid;grid-template-columns:176px 1fr;column-gap:26px;align-items:center;padding:34px 40px 34px}
+.poster.h.hv .lg-wrap{grid-row:1/8;width:176px;height:176px;margin:0;border-width:5px}
+.poster.h.hv .left>*:not(.lg-wrap):not(.lgn){grid-column:2;margin-left:0;margin-right:0}
+.poster.h.hv h2.big{font-size:min(var(--bigfs,64px),56px);margin:4px 0 2px}
+.poster.h.hv .sub1{font-size:22px}.poster.h.hv .sub2{font-size:17px;margin-bottom:14px}
+.poster.h.hv .pill{width:auto;display:inline-block;justify-self:start;font-size:16px;padding:9px 20px;margin-bottom:10px}
+.poster.h.hv .lgn{grid-column:1/-1;margin-top:16px;text-align:center;font-size:15px}
+.poster.h.hv .right{position:relative;left:auto;right:auto;top:auto;bottom:auto;padding:24px 38px 26px;flex:1}
+.poster.h.hv .t-card{flex:1}
+.poster.h.hv .rows{flex:none}
+.poster.h.hv .grid{grid-template-columns:54px minmax(0,1fr) 40px 40px 40px 40px 42px 42px 52px 72px}
+.poster.h.hv .grid.gs{grid-template-columns:58px minmax(0,1fr) 190px 80px}
+.poster.h.hv .grid.rl{grid-template-columns:116px minmax(0,1fr) 52px 54px 52px minmax(0,1fr)}
+.poster.h.hv .rl .hr b{font-size:17px;white-space:nowrap}
+.poster.h.hv .rl .hn,.poster.h.hv .rl .an{font-size:17px}
+.poster.h.hv .bk{flex:none;min-height:640px;gap:14px}
+.poster.h.hv .mr{font-size:12.5px}
+.poster.pv{width:830px;padding:0 30px 30px}
+.poster.pv .hd{height:auto;flex-wrap:wrap;gap:14px 22px;padding:28px 0 6px}
+.poster.pv .lgo{width:118px;height:118px}
+.poster.pv .ti{flex:1 1 380px}
+.poster.pv .ti .s{font-size:21px;white-space:normal}
+.poster.pv .ti h1{font-size:min(54px,var(--h1,54px))!important;white-space:normal}
+.poster.pv .jb{flex:1 1 100%;height:70px}
+.poster.pv .jb .b{flex:1}
+.poster.pq.pv .m{height:auto!important;min-height:72px}
+.poster.pv .m .t{width:104px}
+.poster.pq.pv .m .n{white-space:normal;font-size:18px;line-height:1.08;padding:6px 8px;overflow:visible;text-overflow:clip}
+.poster.pv .m .l{width:50px;height:50px}
+.poster.pv .m .v{margin:0 8px}
+.poster.pv .sg{grid-template-columns:repeat(2,1fr)!important}
+.poster.pv .pgr{grid-template-columns:1fr}
+.poster.pv .ban{padding:10px 30px;font-size:21px}
 /* Formato vertical con los estilos nuevos */
 .poster.v.sk .sub,.poster.v.sk h2.big,.poster.v.sk .pill,.poster.v.sk .head,.poster.v.sk .pts,.poster.v.sk .pos{font-family:'Oswald','Montserrat',sans-serif}
 .poster.v.sk .lg-wrap{border-color:var(--ring);box-shadow:var(--ringsh)}
@@ -672,7 +707,7 @@ Atlético Norte vs Racing del Puerto (aplazado)</pre>
       <div class="tab" data-v="sanc">Sanciones</div>
       <div class="tab" data-v="lig">Liguilla</div>
     </div>
-    <div class="tabs" style="margin:0" id="fmtTabs" title="Formato de la imagen de la tabla general">
+    <div class="tabs" style="margin:0" id="fmtTabs" title="Formato de la imagen">
       <div class="tab on" data-f="h">Horizontal</div>
       <div class="tab" data-f="v">Vertical</div>
     </div>
@@ -1289,10 +1324,11 @@ function nfsFor(rh){return rh<20?Math.max(8,rh-7):rh<26?11:rh<40?13:rh<46?16:19}
 /* tamano del titulo lateral: con los estilos nuevos (Oswald, mas angosta) cabe una letra mas grande */
 function bigFor(catT,c,l){return Math.max(34,Math.min(64,Math.floor(312/(catT.length*(estiloCat(c,l)==='clasico'?0.76:0.56)))))}
 function posterHtml(){
-  const h=posterHtml0(),est=estiloCat(C(),L());
+  let h=posterHtml0();const est=estiloCat(C(),L());
   const esV=h.indexOf('class="poster v"')>=0;
-  if(est==='clasico'||(!esV&&(S.view==='rol'||S.view==='sanc')))return h;
-  return h.replace('class="poster h"','class="poster h sk sk-'+est+'"').replace('class="poster v"','class="poster v sk sk-'+est+'"');
+  if(est!=='clasico'&&(esV||!(S.view==='rol'||S.view==='sanc')))h=h.replace('class="poster h"','class="poster h sk sk-'+est+'"').replace('class="poster v"','class="poster v sk sk-'+est+'"');
+  if(S.fmt==='v'&&!esV)h=h.replace('class="poster h','class="poster h hv').replace('class="poster pq','class="poster pq pv');
+  return h;
 }
 function posterHtml0(){
   const l=L(),c=C(),list=sorted(c),k=list.length;
@@ -1374,7 +1410,6 @@ function tabName(l){
 function renderTabs(){
   $('leagueTabs').innerHTML=S.leagues.map((l,i)=>`<div class="tab ${i===S.selL?'on':''}" data-i="${i}">${esc(tabName(l))}</div>`).join('');
   document.querySelectorAll('#viewTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.v===(S.view||'tabla')));
-  $('fmtTabs').style.display=(S.view||'tabla')==='tabla'?'':'none';
   document.querySelectorAll('#fmtTabs .tab').forEach(t=>t.classList.toggle('on',t.dataset.f===(S.fmt==='v'?'v':'h')));
   $('catTabs').innerHTML=L().cats.map((c,i)=>`<div class="tab ${i===S.selC?'on':''}" data-i="${i}">${esc(c.name||'Sin nombre')}</div>`).join('');
 }
