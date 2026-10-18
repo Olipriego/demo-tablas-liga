@@ -1956,6 +1956,20 @@ function pickLogo(cb,current){
 /* ====================== EXPORTAR ====================== */
 const slug=s=>(s||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/gi,'_').replace(/^_|_$/g,'').toLowerCase();
 function fileBase(){const c=C();return `${({goleo:'goleo',rol:'rol',sanc:'sanciones',lig:'liguilla'})[S.view]||'tabla'}_${slug(c.name)||'categoria'}_j${slug(c.jor)||'0'}`}
+/* html2canvas ignora object-fit: un logo que no es cuadrado (p. ej. 240x215) sale aplastado en el PNG/PDF.
+   Antes de exportar se recorta (cover) o se centra (contain) cada imagen en un cuadrado, que es como se ve en pantalla. */
+async function cuadrarImagenes(el){
+  await Promise.all([...el.querySelectorAll('img')].map(async im=>{
+    try{
+      if(!im.complete)await new Promise(r=>{im.onload=im.onerror=r});
+      const w=im.naturalWidth,h=im.naturalHeight;if(!w||!h||w===h)return;
+      const contain=getComputedStyle(im).objectFit==='contain',side=contain?Math.max(w,h):Math.min(w,h);
+      const c=document.createElement('canvas');c.width=c.height=side;const g=c.getContext('2d');
+      if(contain)g.drawImage(im,(side-w)/2,(side-h)/2);else g.drawImage(im,(w-side)/2,(h-side)/2,side,side,0,0,side,side);
+      await new Promise(r=>{im.onload=im.onerror=r;im.src=c.toDataURL('image/png')});
+    }catch(e){}
+  }));
+}
 async function snapshot(scale=2){
   if(!LIC.ok())throw new Error('Licencia requerida');
   await document.fonts.ready;
@@ -1964,6 +1978,7 @@ async function snapshot(scale=2){
   host.innerHTML=posterHtml();document.body.appendChild(host);
   const el=host.firstElementChild;
   try{
+    await cuadrarImagenes(el);
     const cv=await html2canvas(el,{scale,useCORS:true,backgroundColor:null,logging:false,width:el.offsetWidth,height:el.offsetHeight});
     return cv;
   }finally{host.remove()}
