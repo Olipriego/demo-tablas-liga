@@ -1284,11 +1284,11 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const bw=big.split(' '),first=bw[0],rest2=bw.slice(1).join(' ');
   const h1fs=Math.max(30,Math.min(66,Math.floor(600/(big.length*(est==='retro'?0.85:0.62)))));
   const jn=r?fx.sel+1:(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
-  const days=[...new Set(ms.map(m=>(m.day||'').trim()).filter(Boolean))],multi=days.length>1,dia=days.length===1?days[0]:'';
+  const days=[...new Set(ms.map(m=>(m.day||'').trim()).filter(Boolean))],multi=days.length>1,dia='';
   const tm=m=>{
     const mm=/^(\d{1,2}:\d{2})\s*([ap])\.?\s*m\.?/i.exec((m.time||'').trim());
     let b=mm?mm[1]:((m.time||'').trim()||'—'),lab=mm?(mm[2].toLowerCase()==='a'?'A.M.':'P.M.'):'';
-    if(multi&&m.day)return `<div class="t d"><u>${esc(m.day.trim().toUpperCase())}</u><b>${esc(b)}</b>${lab?`<i>${esc(lab)}</i>`:''}</div>`;
+    if(m.day)return `<div class="t d"><u>${esc(m.day.trim().toUpperCase())}</u><b>${esc(b)}</b>${lab?`<i>${esc(lab)}</i>`:''}</div>`;
     return `<div class="t"><b>${esc(b)}</b>${lab?`<i>${esc(lab)}</i>`:''}</div>`;
   };
   const vq=m=>{
