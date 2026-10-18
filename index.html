@@ -440,7 +440,8 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pv .jb .b{flex:1}
 .poster.pq.pv .m{height:auto!important;min-height:72px}
 .poster.pv .m .t{width:104px}
-.poster.pq.pv .m .n{white-space:normal;font-size:18px;line-height:1.08;padding:6px 8px;overflow:visible;text-overflow:clip}
+.poster.pq.pv .m .n.lg{font-size:16px}
+.poster.pq.pv .m .n{white-space:normal;font-size:17px;line-height:1.08;padding:6px 8px;overflow:visible;text-overflow:clip}
 .poster.pv .m .l{width:50px;height:50px}
 .poster.pv .m .v{margin:0 8px}
 .poster.pv .sg{grid-template-columns:repeat(2,1fr)!important}
@@ -481,6 +482,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sk-estadio .m .t b{font-size:34px}.poster.pq.sk-estadio .m .t.d b{font-size:30px}
 .poster.pq.sk-estadio .m .t.d u{font-size:17px}
 .poster.pq.sk-estadio .m .n{font-size:26px;font-weight:700;letter-spacing:.01em}
+.poster.pq.sk-estadio .m .n.lg{font-size:21px}
 .poster.pq.sk-estadio .l{width:62px;height:62px;border:3px solid #ffffff}
 .poster.pq.sk-estadio .m .v{background:var(--vbg);border:2.5px solid var(--vring);min-width:44px;height:44px;font-size:16px;font-weight:700}
 .poster.pq.sk-estadio .pc{border:1.5px solid var(--g2);border-radius:10px;height:52px;font-size:17px;font-weight:700;font-family:'Oswald','Montserrat',sans-serif;gap:10px}
@@ -1295,7 +1297,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
     return g?`<div class="v sc">${g[0]}–${g[1]}</div>`:'<div class="v">VS</div>';
   };
   const rows=ms.length?ms.map(m=>{const h=T(m.h),a=T(m.a);
-    return `<div class="m">${tm(m)}<div class="n h">${esc(h?h.name:'')}</div><div class="l">${lg(h)}</div>${vq(m)}<div class="l">${lg(a)}</div><div class="n a">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
+    return `<div class="m">${tm(m)}<div class="n h${h&&h.name.length>20?' lg':''}">${esc(h?h.name:'')}</div><div class="l">${lg(h)}</div>${vq(m)}<div class="l">${lg(a)}</div><div class="n a${a&&a.name.length>20?' lg':''}">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
   const gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
   const sg=gr.length?`${solo?'':'<div class="sec r" style="margin-top:12px">Sanciones</div>'}<div class="sg" style="grid-template-columns:repeat(${Math.max(2,Math.min(solo?3:4,gr.length))},1fr)">${gr.map(x=>`<div class="sk"><div class="st"><div class="l">${lg(x.team)}</div><span>${esc(x.team?x.team.name:'Sin equipo')}</span></div>${x.list.map(s=>`<div class="sp"><span class="nm">${esc(s.p)}</span>${sancCausal(s.c)?`<span class="c">${esc(sancCausal(s.c))}</span>`:''}${sancJuegos(s.g)?`<span class="j">${esc(sancJuegos(s.g))}</span>`:''}</div>`).join('')}</div>`).join('')}</div>`:'';
   const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[];
