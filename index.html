@@ -653,6 +653,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
     <div class="row" style="margin-top:10px">
       <button class="btn pri" id="fxGen">Generar calendario</button>
       <button class="btn" id="fxSync">Ajustar a los equipos</button>
+      <button class="btn" id="fxRecalc" title="Se quedan fijas las jornadas jugadas y hasta la que estás viendo; las demás se reparten de nuevo">Recalcular jornadas pendientes</button>
       <button class="btn del" id="fxClear">Borrar calendario</button>
     </div>
     <div class="hint" id="fxInfo" style="margin:10px 0 0"></div>
@@ -1531,6 +1532,49 @@ function syncFx(c){
   fx.sel=Math.min(fx.sel||0,fx.rounds.length-1);
   return 'Calendario ajustado: +'+miss.length+' partido(s)'+(removed?', −'+removed+' quitado(s)':'');
 }
+/* Recalcula las jornadas que siguen: se quedan fijas las jornadas jugadas, las que tienen marcadores y todas hasta la
+   que se está viendo (la modificada a mano); los partidos que faltan se reparten de nuevo en las jornadas siguientes
+   sin repetir rivales ni poner a un equipo dos veces en la misma jornada. apply=false solo calcula (para confirmar). */
+function recalcFx(c,apply){
+  if(!apply){const c2={...c,fx:JSON.parse(JSON.stringify(c.fx))},i=recalcFx(c2,true);i.total=c2.fx.rounds.length;return i}
+  const fx=c.fx,ids=new Set(c.teams.map(t=>t.id)),sel=Math.max(0,Math.min(fx.sel||0,fx.rounds.length-1)),need=c.fxDouble?2:1;
+  const fixedR=(r,i)=>i<=sel||r.done;
+  const kept=fx.rounds.map((r,i)=>fixedR(r,i)?r.m.slice():r.m.filter(m=>ids.has(m.h)&&ids.has(m.a)&&hasResult(m)));
+  const cnt={},ori={};let moved=0,dropped=0;
+  fx.rounds.forEach((r,i)=>{if(!fixedR(r,i))moved+=r.m.length-kept[i].length});
+  kept.forEach(ms=>ms.forEach(m=>{const k=pairKey(m.h,m.a);cnt[k]=(cnt[k]||0)+1;ori[k]=m.h}));
+  const T=c.teams.map(t=>t.id),miss=[];
+  for(let i=0;i<T.length;i++)for(let j=i+1;j<T.length;j++){
+    const k=pairKey(T[i],T[j]);let first=ori[k];
+    for(let q=cnt[k]||0;q<need;q++){const h=first===undefined?T[i]:(first===T[i]?T[j]:T[i]);miss.push([h,h===T[i]?T[j]:T[i]]);first=h}
+  }
+  const slots=[];fx.rounds.forEach((r,i)=>{if(!fixedR(r,i))slots.push(i)});
+  let best=null;
+  for(let t=0;t<400&&miss.length;t++){
+    const left=miss.map(p=>p.slice());
+    if(t>0)for(let i=left.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[left[i],left[j]]=[left[j],left[i]]}
+    const place=[];
+    for(const ri of slots){
+      const used=new Set();kept[ri].forEach(m=>{used.add(m.h);used.add(m.a)});
+      const deg={};left.forEach(([h,a])=>{deg[h]=(deg[h]||0)+1;deg[a]=(deg[a]||0)+1});
+      const cand=left.map((p,i)=>({i,w:deg[p[0]]+deg[p[1]]+(t?Math.random()*0.9:0)})).sort((x,y)=>y.w-x.w),idx=[];
+      cand.forEach(({i})=>{const p=left[i];if(!used.has(p[0])&&!used.has(p[1])){used.add(p[0]);used.add(p[1]);idx.push(i)}});
+      place.push(idx.map(i=>left[i]));idx.sort((a,b)=>b-a).forEach(i=>left.splice(i,1));
+    }
+    const extra=left.length?packRounds(left,60):[];
+    const score=extra.length*1000+place.filter(p=>p.length).length;
+    if(!best||score<best.score)best={score,place,extra};
+  }
+  if(!best)best={place:slots.map(()=>[]),extra:[]};
+  const info={moved:miss.length,from:slots.length?slots[0]+1:null,extra:best.extra.length,total:0,before:fx.rounds.length,kept:sel+1};
+  const mk=([h,a])=>({id:uid(),h,a,day:'',time:''});
+  slots.forEach((ri,i)=>{fx.rounds[ri].m=kept[ri].concat(best.place[i].map(mk))});
+  best.extra.forEach(par=>fx.rounds.push({id:uid(),fecha:'',done:false,sanc:[],obs:'',m:par.map(mk)}));
+  while(fx.rounds.length>sel+1){const r=fx.rounds[fx.rounds.length-1];if(r.m.length||r.done)break;fx.rounds.pop()}
+  fx.sel=Math.min(sel,fx.rounds.length-1);
+  info.total=fx.rounds.length;
+  return info;
+}
 /* Reparte partidos pendientes en el menor número de jornadas (prueba muchas combinaciones y se queda con la mejor) */
 function packRounds(pairs,tries){
   let best=null;
@@ -1664,6 +1708,17 @@ $('fxGen').onclick=()=>{
   if(c.teams.length<2){toast('Agrega al menos 2 equipos');return}
   if(c.fx&&!confirm('Ya hay un calendario. Se reemplazará por uno nuevo (se pierden días, horas y jornadas marcadas como jugadas). ¿Continuar?'))return;
   c.fx=freshFx(c,c.fx&&c.fx.rounds);save();renderFixtures();fxTouch();toast('Calendario generado: '+c.fx.rounds.length+' jornadas');
+};
+$('fxRecalc').onclick=()=>{
+  const c=C();if(!c.fx){toast('Primero genera el calendario');return}
+  const fx=c.fx,sel=fx.sel||0,i=recalcFx(c,false);
+  if(!i.moved){toast('No faltan partidos por repartir: el calendario ya está completo');return}
+  const msg='Se quedan fijas las jornadas 1 a '+(sel+1)+' y las ya jugadas o con marcador.\n'
+    +'Se repartirán de nuevo '+i.moved+' partido(s) en las jornadas siguientes (se limpian sus días y horas).\n'
+    +'El calendario quedará en '+i.total+' jornadas'+(i.extra?' (se agregan '+i.extra+')':'')+'.\n\n¿Continuar?';
+  if(!confirm(msg))return;
+  const r=recalcFx(c,true);save();renderFixtures();renderPend();renderPreview();fxTouch();
+  toast('Jornadas recalculadas: '+r.moved+' partido(s) reubicados, '+fx.rounds.length+' jornadas')
 };
 $('fxSync').onclick=()=>{const c=C();if(!c.fx){toast('Primero genera el calendario');return}autoSyncFx();fxTouch()};
 $('fxClear').onclick=()=>{const c=C();if(!c.fx)return;if(!confirm('¿Borrar todo el calendario de esta categoría?'))return;c.fx=null;save();renderFixtures();renderLig();renderPreview()};
