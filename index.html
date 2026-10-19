@@ -259,12 +259,12 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .stripe{position:absolute;left:0;right:0;top:0;height:10px;background:var(--stripe);z-index:3}
 .pq .stripe.b{top:auto;bottom:0}
 .pq .deco{position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--deco)}
-.pq .hd{display:flex;align-items:center;gap:22px;height:196px;padding-top:22px;position:relative;z-index:2}
+.pq .hd{display:flex;align-items:center;gap:22px;min-height:196px;padding-top:22px;position:relative;z-index:2}
 .pq .lgo{width:150px;height:150px;border-radius:50%;flex:none;overflow:hidden;background:#fff;border:6px solid var(--ring);box-shadow:var(--ringsh);display:grid;place-items:center}
 .pq .lgo img{width:100%;height:100%;object-fit:cover}
 .pq .lgo b{font-size:42px;font-weight:900;color:var(--acc)}
 .pq .ti{flex:1;min-width:0}
-.pq .ti .s{font-size:28px;font-weight:900;letter-spacing:.02em;text-transform:uppercase;line-height:1;color:var(--ink);white-space:nowrap}
+.pq .ti .s{font-size:var(--sfs,28px);font-weight:900;letter-spacing:.02em;text-transform:uppercase;line-height:1;color:var(--ink);white-space:nowrap}
 .pq .ti h1{margin:2px 0 8px;line-height:.95;font-weight:900;text-transform:uppercase;white-space:nowrap;color:var(--ink)}
 .pq .ti h1 em{font-style:normal;color:var(--acc)}
 .pq .rib{display:inline-block;background:var(--rib);color:var(--ribink);font-weight:800;font-size:17px;letter-spacing:.14em;text-transform:uppercase;padding:8px 22px 8px 16px;border-bottom:4px solid var(--ribline);border-radius:4px 14px 4px 4px;max-width:100%}
@@ -394,7 +394,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sancv .ob span{font-size:18px}
 /* rol de juegos (diseño con encabezado arriba) */
 .pq .ti .s,.pq .ti h1,.pq .jb .a small,.pq .jb .a b,.pq .jb .b small,.pq .jb .b b,.pq .sec,.pq .m .t b,.pq .m .v,.pq .sk .st,.pq .ob b,.pq .ban{font-family:'Oswald','Montserrat',sans-serif}
-.pq .ti .s{font-size:26px;font-weight:700;letter-spacing:.08em}
+.pq .ti .s{font-size:var(--sfs,26px);font-weight:700;letter-spacing:.08em}
 .pq .ti h1{letter-spacing:.02em;font-weight:700}
 .pq .rib{font-size:16px;letter-spacing:.12em;padding:8px 24px 8px 18px;border-radius:2px 18px 2px 2px}
 .pq .jb{min-height:78px;border-radius:8px}
@@ -1284,8 +1284,11 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   let small='',big=l.name||'Liga';
   if(words.length>=3){big=words.slice(-2).join(' ');small=words.slice(0,-2).join(' ')}
   const bw=big.split(' '),first=bw[0],rest2=bw.slice(1).join(' ');
-  const h1fs=Math.max(30,Math.min(66,Math.floor(600/(big.length*(est==='retro'?0.85:0.62)))));
   const jn=r?fx.sel+1:(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
+  /* el recuadro de jornada/fecha crece con el texto: el titulo se ajusta al espacio que le queda (el de la fecha conserva su tamano) */
+  const jbW=(jn?114:0)+(fecha?Math.min(400,fecha.length*15+48):0),availT=Math.min(600,1010-jbW-20);
+  const h1fs=Math.max(30,Math.min(66,Math.floor(availT/(big.length*(est==='retro'?0.85:0.62)))));
+  const sfs=Math.max(15,Math.min(26,Math.floor(availT/(small.length*0.56||1))));
   const days=[...new Set(ms.map(m=>(m.day||'').trim()).filter(Boolean))],multi=days.length>1,dia='';
   const tm=m=>{
     const mm=/^(\d{1,2}:\d{2})\s*([ap])\.?\s*m\.?/i.exec((m.time||'').trim());
@@ -1316,7 +1319,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const cuerpo=solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${pd}`;
   return `<div class="poster pq${solo?' sancv':''} sk-${est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
     <div class="hd"><div class="lgo">${lgo}</div>
-      <div class="ti">${small?`<div class="s">${esc(small)}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(first)}${rest2?` <em>${esc(rest2)}</em>`:''}</h1>${(c.sub||catT)?`<span class="rib">${esc([c.sub,c.name].filter(Boolean).join(' · '))}</span>`:''}</div>
+      <div class="ti" style="--sfs:${sfs}px">${small?`<div class="s">${esc(small)}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(first)}${rest2?` <em>${esc(rest2)}</em>`:''}</h1>${(c.sub||catT)?`<span class="rib">${esc([c.sub,c.name].filter(Boolean).join(' · '))}</span>`:''}</div>
       ${jb}</div>
     ${cuerpo}
     <div class="ban" style="font-size:${banfs}px"><i>★</i> ${esc(bantxt)} <i>★</i></div><div class="stripe b"></div></div>`;
