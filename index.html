@@ -268,13 +268,13 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .ti h1{margin:2px 0 8px;line-height:.95;font-weight:900;text-transform:uppercase;white-space:nowrap;color:var(--ink)}
 .pq .ti h1 em{font-style:normal;color:var(--acc)}
 .pq .rib{display:inline-block;background:var(--rib);color:var(--ribink);font-weight:800;font-size:17px;letter-spacing:.14em;text-transform:uppercase;padding:8px 22px 8px 16px;border-bottom:4px solid var(--ribline);border-radius:4px 14px 4px 4px;max-width:100%}
-.pq .jb{display:flex;align-items:stretch;height:74px;border-radius:6px;overflow:hidden;flex:none;box-shadow:var(--jsh)}
+.pq .jb{display:flex;align-items:stretch;min-height:74px;border-radius:6px;overflow:hidden;flex:none;box-shadow:var(--jsh)}
 .pq .jb .a{background:var(--ja);color:var(--jainks);padding:0 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
 .pq .jb .a small{font-size:11px;letter-spacing:.3em;font-weight:800;margin-bottom:3px}
 .pq .jb .a b{font-size:38px;font-weight:900}
-.pq .jb .b{background:var(--jb);color:var(--jbink);padding:0 24px;display:flex;flex-direction:column;justify-content:center;line-height:1.05}
+.pq .jb .b{background:var(--jb);color:var(--jbink);padding:6px 24px;max-width:400px;display:flex;flex-direction:column;justify-content:center;line-height:1.05}
 .pq .jb .b small{font-size:21px;letter-spacing:.14em;font-weight:800;text-transform:uppercase;color:var(--jbsm)}
-.pq .jb .b b{font-weight:900;text-transform:uppercase;white-space:nowrap}
+.pq .jb .b b{font-weight:900;text-transform:uppercase;white-space:normal;overflow-wrap:anywhere}
 .pq .sec{display:flex;align-items:center;gap:18px;margin:2px 0 8px;height:34px;font-size:23px;font-weight:900;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);position:relative;z-index:2}
 .pq .sec:before,.pq .sec:after{content:"";flex:1;height:2px;background:var(--line1)}
 .pq .sec.r{color:var(--red)}.pq .sec.r:before,.pq .sec.r:after{background:var(--redline)}
@@ -397,7 +397,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .ti .s{font-size:26px;font-weight:700;letter-spacing:.08em}
 .pq .ti h1{letter-spacing:.02em;font-weight:700}
 .pq .rib{font-size:16px;letter-spacing:.12em;padding:8px 24px 8px 18px;border-radius:2px 18px 2px 2px}
-.pq .jb{height:78px;border-radius:8px}
+.pq .jb{min-height:78px;border-radius:8px}
 .pq .jb .a{padding:0 24px}.pq .jb .a b{font-size:40px;font-weight:700}
 .pq .jb .b{padding:0 26px}.pq .jb .b b{font-weight:700}
 .pq .sec{font-size:24px;font-weight:700;letter-spacing:.05em}
@@ -436,7 +436,8 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pv .ti{flex:1 1 380px}
 .poster.pv .ti .s{font-size:21px;white-space:normal}
 .poster.pv .ti h1{font-size:min(54px,var(--h1,54px))!important;white-space:normal}
-.poster.pv .jb{flex:1 1 100%;height:70px}
+.poster.pv .jb{flex:1 1 100%;min-height:70px}
+.poster.pv .jb .b{max-width:none}
 .poster.pv .jb .b{flex:1}
 .poster.pq.pv .m{height:auto!important;min-height:72px}
 .poster.pv .m .t{width:104px}
@@ -1310,7 +1311,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const bantxt=solo?'¡Puntualidad, respeto y juego limpio!':rest.length?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
   const banfs=bantxt.length>46?17:bantxt.length>30?21:25;
   const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
-  const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>#${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:${fecha.length>22?18:fecha.length>16?23:28}px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
+  const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>#${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:28px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
   const obsH=obs?`<div class="ob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
   const cuerpo=solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${pd}`;
   return `<div class="poster pq${solo?' sancv':''} sk-${est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
