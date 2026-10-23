@@ -1531,10 +1531,19 @@ function syncFx(c){
   fx.double=!!c.fxDouble;
   let removed=0;
   fx.rounds.forEach(r=>{const b=r.m.length;r.m=r.m.filter(m=>ids.has(m.h)&&ids.has(m.a));removed+=b-r.m.length});
+  // equipos que entraron con la liga empezada: sus partidos anteriores a su jornada de ingreso se quitan (los aplazados
+  // o vacíos; si ya tienen marcador se dejan y se avisa) y se vuelven a repartir más adelante
+  let tarde=0,tardeRes=0;
+  fx.rounds.forEach((r,i)=>{const b=r.m.length;
+    r.m=r.m.filter(m=>{if(okJ(c,m.h,i)&&okJ(c,m.a,i))return true;
+      const marc=(m.gh!==''&&m.gh!=null)||(m.ga!==''&&m.ga!=null)||m.st==='dfh'||m.st==='dfa';
+      if(marc){tardeRes++;return true}return false});
+    tarde+=b-r.m.length});
+  const extra=(tarde?' · '+tarde+' partido(s) anteriores al ingreso de un equipo reprogramados':'')+(tardeRes?' · OJO: '+tardeRes+' partido(s) anteriores a su ingreso ya tienen marcador y se dejaron':'');
   const locked=fx.rounds.some(r=>r.done||r.m.some(m=>m.day||m.time||hasResult(m)));
   if(!locked){ // nada capturado todavía: se reparte de nuevo de forma óptima
     const sel=fx.sel||0;c.fx=freshFx(c,fx.rounds);c.fx.sel=Math.min(sel,c.fx.rounds.length-1);
-    return 'Calendario regenerado con '+c.fx.rounds.length+' jornadas';
+    return 'Calendario regenerado con '+c.fx.rounds.length+' jornadas'+extra;
   }
   // ya hay horarios o jornadas jugadas: se conserva todo y solo se agregan los partidos que faltan
   const need=fx.double?2:1,cnt={},ori={},T=c.teams.map(t=>t.id),miss=[];
@@ -1553,19 +1562,15 @@ function syncFx(c){
   packRounds(resto,300).forEach(par=>fx.rounds.push({id:uid(),fecha:'',done:false,m:par.map(([h,a])=>({id:uid(),h,a,day:'',time:''}))}));
   while(fx.rounds.length>1){const r=fx.rounds[fx.rounds.length-1];if(r.m.length||r.done)break;fx.rounds.pop()}
   fx.sel=Math.min(fx.sel||0,fx.rounds.length-1);
-  return 'Calendario ajustado: +'+miss.length+' partido(s)'+(removed?', −'+removed+' quitado(s)':'');
+  return 'Calendario ajustado: +'+miss.length+' partido(s)'+(removed?', −'+removed+' quitado(s)':'')+extra;
 }
-/* Un equipo se incorporó en la jornada t.desde: se quitan sus partidos anteriores (si no tienen marcador) y se reparten
-   en jornadas posteriores. Avisa si alguno ya tenía marcador capturado. */
+/* Un equipo se incorporó en la jornada t.desde: syncFx quita sus partidos anteriores (aplazados o sin marcador) y los reparte
+   en jornadas posteriores. */
 function aplicarIngreso(c,t){
   if(!c.fx){save();renderTeams();renderPreview();return}
-  const d=t.desde||1;let quit=0,conRes=0;
-  c.fx.rounds.forEach((r,i)=>{if(i+1>=d)return;const b=r.m.length;
-    r.m=r.m.filter(m=>{if(m.h!==t.id&&m.a!==t.id)return true;if(hasResult(m)){conRes++;return true}return false});quit+=b-r.m.length});
   const msg=syncFx(c);
   save();renderFixtures();renderTeams();renderPend();renderPreview();
-  toast((d>1?(t.name||'El equipo')+' entra en la jornada '+d+'. ':'Sin jornada de ingreso. ')+(quit?quit+' partido(s) anteriores se reprogramaron. ':'')+msg
-    +(conRes?' OJO: '+conRes+' partido(s) anteriores ya tienen marcador y se dejaron.':''));
+  toast(((t.desde>1)?(t.name||'El equipo')+' entra en la jornada '+t.desde+'. ':'Sin jornada de ingreso. ')+msg);
 }
 /* Recalcula las jornadas que siguen: se quedan fijas las jornadas jugadas, las que tienen marcadores y todas hasta la
    que se está viendo (la modificada a mano); los partidos que faltan se reparten de nuevo en las jornadas siguientes
