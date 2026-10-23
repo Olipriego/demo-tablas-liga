@@ -45,6 +45,7 @@ input:focus,select:focus{outline:2px solid var(--accent);border-color:transparen
 .teams td{padding:3px 2px}
 .teams input[type=number]{padding:6px 2px;text-align:center;width:46px}
 .teams input.nm{min-width:120px}
+.teams input.adj{border-color:#f59e0b;box-shadow:0 0 0 1px #f59e0b}
 .teams .calc{text-align:center;font-weight:800;min-width:34px;color:var(--accent)}
 .cp{display:flex;flex-direction:column;gap:3px;align-items:center;font-size:10px;font-weight:700;color:var(--muted)}
 .cp input{width:42px;height:30px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#1e293b;cursor:pointer}
@@ -611,6 +612,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
   </div>
   <div class="card" style="margin-top:10px">
     <label class="chk"><input type="checkbox" id="autoTable"> Calcular la tabla con los resultados del calendario</label>
+    <label class="chk" id="manualEditBox"><input type="checkbox" id="manualEdit"> Permitir corregir a mano JG, JE, JP, GF y GC (se guarda como ajuste sobre lo calculado; p. ej. un equipo que hereda los datos de otro)</label>
     <div class="hint" id="autoHint" style="margin:6px 0 8px"></div>
     <div class="row">
       <label class="f" style="min-width:120px">Goles en victoria por default<input type="number" id="defGoals" min="0"></label>
@@ -891,7 +893,7 @@ function autoStats(c){
 function calc(t,cat,A){
   const useAuto=!!(cat.autoTable&&cat.fx);
   if(useAuto&&!A)A=autoStats(cat);
-  const e=useAuto?(A[t.id]||{jg:0,je:0,jp:0,gf:0,gc:0}):{jg:n(t.jg),je:n(t.je),jp:n(t.jp),gf:n(t.gf),gc:n(t.gc)};
+  const e=useAuto?(()=>{const a=A[t.id]||{jg:0,je:0,jp:0,gf:0,gc:0},o=t.off||{};return {jg:a.jg+n(o.jg),je:a.je+n(o.je),jp:a.jp+n(o.jp),gf:a.gf+n(o.gf),gc:a.gc+n(o.gc)}})():{jg:n(t.jg),je:n(t.je),jp:n(t.jp),gf:n(t.gf),gc:n(t.gc)};
   const jj=e.jg+e.je+e.jp,dif=e.gf-e.gc;
   const pts=e.jg*n(cat.pw)+e.je*n(cat.pd)+n(t.aj);
   const fp=n(t.ya)*(cat.fpY===undefined?1:n(cat.fpY))+n(t.rc)*(cat.fpR===undefined?3:n(cat.fpR));
@@ -1443,6 +1445,7 @@ function renderCatForm(){
 function renderRules(){
   const c=C();
   $('autoTable').checked=!!c.autoTable;
+  $('manualEdit').checked=!!c.manualEdit;$('manualEditBox').style.display=(c.autoTable&&c.fx)?'':'none';
   $('autoHint').textContent=c.fx?(c.autoTable?'JG, JE, JP, GF y GC se calculan con los marcadores del calendario (los partidos aplazados no cuentan).':'Captura los marcadores en el calendario y activa esta opción para no escribir los resultados dos veces.'):'Genera primero el calendario (sección 5) para poder usar esta opción.';
   $('defGoals').value=c.defGoals===undefined?3:c.defGoals;
   $('fpY').value=c.fpY===undefined?1:c.fpY;$('fpR').value=c.fpR===undefined?3:c.fpR;
@@ -1456,7 +1459,7 @@ function renderTeams(){
     return `<tr data-id="${t.id}">
       <td><div class="logo-pick sq" data-act="logo" style="${t.logo?`background-image:url(${t.logo})`:''}">${t.logo?'':'Logo'}</div></td>
       <td><input type="text" class="nm" data-k="name" value="${esc(t.name)}" placeholder="Equipo"></td>
-      ${['jg','je','jp','gf','gc'].map(k=>`<td><input type="number" data-k="${k}" value="${au?r[k]:t[k]}" ${au?'disabled title="Calculado con el calendario"':''}></td>`).join('')}
+      ${['jg','je','jp','gf','gc'].map(k=>`<td><input type="number" data-k="${k}" value="${au?r[k]:t[k]}" ${au?`${c.manualEdit?'':'disabled '}title="Calculado con el calendario; ${c.manualEdit?'si lo cambias se guarda como ajuste':'activa «Permitir corregir a mano» para cambiarlo'}${t.off&&n(t.off[k])?' ('+(n(t.off[k])>0?'+':'')+n(t.off[k])+')':''}"${t.off&&n(t.off[k])?' class="adj"':''}`:''}></td>`).join('')}
       <td><input type="number" data-k="aj" value="${t.aj}"></td>
       ${['ya','rc'].map(k=>`<td><input type="number" min="0" data-k="${k}" value="${t[k]||0}"></td>`).join('')}
       <td class="calc" data-c="jj">${r.jj}</td><td class="calc" data-c="dif">${fmtDif(r.dif)}</td><td class="calc" data-c="pts">${r.pts}</td>
@@ -1903,6 +1906,7 @@ $('ligBox').addEventListener('input',e=>{
 });
 
 $('autoTable').onchange=e=>{C().autoTable=e.target.checked;save();renderRules();renderTeams();renderPreview()};
+$('manualEdit').onchange=e=>{const c=C();c.manualEdit=e.target.checked;save();renderTeams()};
 $('defGoals').oninput=e=>{C().defGoals=Math.max(0,n(e.target.value));if(C().autoTable)renderTeams();changed()};
 $('fpY').oninput=e=>{C().fpY=Math.max(0,n(e.target.value));changed()};
 $('fpR').oninput=e=>{C().fpR=Math.max(0,n(e.target.value));changed()};
@@ -2007,12 +2011,16 @@ $('addTeam').onclick=()=>{
 };
 $('clearTeams').onclick=()=>{
   if(!confirm('¿Poner en cero JG, JE, JP, GF, GC y ajustes de todos los equipos? (conserva nombres y logos)'))return;
-  C().teams.forEach(t=>Object.assign(t,{jg:0,je:0,jp:0,gf:0,gc:0,aj:0}));save();renderTeams();renderPreview();
+  C().teams.forEach(t=>Object.assign(t,{jg:0,je:0,jp:0,gf:0,gc:0,aj:0,off:{}}));save();renderTeams();renderPreview();
 };
 $('teamRows').addEventListener('input',e=>{
   const tr=e.target.closest('tr'),k=e.target.dataset.k;if(!tr||!k)return;
   const t=C().teams.find(x=>x.id===tr.dataset.id);
   if(k==='desde'||k==='hasta')return; // se aplica al terminar de escribir (evento change)
+  const cc=C();
+  if(cc.autoTable&&cc.fx&&['jg','je','jp','gf','gc'].includes(k)){ // tabla automática: lo escrito se guarda como ajuste sobre lo calculado
+    const a=(autoStats(cc)[t.id]||{})[k]||0;t.off=t.off||{};t.off[k]=(e.target.value===''?0:+e.target.value)-a;
+    e.target.classList.toggle('adj',!!t.off[k]);refreshCalcs();changed();return}
   t[k]=k==='name'?e.target.value:(e.target.value===''?0:+e.target.value);
   refreshCalcs();if(k==='name'){refreshScorerTeams();if(C().fx)renderFixtures();if(C().lig)renderLig()}changed();
 });
