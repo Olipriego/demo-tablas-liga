@@ -602,7 +602,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
   <p class="hint">JJ, DIF y PTS se calculan solos. «Aj» es un ajuste de puntos (+/−) por sanciones. «Entra J»: si un equipo se incorporó con la liga ya empezada, escribe la jornada en que entró (p. ej. 3); no se programa antes y sus juegos anteriores se reparten en jornadas posteriores. «Sale J»: si un equipo se salió, escribe la última jornada que jugó; después de ella ya no se programa ni aparece como «Descansa».</p>
   <div class="scroll-x">
     <table class="teams">
-      <thead><tr><th>Logo</th><th style="text-align:left">Equipo</th><th>JG</th><th>JE</th><th>JP</th><th>GF</th><th>GC</th><th>Aj</th><th title="Tarjetas amarillas">TA</th><th title="Tarjetas rojas">TR</th><th>JJ</th><th>DIF</th><th>PTS</th><th title="Jornada en la que se incorpora el equipo (vacío = desde el inicio)">Entra J</th><th title="Última jornada que juega el equipo, si se sale de la liga (vacío = hasta el final)">Sale J</th><th></th></tr></thead>
+      <thead><tr><th>Logo</th><th style="text-align:left">Equipo</th><th>JG</th><th>JE</th><th>JP</th><th>GF</th><th>GC</th><th>Aj</th><th title="Tarjetas amarillas">TA</th><th title="Tarjetas rojas">TR</th><th>JJ</th><th>DIF</th><th>PTS</th><th title="Jornada en la que se incorpora el equipo (vacío = desde el inicio)">Entra J</th><th title="Última jornada que juega el equipo, si se sale de la liga (vacío = hasta el final)">Sale J</th><th title="Dar de baja: el equipo ya no sale en la tabla general (conserva su calendario y resultados)">Baja</th><th></th></tr></thead>
       <tbody id="teamRows"></tbody>
     </table>
   </div>
@@ -913,7 +913,7 @@ function h2hTable(cat,ids){
 }
 function sorted(cat){
   const A=cat.autoTable&&cat.fx?autoStats(cat):null;
-  const rows=cat.teams.map(t=>({t,...calc(t,cat,A)}));
+  const rows=cat.teams.filter(t=>!t.baja).map(t=>({t,...calc(t,cat,A)})); // los equipos dados de baja no salen en la tabla
   const tb=(cat.tb&&cat.tb.length)?cat.tb:['dif','gf'];
   rows.sort((a,b)=>b.pts-a.pts);
   const out=[];
@@ -1456,7 +1456,7 @@ function renderTeams(){
   const c=C(),A=c.autoTable&&c.fx?autoStats(c):null;
   $('teamRows').innerHTML=c.teams.map((t,i)=>{
     const r=calc(t,c,A),au=!!A;
-    return `<tr data-id="${t.id}">
+    return `<tr data-id="${t.id}"${t.baja?' style="opacity:.55"':''}>
       <td><div class="logo-pick sq" data-act="logo" style="${t.logo?`background-image:url(${t.logo})`:''}">${t.logo?'':'Logo'}</div></td>
       <td><input type="text" class="nm" data-k="name" value="${esc(t.name)}" placeholder="Equipo"></td>
       ${['jg','je','jp','gf','gc'].map(k=>`<td><input type="number" data-k="${k}" value="${au?r[k]:t[k]}" ${au?`${c.manualEdit?'':'disabled '}title="Calculado con el calendario; ${c.manualEdit?'si lo cambias se guarda como ajuste':'activa «Permitir corregir a mano» para cambiarlo'}${t.off&&n(t.off[k])?' ('+(n(t.off[k])>0?'+':'')+n(t.off[k])+')':''}"${t.off&&n(t.off[k])?' class="adj"':''}`:''}></td>`).join('')}
@@ -1465,6 +1465,7 @@ function renderTeams(){
       <td class="calc" data-c="jj">${r.jj}</td><td class="calc" data-c="dif">${fmtDif(r.dif)}</td><td class="calc" data-c="pts">${r.pts}</td>
       <td><input type="number" min="2" data-k="desde" value="${t.desde>1?t.desde:''}" placeholder="—" title="Jornada en la que se incorpora (vacío = desde el inicio)"></td>
       <td><input type="number" min="1" data-k="hasta" value="${t.hasta>0?t.hasta:''}" placeholder="—" title="Última jornada que juega (vacío = hasta el final)"></td>
+      <td><input type="checkbox" data-k="baja" ${t.baja?'checked':''} title="Dar de baja: ya no sale en la tabla general"></td>
       <td><button class="btn sm del" data-act="del" title="Eliminar equipo">✕</button></td></tr>`}).join('');
 }
 function refreshScorerTeams(){
@@ -2016,7 +2017,7 @@ $('clearTeams').onclick=()=>{
 $('teamRows').addEventListener('input',e=>{
   const tr=e.target.closest('tr'),k=e.target.dataset.k;if(!tr||!k)return;
   const t=C().teams.find(x=>x.id===tr.dataset.id);
-  if(k==='desde'||k==='hasta')return; // se aplica al terminar de escribir (evento change)
+  if(k==='desde'||k==='hasta'||k==='baja')return; // se aplica al terminar de escribir (evento change)
   const cc=C();
   if(cc.autoTable&&cc.fx&&['jg','je','jp','gf','gc'].includes(k)){ // tabla automática: lo escrito se guarda como ajuste sobre lo calculado
     const a=(autoStats(cc)[t.id]||{})[k]||0;t.off=t.off||{};t.off[k]=(e.target.value===''?0:+e.target.value)-a;
@@ -2025,8 +2026,9 @@ $('teamRows').addEventListener('input',e=>{
   refreshCalcs();if(k==='name'){refreshScorerTeams();if(C().fx)renderFixtures();if(C().lig)renderLig()}changed();
 });
 $('teamRows').addEventListener('change',e=>{
-  const tr=e.target.closest('tr');const k=e.target.dataset.k;if(!tr||(k!=='desde'&&k!=='hasta'))return;
+  const tr=e.target.closest('tr');const k=e.target.dataset.k;if(!tr||(k!=='desde'&&k!=='hasta'&&k!=='baja'))return;
   const c=C(),t=c.teams.find(x=>x.id===tr.dataset.id);if(!t)return;
+  if(k==='baja'){t.baja=e.target.checked;save();renderTeams();renderPreview();if(c.lig)renderLig();toast((t.name||'El equipo')+(t.baja?' dado de baja: ya no sale en la tabla general':' vuelve a salir en la tabla general'));return}
   const v=Math.floor(+e.target.value);t[k]=v>(k==='desde'?1:0)?v:0;e.target.value=t[k]||'';
   aplicarIngreso(c,t);
 });
