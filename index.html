@@ -597,10 +597,10 @@ input::placeholder,textarea::placeholder{color:#64748b}
   </div>
 
   <h2>3 · Equipos y resultados</h2>
-  <p class="hint">JJ, DIF y PTS se calculan solos. «Aj» es un ajuste de puntos (+/−) por sanciones.</p>
+  <p class="hint">JJ, DIF y PTS se calculan solos. «Aj» es un ajuste de puntos (+/−) por sanciones. «Entra J»: si un equipo se incorporó a la liga con ella ya empezada, escribe la jornada en que entró (p. ej. 3); no se programa antes y sus juegos anteriores se reparten en jornadas posteriores.</p>
   <div class="scroll-x">
     <table class="teams">
-      <thead><tr><th>Logo</th><th style="text-align:left">Equipo</th><th>JG</th><th>JE</th><th>JP</th><th>GF</th><th>GC</th><th>Aj</th><th title="Tarjetas amarillas">TA</th><th title="Tarjetas rojas">TR</th><th>JJ</th><th>DIF</th><th>PTS</th><th></th></tr></thead>
+      <thead><tr><th>Logo</th><th style="text-align:left">Equipo</th><th>JG</th><th>JE</th><th>JP</th><th>GF</th><th>GC</th><th>Aj</th><th title="Tarjetas amarillas">TA</th><th title="Tarjetas rojas">TR</th><th>JJ</th><th>DIF</th><th>PTS</th><th title="Jornada en la que se incorpora el equipo (vacío = desde el inicio)">Entra J</th><th></th></tr></thead>
       <tbody id="teamRows"></tbody>
     </table>
   </div>
@@ -1073,7 +1073,7 @@ function rolHtml(l,c,style,c2,catT,modo){
       ${vsHtml(m,c)}
       <div class="lgc">${a?teamLogo(a,c2):''}</div><div class="an">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
   const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
-  const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name).map(t=>t.name):[];
+  const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name&&!(t.desde>fx.sel+1)).map(t=>t.name):[];
   const jn=r?fx.sel+1:(c.jor||'');const fecha=(r&&r.fecha)||c.fecha;
   return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
     <div class="left">
@@ -1310,7 +1310,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const pd=pshow.length?`<div class="sec sm">Juegos pendientes${pmore>0?` (+${pmore} más)`:''}</div><div class="pgr">${pshow.map(p=>{const h=T(p.h),a=T(p.a);
     return `<div class="pc">${p.j?`<span class="pj">${esc(p.j)}</span>`:''}<span class="pn r">${esc(h?h.name:'')}</span><div class="l">${lg(h)}</div><span class="pv">VS</span><div class="l">${lg(a)}</div><span class="pn">${esc(a?a.name:'')}</span>${p.when?`<span class="pw">${esc(p.when)}</span>`:''}</div>`}).join('')}</div>`:'';
   const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
-  const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name).map(t=>t.name):[];
+  const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name&&!(t.desde>fx.sel+1)).map(t=>t.name):[];
   const bantxt=solo?'¡Puntualidad, respeto y juego limpio!':rest.length?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
   const banfs=bantxt.length>46?17:bantxt.length>30?21:25;
   const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
@@ -1458,6 +1458,7 @@ function renderTeams(){
       <td><input type="number" data-k="aj" value="${t.aj}"></td>
       ${['ya','rc'].map(k=>`<td><input type="number" min="0" data-k="${k}" value="${t[k]||0}"></td>`).join('')}
       <td class="calc" data-c="jj">${r.jj}</td><td class="calc" data-c="dif">${fmtDif(r.dif)}</td><td class="calc" data-c="pts">${r.pts}</td>
+      <td><input type="number" min="2" data-k="desde" value="${t.desde>1?t.desde:''}" placeholder="—" title="Jornada en la que se incorpora (vacío = desde el inicio)"></td>
       <td><button class="btn sm del" data-act="del" title="Eliminar equipo">✕</button></td></tr>`}).join('');
 }
 function refreshScorerTeams(){
@@ -1500,8 +1501,25 @@ function rrRounds(ids,dbl,rnd){
   if(dbl)rounds.slice().forEach(ms=>rounds.push(ms.map(([h,a])=>[a,h])));
   return rounds;
 }
+/* ¿El equipo ya forma parte de la liga en la jornada i (base 0)? «desde» = jornada en que se incorporó */
+const okJ=(c,id,i)=>{const t=c.teams.find(x=>x.id===id);return !(t&&t.desde>i+1)};
 function freshFx(c,old){
-  const rs=rrRounds(c.teams.map(t=>t.id),!!c.fxDouble,c.fxRandom!==false);
+  let rs;
+  if(!c.teams.some(t=>t.desde>1))rs=rrRounds(c.teams.map(t=>t.id),!!c.fxDouble,c.fxRandom!==false);
+  else{ // equipos que entran tarde: el rol se arma con los que estaban y sus juegos se acomodan desde su jornada de ingreso
+    const T=c.teams.map(t=>t.id),ini=c.teams.filter(t=>!(t.desde>1)).map(t=>t.id),need=c.fxDouble?2:1,pend=[];
+    rs=ini.length>1?rrRounds(ini,!!c.fxDouble,c.fxRandom!==false):[];
+    for(let i=0;i<T.length;i++)for(let j=i+1;j<T.length;j++){
+      if(ini.includes(T[i])&&ini.includes(T[j]))continue;
+      for(let q=0;q<need;q++)pend.push(q%2?[T[j],T[i]]:[T[i],T[j]]);
+    }
+    const resto=[];
+    pend.forEach(([h,a])=>{
+      const k=rs.findIndex((ms,i)=>okJ(c,h,i)&&okJ(c,a,i)&&!ms.some(m=>m[0]===h||m[1]===h||m[0]===a||m[1]===a));
+      if(k>=0)rs[k].push([h,a]);else resto.push([h,a]);
+    });
+    packRounds(resto,300).forEach(par=>rs.push(par));
+  }
   return {double:!!c.fxDouble,sel:0,rounds:rs.map((ms,i)=>({id:uid(),fecha:(old&&old[i]&&old[i].fecha)||'',done:false,sanc:(old&&old[i]&&old[i].sanc)||[],obs:(old&&old[i]&&old[i].obs)||'',
     m:ms.map(([h,a])=>({id:uid(),h,a,day:'',time:''}))}))};
 }
@@ -1528,13 +1546,25 @@ function syncFx(c){
   }
   const resto=[];
   miss.forEach(([h,a])=>{
-    const r=fx.rounds.find(r=>!r.done&&!r.m.some(m=>m.h===h||m.a===h||m.h===a||m.a===a));
+    const r=fx.rounds.find((r,i)=>!r.done&&okJ(c,h,i)&&okJ(c,a,i)&&!r.m.some(m=>m.h===h||m.a===h||m.h===a||m.a===a));
     if(r)r.m.push({id:uid(),h,a,day:'',time:''});else resto.push([h,a]);
   });
   packRounds(resto,300).forEach(par=>fx.rounds.push({id:uid(),fecha:'',done:false,m:par.map(([h,a])=>({id:uid(),h,a,day:'',time:''}))}));
   while(fx.rounds.length>1){const r=fx.rounds[fx.rounds.length-1];if(r.m.length||r.done)break;fx.rounds.pop()}
   fx.sel=Math.min(fx.sel||0,fx.rounds.length-1);
   return 'Calendario ajustado: +'+miss.length+' partido(s)'+(removed?', −'+removed+' quitado(s)':'');
+}
+/* Un equipo se incorporó en la jornada t.desde: se quitan sus partidos anteriores (si no tienen marcador) y se reparten
+   en jornadas posteriores. Avisa si alguno ya tenía marcador capturado. */
+function aplicarIngreso(c,t){
+  if(!c.fx){save();renderTeams();renderPreview();return}
+  const d=t.desde||1;let quit=0,conRes=0;
+  c.fx.rounds.forEach((r,i)=>{if(i+1>=d)return;const b=r.m.length;
+    r.m=r.m.filter(m=>{if(m.h!==t.id&&m.a!==t.id)return true;if(hasResult(m)){conRes++;return true}return false});quit+=b-r.m.length});
+  const msg=syncFx(c);
+  save();renderFixtures();renderTeams();renderPend();renderPreview();
+  toast((d>1?(t.name||'El equipo')+' entra en la jornada '+d+'. ':'Sin jornada de ingreso. ')+(quit?quit+' partido(s) anteriores se reprogramaron. ':'')+msg
+    +(conRes?' OJO: '+conRes+' partido(s) anteriores ya tienen marcador y se dejaron.':''));
 }
 /* Recalcula las jornadas que siguen: se quedan fijas las jornadas jugadas, las que tienen marcadores y todas hasta la
    que se está viendo (la modificada a mano); los partidos que faltan se reparten de nuevo en las jornadas siguientes
@@ -1562,7 +1592,7 @@ function recalcFx(c,apply){
       const used=new Set();kept[ri].forEach(m=>{used.add(m.h);used.add(m.a)});
       const deg={};left.forEach(([h,a])=>{deg[h]=(deg[h]||0)+1;deg[a]=(deg[a]||0)+1});
       const cand=left.map((p,i)=>({i,w:deg[p[0]]+deg[p[1]]+(t?Math.random()*0.9:0)})).sort((x,y)=>y.w-x.w),idx=[];
-      cand.forEach(({i})=>{const p=left[i];if(!used.has(p[0])&&!used.has(p[1])){used.add(p[0]);used.add(p[1]);idx.push(i)}});
+      cand.forEach(({i})=>{const p=left[i];if(!used.has(p[0])&&!used.has(p[1])&&okJ(c,p[0],ri)&&okJ(c,p[1],ri)){used.add(p[0]);used.add(p[1]);idx.push(i)}});
       place.push(idx.map(i=>left[i]));idx.sort((a,b)=>b-a).forEach(i=>left.splice(i,1));
     }
     const extra=left.length?packRounds(left,60):[];
@@ -1690,7 +1720,7 @@ function renderFixtures(){
       +'<div class="fr"><span style="font-size:11px;font-weight:700;color:var(--muted)">Mover a jornada</span><select data-k="mv"><option value="">—</option>'+ro+'</select>'+(m.from?'<span style="font-size:11px;font-weight:700;color:var(--muted)">↪ reprogramado de J'+m.from+'</span>':'')+'</div>'
       +(w?'<div class="warn">⚠ '+w+'</div>':'')+'</div>';
   }).join('');
-  const rest=c.teams.filter(t=>!busy[t.id]).map(t=>t.name||'(sin nombre)');
+  const rest=c.teams.filter(t=>!busy[t.id]&&!(t.desde>fx.sel+1)).map(t=>t.name||'(sin nombre)');
   const sancRows=(r.sanc||[]).map(s=>'<div class="fm" data-s="'+s.id+'"><div class="fr"><select data-sk="t">'+opts(s.t)+'</select><button class="btn sm del" data-act="dels" title="Quitar sanción">✕</button></div>'
     +'<div class="fr"><input type="text" data-sk="p" style="flex:1;min-width:130px" placeholder="Jugador" value="'+esc(s.p)+'"><input type="text" class="sm" data-sk="c" placeholder="Causal" title="Número de causal (6) o texto" value="'+esc(s.c)+'"><input type="text" class="sm" data-sk="g" placeholder="Juegos" value="'+esc(s.g)+'"></div></div>').join('');
   box.innerHTML='<div class="card" style="margin-top:8px">'
@@ -1964,8 +1994,15 @@ $('clearTeams').onclick=()=>{
 $('teamRows').addEventListener('input',e=>{
   const tr=e.target.closest('tr'),k=e.target.dataset.k;if(!tr||!k)return;
   const t=C().teams.find(x=>x.id===tr.dataset.id);
+  if(k==='desde')return; // se aplica al terminar de escribir (evento change)
   t[k]=k==='name'?e.target.value:(e.target.value===''?0:+e.target.value);
   refreshCalcs();if(k==='name'){refreshScorerTeams();if(C().fx)renderFixtures();if(C().lig)renderLig()}changed();
+});
+$('teamRows').addEventListener('change',e=>{
+  const tr=e.target.closest('tr');if(!tr||e.target.dataset.k!=='desde')return;
+  const c=C(),t=c.teams.find(x=>x.id===tr.dataset.id);if(!t)return;
+  const v=Math.floor(+e.target.value);t.desde=v>1?v:0;e.target.value=t.desde||'';
+  aplicarIngreso(c,t);
 });
 $('teamRows').addEventListener('click',e=>{
   const tr=e.target.closest('tr'),act=e.target.closest('[data-act]');if(!tr||!act)return;
