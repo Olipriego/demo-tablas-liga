@@ -1539,6 +1539,31 @@ function freshFx(c,old){
   return {double:!!c.fxDouble,sel:0,rounds:rs.map((ms,i)=>({id:uid(),fecha:(old&&old[i]&&old[i].fecha)||'',done:false,sanc:(old&&old[i]&&old[i].sanc)||[],obs:(old&&old[i]&&old[i].obs)||'',
     m:ms.map(([h,a])=>({id:uid(),h,a,day:'',time:''}))}))};
 }
+/* Reparte partidos faltantes (miss = [local, visita, esPrimeraVuelta]) en las jornadas «slots»; usedOf(ri) = equipos que ya juegan
+   en esa jornada. Prueba muchas combinaciones: primero las primeras vueltas (no se repite un juego recién jugado), nunca una
+   segunda vuelta antes que la primera del mismo par, y lo que no cabe se devuelve en «extra» para jornadas nuevas. */
+function placeMiss(c,miss,slots,usedOf,nRounds,tries){
+  let best=null;
+  for(let t=0;t<tries&&miss.length;t++){
+    const left=miss.map(p=>p.slice());
+    if(t>0)for(let i=left.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[left[i],left[j]]=[left[j],left[i]]}
+    const place=[];
+    for(const ri of slots){
+      const used=usedOf(ri);
+      const deg={};left.forEach(([h,a])=>{deg[h]=(deg[h]||0)+1;deg[a]=(deg[a]||0)+1});
+      const cand=left.map((p,i)=>({i,w:deg[p[0]]+deg[p[1]]+(p[2]?100:0)+(t?Math.random()*0.9:0)})).sort((x,y)=>y.w-x.w),idx=[];
+      cand.forEach(({i})=>{const p=left[i];if(!used.has(p[0])&&!used.has(p[1])&&okJ(c,p[0],ri)&&okJ(c,p[1],ri)){used.add(p[0]);used.add(p[1]);idx.push(i)}});
+      place.push(idx.map(i=>left[i]));idx.sort((a,b)=>b-a).forEach(i=>left.splice(i,1));
+    }
+    const extra=left.length?packRounds(left.filter(([h,a])=>okJ(c,h,nRounds)&&okJ(c,a,nRounds)),60):[];
+    const pos={};let late=0;
+    place.forEach((ps,x)=>ps.forEach(p=>{const k=pairKey(p[0],p[1]);(pos[k]=pos[k]||[]).push(x);if(p[2])late+=x}));
+    let ord=0;Object.values(pos).forEach(v=>{if(v.length>1&&v[0]>v[1])ord++});
+    const score=extra.length*1000+ord*100+late;
+    if(!best||score<best.score)best={score,place,extra};
+  }
+  return best||{place:slots.map(()=>[]),extra:[]};
+}
 /* Ajusta el calendario cuando se agregan o quitan equipos. Devuelve un resumen */
 function syncFx(c){
   if(c.teams.length<2){c.fx=null;return 'Calendario borrado (se necesitan al menos 2 equipos)'}
@@ -1561,20 +1586,19 @@ function syncFx(c){
     return 'Calendario regenerado con '+c.fx.rounds.length+' jornadas'+extra;
   }
   // ya hay horarios o jornadas jugadas: se conserva todo y solo se agregan los partidos que faltan
-  const need=fx.double?2:1,cnt={},ori={},T=c.teams.map(t=>t.id),miss=[];
+  const need=fx.double?2:1,cnt={},ori={},T=c.teams.map(t=>t.id);let miss=[];
   fx.rounds.forEach(r=>r.m.forEach(m=>{const k=pairKey(m.h,m.a);cnt[k]=(cnt[k]||0)+1;ori[k]=m.h}));
   for(let i=0;i<T.length;i++)for(let j=i+1;j<T.length;j++){
     if(!coex(c,T[i],T[j]))continue;
     const k=pairKey(T[i],T[j]);let first=ori[k];
     for(let q=cnt[k]||0;q<needFx(c,T[i],T[j],need,fx.rounds.length);q++){
-      const h=first===undefined?T[i]:(first===T[i]?T[j]:T[i]);miss.push([h,h===T[i]?T[j]:T[i]]);first=h;
+      const h=first===undefined?T[i]:(first===T[i]?T[j]:T[i]);miss.push([h,h===T[i]?T[j]:T[i],!cnt[k]&&q===0]);first=h;
     }
   }
-  const resto=[];
-  miss.forEach(([h,a])=>{
-    const r=fx.rounds.find((r,i)=>!r.done&&okJ(c,h,i)&&okJ(c,a,i)&&!r.m.some(m=>m.h===h||m.a===h||m.h===a||m.a===a));
-    if(r)r.m.push({id:uid(),h,a,day:'',time:''});else resto.push([h,a]);
-  });
+  const slots=[];fx.rounds.forEach((r,i)=>{if(!r.done)slots.push(i)});
+  const pl=placeMiss(c,miss,slots,ri=>{const u=new Set();fx.rounds[ri].m.forEach(m=>{u.add(m.h);u.add(m.a)});return u},fx.rounds.length,200);
+  slots.forEach((ri,i)=>pl.place[i].forEach(([h,a])=>fx.rounds[ri].m.push({id:uid(),h,a,day:'',time:''})));
+  const resto=pl.extra.flat();
   packRounds(resto.filter(([h,a])=>okJ(c,h,fx.rounds.length)&&okJ(c,a,fx.rounds.length)),300).forEach(par=>fx.rounds.push({id:uid(),fecha:'',done:false,m:par.map(([h,a])=>({id:uid(),h,a,day:'',time:''}))}));
   while(fx.rounds.length>1){const r=fx.rounds[fx.rounds.length-1];if(r.m.length||r.done)break;fx.rounds.pop()}
   fx.sel=Math.min(fx.sel||0,fx.rounds.length-1);
@@ -1603,26 +1627,10 @@ function recalcFx(c,apply){
   for(let i=0;i<T.length;i++)for(let j=i+1;j<T.length;j++){
     if(!coex(c,T[i],T[j]))continue;
     const k=pairKey(T[i],T[j]);let first=ori[k];
-    for(let q=cnt[k]||0;q<needFx(c,T[i],T[j],need,fx.rounds.length);q++){const h=first===undefined?T[i]:(first===T[i]?T[j]:T[i]);miss.push([h,h===T[i]?T[j]:T[i]]);first=h}
+    for(let q=cnt[k]||0;q<needFx(c,T[i],T[j],need,fx.rounds.length);q++){const h=first===undefined?T[i]:(first===T[i]?T[j]:T[i]);miss.push([h,h===T[i]?T[j]:T[i],!cnt[k]&&q===0]);first=h}
   }
   const slots=[];fx.rounds.forEach((r,i)=>{if(!fixedR(r,i))slots.push(i)});
-  let best=null;
-  for(let t=0;t<400&&miss.length;t++){
-    const left=miss.map(p=>p.slice());
-    if(t>0)for(let i=left.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[left[i],left[j]]=[left[j],left[i]]}
-    const place=[];
-    for(const ri of slots){
-      const used=new Set();kept[ri].forEach(m=>{used.add(m.h);used.add(m.a)});
-      const deg={};left.forEach(([h,a])=>{deg[h]=(deg[h]||0)+1;deg[a]=(deg[a]||0)+1});
-      const cand=left.map((p,i)=>({i,w:deg[p[0]]+deg[p[1]]+(t?Math.random()*0.9:0)})).sort((x,y)=>y.w-x.w),idx=[];
-      cand.forEach(({i})=>{const p=left[i];if(!used.has(p[0])&&!used.has(p[1])&&okJ(c,p[0],ri)&&okJ(c,p[1],ri)){used.add(p[0]);used.add(p[1]);idx.push(i)}});
-      place.push(idx.map(i=>left[i]));idx.sort((a,b)=>b-a).forEach(i=>left.splice(i,1));
-    }
-    const extra=left.length?packRounds(left.filter(([h,a])=>okJ(c,h,fx.rounds.length)&&okJ(c,a,fx.rounds.length)),60):[];
-    const score=extra.length*1000+place.filter(p=>p.length).length;
-    if(!best||score<best.score)best={score,place,extra};
-  }
-  if(!best)best={place:slots.map(()=>[]),extra:[]};
+  const best=placeMiss(c,miss,slots,ri=>{const u=new Set();kept[ri].forEach(m=>{u.add(m.h);u.add(m.a)});return u},fx.rounds.length,400);
   const info={moved:miss.length,from:slots.length?slots[0]+1:null,extra:best.extra.length,total:0,before:fx.rounds.length,kept:sel+1};
   const mk=([h,a])=>({id:uid(),h,a,day:'',time:''});
   slots.forEach((ri,i)=>{fx.rounds[ri].m=kept[ri].concat(best.place[i].map(mk))});
@@ -1634,20 +1642,21 @@ function recalcFx(c,apply){
 }
 /* Reparte partidos pendientes en el menor número de jornadas (prueba muchas combinaciones y se queda con la mejor) */
 function packRounds(pairs,tries){
-  let best=null;
+  let best=null,bestLate=0;
   for(let t=0;t<tries;t++){
     const left=pairs.map(p=>p.slice());
     if(t>0)for(let i=left.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[left[i],left[j]]=[left[j],left[i]]}
-    const rounds=[];
+    const rounds=[];let late=0;
     while(left.length){
       const deg={};left.forEach(([h,a])=>{deg[h]=(deg[h]||0)+1;deg[a]=(deg[a]||0)+1});
-      const cand=left.map((p,i)=>({i,w:deg[p[0]]+deg[p[1]]+(t?Math.random()*0.9:0)})).sort((x,y)=>y.w-x.w);
+      // las primeras vueltas (p[2]) van antes, para no repetir un partido recién jugado
+      const cand=left.map((p,i)=>({i,w:deg[p[0]]+deg[p[1]]+(p[2]?100:0)+(t?Math.random()*0.9:0)})).sort((x,y)=>y.w-x.w);
       const used=new Set(),idx=[];
-      cand.forEach(({i})=>{const p=left[i];if(!used.has(p[0])&&!used.has(p[1])){used.add(p[0]);used.add(p[1]);idx.push(i)}});
+      cand.forEach(({i})=>{const p=left[i];if(!used.has(p[0])&&!used.has(p[1])){used.add(p[0]);used.add(p[1]);idx.push(i);if(p[2])late+=rounds.length}});
       rounds.push(idx.map(i=>left[i]));idx.sort((a,b)=>b-a).forEach(i=>left.splice(i,1));
-      if(best&&rounds.length>=best.length)break;
+      if(best&&rounds.length>best.length)break;
     }
-    if(!left.length&&(!best||rounds.length<best.length))best=rounds;
+    if(!left.length&&(!best||rounds.length<best.length||(rounds.length===best.length&&late<bestLate))){best=rounds;bestLate=late}
   }
   return best||[];
 }
