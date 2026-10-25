@@ -372,6 +372,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.sk-cancha.h .foot,.poster.sk-cancha.h .legend{color:#fff;font-weight:800;text-shadow:0 1px 3px rgba(0,0,0,.7)}
 /* vista «Sanciones» */
 .poster.h.sancv .sanc{margin-top:0}
+.poster.h:not(.sancv) .obs{margin-top:18px}
 .poster.h.sancv .obs{margin-top:14px}
 .poster.h.sancv .obs b{font-size:15px;padding:0 18px}
 .poster.h.sancv .obs span{font-size:18px;padding:12px 18px}
@@ -391,6 +392,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sancv .sp{height:38px;font-size:15px}
 .poster.pq.sancv .sp .c{font-size:12px;padding:3px 9px}
 .poster.pq.sancv .sp .j{font-size:13px;padding:4px 10px}
+.poster.pq:not(.sancv) .ob{margin-top:26px}
 .poster.pq.sancv .ob{margin-top:18px;min-height:64px}
 .poster.pq.sancv .ob b{font-size:20px}
 .poster.pq.sancv .ob span{font-size:18px}
@@ -1028,7 +1030,7 @@ function sancHtml(gr,c2){
 }
 function sancAlto(gr,obs){
   let sH=0;if(gr.length){sH=8+17;for(let i=0;i<gr.length;i+=3)sH+=(i?6:0)+30+22*Math.max(...gr.slice(i,i+3).map(x=>x.list.length))}
-  return sH+(obs?(obs.length>120?60:42)+8:0);
+  return sH+(obs?(obs.length>120?60:42)+18:0);
 }
 /* Orden del rol: por dia de la semana (lunes a domingo) y luego por hora; sin dia o sin hora van al final */
 const DIAS_SEM=['lun','mar','mie','jue','vie','sab','dom'];
