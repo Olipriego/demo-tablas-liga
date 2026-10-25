@@ -1063,7 +1063,7 @@ function rolHtml(l,c,style,c2,catT,modo){
     </div>
   </div>`;
   }
-  gr=[];obs='';
+  gr=[];
   const sH=sancAlto(gr,obs),oH=0;
   const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[],np=Math.min(pend.length,6),pH=np?10+52+Math.ceil(np/2)*46:0;
   const avail=545-sH-oH-pH,rg=k>14?2:k>8?5:8;
@@ -1094,7 +1094,7 @@ function rolHtml(l,c,style,c2,catT,modo){
       ${sancHtml(gr,c2)}
       ${obs?`<div class="obs"><b>Observación</b><span>${esc(obs)}</span></div>`:''}
       ${pendHtml(pend,c,c2,6)}
-      <div class="foot">${rest.length?`<b style="color:var(--c2)">Descansa:</b> ${esc(rest.join(', '))}`:'¡Puntualidad y juego limpio!'}</div>
+      <div class="foot">${rest.length&&c.restRol!==false?`<b style="color:var(--c2)">Descansa:</b> ${esc(rest.join(', '))}`:'¡Puntualidad y juego limpio!'}</div>
     </div>
   </div>`;
 }
@@ -1316,12 +1316,12 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
     return `<div class="pc">${p.j?`<span class="pj">${esc(p.j)}</span>`:''}<span class="pn r">${esc(h?h.name:'')}</span><div class="l">${lg(h)}</div><span class="pv">VS</span><div class="l">${lg(a)}</div><span class="pn">${esc(a?a.name:'')}</span>${p.when?`<span class="pw">${esc(p.when)}</span>`:''}</div>`}).join('')}</div>`:'';
   const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
   const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name&&okJ(c,t.id,fx.sel)).map(t=>t.name):[];
-  const bantxt=solo?'¡Puntualidad, respeto y juego limpio!':rest.length?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
+  const bantxt=solo?'¡Puntualidad, respeto y juego limpio!':rest.length&&c.restRol!==false?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
   const banfs=bantxt.length>46?17:bantxt.length>30?21:25;
   const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
   const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>#${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:28px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
   const obsH=obs?`<div class="ob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
-  const cuerpo=solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${pd}`;
+  const cuerpo=solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${obsH}${pd}`;
   return `<div class="poster pq${solo?' sancv':''} sk-${est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
     <div class="hd"><div class="lgo">${lgo}</div>
       <div class="ti" style="--sfs:${sfs}px">${small?`<div class="s">${esc(small)}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(first)}${rest2?` <em>${esc(rest2)}</em>`:''}</h1>${(c.sub||catT)?(()=>{const nt=(c.name||'').trim()||(c.sub||''),st=(c.name&&c.sub)?c.sub:'';return `<span class="rib" style="font-size:${Math.max(24,Math.min(44,Math.floor(400/(nt.length*0.6))))}px">${esc(nt)}${st?`<small>${esc(st)}</small>`:''}</span>`})():''}</div>
@@ -1764,7 +1764,8 @@ function renderFixtures(){
     +'<p class="hint" style="margin:3px 0 8px">Salen en la imagen «Sanciones» (pestaña de la vista previa), agrupadas por equipo. En «Juegos» puedes escribir un número (2) o un texto (Expulsión definitiva).</p>'
     +sancRows+'<button class="btn sm" data-act="adds">+ Sanción</button>'
     +'<label class="f" style="margin-top:10px">Observación (sale en la imagen «Sanciones»)<textarea data-rk="obs" rows="2" style="border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;resize:vertical" placeholder="Ej.: Por favor háganle llegar a sus jugadores el Reglamento de Competencia">'+esc(r.obs||'')+'</textarea></label>'
-    +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="pendrol"'+(c.pendRol!==false?' checked':'')+'> Mostrar los juegos pendientes en el rol de juegos</label></div>'
+    +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="pendrol"'+(c.pendRol!==false?' checked':'')+'> Mostrar los juegos pendientes en el rol de juegos</label>'
+    +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="restrol"'+(c.restRol!==false?' checked':'')+'> Mostrar los equipos que descansan en la tira del rol de juegos</label></div>'
     +(rest.length?'<div class="hint" style="margin:8px 0 0">Descansa: '+esc(rest.join(', '))+'</div>':'')+'</div>';
 }
 $('fxDouble').onchange=e=>{const c=C();c.fxDouble=e.target.checked;if(c.fx)autoSyncFx();else{save();renderFixtures()}};
@@ -1804,7 +1805,7 @@ function autoOn(){
 $('fxRound').addEventListener('input',e=>{
   const fx=C().fx,r=fx.rounds[fx.sel],tr=e.target.closest('[data-m]'),k=e.target.dataset.k;
   if(e.target.dataset.rk==='fecha'){r.fecha=e.target.value;fxTouch();return}
-  if(e.target.dataset.rk==='obs'){r.obs=e.target.value;fxTouch('sanc');return}
+  if(e.target.dataset.rk==='obs'){r.obs=e.target.value;fxTouch('rol');return}
   const sr=e.target.closest('[data-s]');
   if(sr&&e.target.dataset.sk&&e.target.tagName!=='SELECT'){r.sanc.find(s=>s.id===sr.dataset.s)[e.target.dataset.sk]=e.target.value;fxTouch('sanc');return}
   if(tr&&(k==='day'||k==='time'||k==='gh'||k==='ga')){
@@ -1817,6 +1818,7 @@ $('fxRound').addEventListener('change',e=>{
   if(tr&&(k==='day'||k==='time')){r.m=sortMs(r.m);save();renderFixtures();renderPreview();return}
   if(e.target.dataset.rk==='done'){r.done=e.target.checked;if(r.done)autoOn();save();renderFixtures();if(C().autoTable)renderTeams();renderPend();renderPreview();return}
   if(e.target.dataset.rk==='pendrol'){C().pendRol=e.target.checked;fxTouch();return}
+  if(e.target.dataset.rk==='restrol'){C().restRol=e.target.checked;fxTouch();return}
   const sr=e.target.closest('[data-s]');
   if(sr&&e.target.dataset.sk==='t'){r.sanc.find(s=>s.id===sr.dataset.s).t=e.target.value;save();fxTouch('sanc');return}
   if(tr&&k==='st'){r.m.find(m=>m.id===tr.dataset.m).st=e.target.value;autoOn();save();if(C().autoTable)renderTeams();renderPend();fxTouch();return}
