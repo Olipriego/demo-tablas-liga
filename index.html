@@ -2174,13 +2174,16 @@ async function bkInit(){
   renderBk();
 }
 async function bkWrite(){
-  if(!BK||!BK.h||!BK.perm)return;
+  if(!BK||!BK.h||!BK.perm||!tieneEquipos())return;
   try{const w=await BK.h.createWritable();await w.write(JSON.stringify(S));await w.close();markBk()}
   catch(e){BK.perm=false;console.error(e)}
   renderBk();
 }
 function bkSchedule(){if(!BK||!BK.h||!BK.perm)return;clearTimeout(BK.t);BK.t=setTimeout(bkWrite,3000)}
 function hasData(){return false}
+/* protección contra pérdida de datos: una app vacía nunca se guarda encima de una copia con datos (ni en la nube, ni en el archivo automático, ni en la copia de «Deshacer restablecer») */
+function tieneEquipos(){return S.leagues.some(l=>l.cats.some(c=>c.teams.length))}
+function guardarPrevio(){try{if(tieneEquipos())localStorage.setItem(KEY+'_backup',JSON.stringify(S))}catch(_){}}
 function renderBk(){
   const b=$('bkBanner'),st=$('bkStatus'),lb=lastBk(),days=Math.floor((Date.now()-lb)/864e5);
   let html='',cls='bk';
@@ -2217,6 +2220,7 @@ function renderNube(){
 }
 async function nubeSave(force){
   if(!NUBE.on||(NUBE.pause&&!force))return;
+  if(!tieneEquipos()&&!(force&&confirm('Este equipo no tiene equipos capturados. Esto reemplazaría el respaldo de la nube con uno VACÍO. ¿Continuar?')))return;
   const body=JSON.stringify(S);if(!force&&body===NUBE.sent)return;
   try{const r=await nubeReq('PUT',body);NUBE.sent=body;NUBE.last=r.updated;nubeSetMark(r.updated);NUBE.err='';NUBE.pause=false;markBk()}
   catch(e){NUBE.err=String(e.message||e).slice(0,40)}
@@ -2224,7 +2228,7 @@ async function nubeSave(force){
 }
 function nubeSchedule(){if(!NUBE||!NUBE.on||NUBE.pause)return;clearTimeout(NUBE.t);NUBE.t=setTimeout(nubeSave,45000)}
 function nubeLoad(d,t){
-  try{localStorage.setItem(KEY+'_backup',JSON.stringify(S))}catch(_){}
+  guardarPrevio();
   S=d;S.selL=0;S.selC=0;NUBE.sent=JSON.stringify(S);NUBE.last=t;nubeSetMark(t);NUBE.pause=false;
   save();renderAll();toast('Datos cargados desde la nube');
 }
@@ -2288,17 +2292,17 @@ $('exportJson').onclick=async()=>{
 $('importJson').onclick=()=>$('fileJson').click();
 $('fileJson').onchange=e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.leagues)throw 0;try{localStorage.setItem(KEY+'_backup',JSON.stringify(S))}catch(_){}S=s;S.selL=0;S.selC=0;save();renderAll();toast('Datos cargados')}catch(_){toast('Archivo no válido')}};
+  r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.leagues)throw 0;guardarPrevio();S=s;S.selL=0;S.selC=0;save();renderAll();toast('Datos cargados')}catch(_){toast('Archivo no válido')}};
   r.readAsText(f);e.target.value='';
 };
 $('resetAll').onclick=()=>{
   if(!confirm('Se borrarán TODAS las ligas, categorías y equipos. (Podrás recuperarlos con «Deshacer restablecer»). ¿Continuar?'))return;
-  try{localStorage.setItem(KEY+'_backup',JSON.stringify(S))}catch(e){}
+  guardarPrevio();
   S=defaultState();save();renderAll();toast('Datos restablecidos · puedes usar «Deshacer restablecer»');
 };
 $('undoReset').onclick=()=>{
   let b=null;try{b=JSON.parse(localStorage.getItem(KEY+'_backup'))}catch(e){}
-  if(!b||!b.leagues){toast('No hay nada que recuperar');return}
+  if(!b||!b.leagues||!b.leagues.some(l=>l.cats.some(c=>c.teams.length))){toast('No hay nada que recuperar');return}
   S=b;S.selL=0;S.selC=0;save();renderAll();toast('Datos recuperados');
 };
 
