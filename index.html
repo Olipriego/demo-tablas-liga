@@ -272,7 +272,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .rib{display:inline-block;background:var(--rib);color:var(--ribink);font-weight:800;font-size:17px;letter-spacing:.14em;text-transform:uppercase;padding:8px 22px 8px 16px;border-bottom:4px solid var(--ribline);border-radius:4px 14px 4px 4px;max-width:100%}
 .pq .jb{display:flex;align-items:stretch;min-height:74px;border-radius:6px;overflow:hidden;flex:none;box-shadow:var(--jsh)}
 .pq .jb .a{background:var(--ja);color:var(--jainks);padding:0 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
-.pq .jb .a small{font-size:11px;letter-spacing:.3em;font-weight:800;margin-bottom:3px}
+.pq .jb .a small{font-size:21px;letter-spacing:.12em;font-weight:800;margin-bottom:4px}
 .pq .jb .a b{font-size:38px;font-weight:900}
 .pq .jb .b{background:var(--jb);color:var(--jbink);padding:6px 24px;max-width:400px;display:flex;flex-direction:column;justify-content:center;line-height:1.05}
 .pq .jb .b small{font-size:21px;letter-spacing:.14em;font-weight:800;text-transform:uppercase;color:var(--jbsm)}
@@ -1291,7 +1291,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const bw=big.split(' '),first=bw[0],rest2=bw.slice(1).join(' ');
   const jn=r?fx.sel+1:(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
   /* el recuadro de jornada/fecha crece con el texto: el titulo se ajusta al espacio que le queda (el de la fecha conserva su tamano) */
-  const jbW=(jn?114:0)+(fecha?Math.min(400,fecha.length*15+48):0),availT=Math.min(600,1010-jbW-20);
+  const jbW=(jn?166:0)+(fecha?Math.min(400,fecha.length*15+48):0),availT=Math.min(600,1010-jbW-20);
   const h1fs=Math.max(30,Math.min(66,Math.floor(availT/(big.length*(est==='retro'?0.85:0.62)))));
   const sfs=Math.max(15,Math.min(26,Math.floor(availT/(small.length*0.56||1))));
   const days=[...new Set(ms.map(m=>(m.day||'').trim()).filter(Boolean))],multi=days.length>1,dia='';
@@ -1319,7 +1319,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const bantxt=solo?'¡Puntualidad, respeto y juego limpio!':rest.length&&c.restRol!==false?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
   const banfs=bantxt.length>46?17:bantxt.length>30?21:25;
   const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
-  const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>#${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:28px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
+  const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:28px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
   const obsH=obs?`<div class="ob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
   const cuerpo=solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${obsH}${pd}`;
   return `<div class="poster pq${solo?' sancv':''} sk-${est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
