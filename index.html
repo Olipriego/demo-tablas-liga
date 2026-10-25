@@ -103,9 +103,9 @@ input:focus,select:focus{outline:2px solid var(--accent);border-color:transparen
 .poster.h .sanc .sp .n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .poster.h .sanc .sp .c{font-size:9px;color:var(--muted);background:var(--soft);padding:1px 5px;border-radius:6px;flex:none}
 .poster.h .sanc .sp .j{background:#b3261e;color:#fff;border-radius:6px;padding:2px 6px;font-size:9.5px;flex:none;white-space:nowrap}
-.poster.h .obs{margin-top:8px;display:flex;align-items:stretch;border:1.5px solid var(--c1);border-radius:12px;overflow:hidden;background:#fff}
-.poster.h .obs b{background:var(--c1);color:#fff;font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:0 12px;display:flex;align-items:center;flex:none}
-.poster.h .obs span{padding:7px 12px;font-size:12.5px;font-weight:600;line-height:1.3;flex:1;min-width:0}
+.poster.h .obs{margin-top:8px;display:flex;align-items:stretch;border:1.5px solid var(--c1);border-radius:12px;overflow:hidden;background:var(--c1);color:#fff}
+.poster.h .obs b{background:rgba(0,0,0,.28);color:#fff;font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:0 12px;display:flex;align-items:center;flex:none}
+.poster.h .obs span{padding:7px 12px;font-size:14px;font-weight:700;line-height:1.3;flex:1;min-width:0}
 .scroll-x{overflow-x:auto}
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;position:sticky;top:0;z-index:5;background:var(--bg);padding:4px 0}
 .toolbar .sp{flex:1}
@@ -303,9 +303,9 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .sp .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pq .sp .c{font-size:9px;background:var(--chip);color:var(--chipink);padding:2px 5px;border-radius:999px;flex:none}
 .pq .sp .j{background:var(--red);color:#fff;font-size:10px;padding:3px 6px;border-radius:5px;flex:none}
-.pq .ob{display:flex;align-items:stretch;margin-top:12px;min-height:46px;border-radius:7px;overflow:hidden;background:var(--card);border:2px solid var(--obline);position:relative;z-index:2}
-.pq .ob b{background:var(--obbg);color:var(--obink);padding:0 20px;display:flex;align-items:center;font-size:17px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;flex:none}
-.pq .ob span{padding:6px 18px;display:flex;align-items:center;font-size:15px;font-weight:600;color:var(--cink);line-height:1.3}
+.pq .ob{display:flex;align-items:stretch;margin-top:12px;min-height:56px;border-radius:7px;overflow:hidden;background:var(--obbg);border:2px solid var(--obline);position:relative;z-index:2}
+.pq .ob b{background:rgba(0,0,0,.3);color:var(--obink);padding:0 20px;display:flex;align-items:center;font-size:19px;letter-spacing:.12em;text-transform:uppercase;font-weight:900;flex:none}
+.pq .ob span{padding:8px 20px;display:flex;align-items:center;font-size:19px;font-weight:700;color:var(--obink);line-height:1.3}
 .pq .pgr{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:relative;z-index:2}
 .pq .pc{display:flex;align-items:center;gap:8px;background:var(--card);border-radius:8px;height:42px;padding:0 12px;font-weight:800;font-size:12.5px;text-transform:uppercase;color:var(--cink);box-shadow:var(--csh);border:var(--cbd)}
 .pq .pc .pn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pq .pc .pn.r{text-align:right}
@@ -1160,6 +1160,8 @@ const hexRGB=h=>{h=h.replace('#','');const v=parseInt(h.length===3?h.replace(/./
 const rgba=(h,a)=>{const [r,g,b]=hexRGB(h);return `rgba(${r},${g},${b},${a})`};
 const lum=h=>{const [r,g,b]=hexRGB(h).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
 const onC=h=>lum(h)>.5?shade(h,-.86):'#ffffff';
+/* texto sobre la tira de observación: el que más contraste da (blanco u oscuro) según la luminosidad real del color */
+const onB=h=>lum(h)>.18?shade(h,-.86):'#ffffff';
 const estiloDe=th=>(ESTILOS.some(e=>e[0]===(th&&th.estilo))?th.estilo:'clasico');
 /* El estilo de la categoría es independiente de los colores: si no elige uno, usa el de la liga */
 const estiloCat=(c,l)=>ESTILOS.some(e=>e[0]===(c&&c.estilo))?c.estilo:estiloDe(l);
@@ -1198,7 +1200,7 @@ function skinVars(est,tgt,c1,c2,B,I){
     rib:P,ribink:oP,ribline:S,ja:P,jainks:oP,jb:'rgba(255,255,255,.08)',jbink:I,jbsm:P,jsh:'none',pgbd:`2px solid ${P}`,
     line1:rgba(P,.5),card:'rgba(255,255,255,.07)',cink:I,rad:'12px',cbd:'1px solid rgba(255,255,255,.1)',
     tbg:`linear-gradient(180deg,${P},${S})`,tink:oP,tsm:oP,lring:P,vbg:B,vink:P,vring:P,chip:rgba(P,.2),chipink:shade(P,.5),
-    obline:P,obbg:P,obink:oP,banbg:`linear-gradient(90deg,${S},${P},${S})`,banink:oP,banline:I,banstar:oP,
+    obline:P,obbg:P,obink:onB(P),banbg:`linear-gradient(90deg,${S},${P},${S})`,banink:oP,banline:I,banstar:oP,
     deco:'repeating-linear-gradient(115deg,rgba(255,255,255,.025) 0 2px,transparent 2px 26px)',
     left:`linear-gradient(170deg,${rgba(P,.16)},transparent 70%)`,leftink:I,leftbd:`1px solid ${rgba(P,.35)}`,leftacc:P,
     hdink:Pb,posbg:'transparent',posink:Pb,ptsbg:P,ptsink:oP,ptssh:`0 0 14px ${rgba(P,.7)}`,ptsrad:'9px',
@@ -1209,7 +1211,7 @@ function skinVars(est,tgt,c1,c2,B,I){
     rib:S,ribink:oS,ribline:P,ja:P,jainks:oP,jb:'#ffffff',jbink:shade(B,-.4),jbsm:P,jsh:`8px 8px 0 ${rgba(S,.6)}`,pgbd:'0',
     line1:rgba(I,.25),card:`linear-gradient(90deg,${shade(B,.2)},${shade(B,.1)})`,cink:I,rad:'0',csh:'none',
     tbg:S,tink:oS,tsm:oS,lring:S,vbg:P,vink:oP,vring:I,chip:rgba(S,.25),chipink:shade(S,.4),
-    obline:S,obbg:S,obink:oS,banbg:`linear-gradient(90deg,${P},${S})`,banink:oP,banline:I,banstar:oP,
+    obline:S,obbg:S,obink:onB(S),banbg:`linear-gradient(90deg,${P},${S})`,banink:oP,banline:I,banstar:oP,
     deco:`linear-gradient(115deg,transparent 62%,${rgba(P,.5)} 62.2%,${rgba(P,.5)} 70%,transparent 70.2%),linear-gradient(115deg,transparent 72%,${rgba(S,.25)} 72.2%,${rgba(S,.25)} 75%,transparent 75.2%)`,
     left:'transparent',leftink:I,leftacc:S,hdink:S,posbg:'transparent',posink:S,ptsbg:S,ptsink:oS,ptsrad:'0',ptssh:'none',upc:shade(S,.4),dnc:'#ff7a95',
     t3bg:`linear-gradient(90deg,${shade(B,.45)},${shade(B,.25)})`});
@@ -1271,7 +1273,7 @@ function skinVars(est,tgt,c1,c2,B,I){
     rib:P,ribink:oP,ribline:S,ja:S,jainks:oS,jb:P,jbink:oP,jbsm:S,jsh:'none',pgbd:'1px solid rgba(255,255,255,.4)',
     line1:shade(P,.5),card:shade(P,.93),cink:I,rad:'6px',cbd:`1px solid ${shade(P,.8)}`,
     tbg:`linear-gradient(180deg,${P},${shade(P,-.3)})`,tink:oP,tsm:S,lring:P,vbg:S,vink:oS,vring:P,chip:shade(P,.88),chipink:shade(P,-.2),
-    obline:S,obbg:S,obink:oS,banbg:P,banink:oP,banline:S,banstar:S,deco:'none',
+    obline:S,obbg:S,obink:onB(S),banbg:P,banink:oP,banline:S,banstar:S,deco:'none',
     left:`linear-gradient(180deg,${shade(P,-.62)},${shade(P,-.75)})`,leftink:'#ffffff',leftacc:S,
     crd:shade(B,.6),hdink:shade(P,-.1),posbg:shade(P,.88),posink:shade(P,-.2),
     ptsbg:shade(P,-.78),ptsink:S,ptsrad:'6px',
