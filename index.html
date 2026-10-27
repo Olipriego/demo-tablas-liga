@@ -1046,7 +1046,7 @@ function sortMs(ms){return ms.map((m,i)=>[m,i]).sort((x,y)=>dayIdx(x[0].day)-day
 function rolHtml(l,c,style,c2,catT,modo){
   const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?sortMs(r.m):[],k=ms.length,solo=modo==='sanc';
   let gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
-  const jn0=r?fx.sel+1:(c.jor||''),fecha0=(r&&r.fecha)||c.fecha;
+  const jn0=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha0=(r&&r.fecha)||c.fecha;
   if(solo){
     const tot=gr.reduce((a,x)=>a+x.list.length,0),big=(gr.length*58+tot*38)/2<=470,bigfs0=bigFor(catT,c,l);
     return `<div class="poster h sancv${big?' sbig':''}" style="${style}--bigfs:${bigfs0}px">
@@ -1080,7 +1080,7 @@ function rolHtml(l,c,style,c2,catT,modo){
       <div class="lgc">${a?teamLogo(a,c2):''}</div><div class="an">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
   const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
   const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name&&okJ(c,t.id,fx.sel)).map(t=>t.name):[];
-  const jn=r?fx.sel+1:(c.jor||'');const fecha=(r&&r.fecha)||c.fecha;
+  const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||'');const fecha=(r&&r.fecha)||c.fecha;
   return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
     <div class="left">
       ${leagueLogo(l)}
@@ -1293,7 +1293,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   let small='',big=l.name||'Liga';
   if(words.length>=3){big=words.slice(-2).join(' ');small=words.slice(0,-2).join(' ')}
   const bw=big.split(' '),first=bw[0],rest2=bw.slice(1).join(' ');
-  const jn=r?fx.sel+1:(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
+  const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
   /* el recuadro de jornada/fecha crece con el texto: el titulo se ajusta al espacio que le queda (el de la fecha conserva su tamano) */
   const jbW=(jn?166:0)+(fecha?Math.min(400,fecha.length*15+48):0),availT=Math.min(600,1010-jbW-20);
   const h1fs=Math.max(30,Math.min(66,Math.floor(availT/(big.length*(est==='retro'?0.85:0.62)))));
@@ -1540,7 +1540,7 @@ function freshFx(c,old){
     });
     packRounds(resto.filter(([h,a])=>okJ(c,h,rs.length)&&okJ(c,a,rs.length)),300).forEach(par=>rs.push(par));
   }
-  return {double:!!c.fxDouble,sel:0,rounds:rs.map((ms,i)=>({id:uid(),fecha:(old&&old[i]&&old[i].fecha)||'',done:false,sanc:(old&&old[i]&&old[i].sanc)||[],obs:(old&&old[i]&&old[i].obs)||'',
+  return {double:!!c.fxDouble,sel:0,rounds:rs.map((ms,i)=>({id:uid(),fecha:(old&&old[i]&&old[i].fecha)||'',jl:(old&&old[i]&&old[i].jl)||'',done:false,sanc:(old&&old[i]&&old[i].sanc)||[],obs:(old&&old[i]&&old[i].obs)||'',
     m:ms.map(([h,a])=>({id:uid(),h,a,day:'',time:''}))}))};
 }
 /* Reparte partidos faltantes (miss = [local, visita, esPrimeraVuelta]) en las jornadas «slots»; usedOf(ri) = equipos que ya juegan
@@ -1761,6 +1761,7 @@ function renderFixtures(){
     +'<div class="fr"><input type="text" data-sk="p" style="flex:1;min-width:130px" placeholder="Jugador" value="'+esc(s.p)+'"><input type="text" class="sm" data-sk="c" placeholder="Causal" title="Número de causal (6) o texto" value="'+esc(s.c)+'"><input type="text" class="sm" data-sk="g" placeholder="Juegos" value="'+esc(s.g)+'"></div></div>').join('');
   box.innerHTML='<div class="card" style="margin-top:8px">'
     +'<div class="row"><label class="f" style="min-width:180px">Fecha de la jornada '+(fx.sel+1)+'<input type="text" data-rk="fecha" placeholder="12 – 16 de octubre 2026" value="'+esc(r.fecha)+'"></label>'
+    +'<label class="f" style="min-width:110px">Cuadro «Jornada»<input type="text" data-rk="jl" placeholder="'+(fx.sel+1)+'" title="Texto del cuadro JORNADA en las imágenes (vacío = el número de la jornada)" value="'+esc(r.jl||'')+'"></label>'
     +'<label class="chk"><input type="checkbox" data-rk="done"'+(r.done?' checked':'')+'> Jornada jugada</label></div>'
     +'<div style="margin-top:8px">'+rows+'</div>'
     +'<div class="row" style="margin-top:8px"><button class="btn sm" data-act="addm">+ Partido</button><button class="btn sm del" data-act="delr">Eliminar jornada</button></div>'
@@ -1808,6 +1809,7 @@ function autoOn(){
 }
 $('fxRound').addEventListener('input',e=>{
   const fx=C().fx,r=fx.rounds[fx.sel],tr=e.target.closest('[data-m]'),k=e.target.dataset.k;
+  if(e.target.dataset.rk==='jl'){r.jl=e.target.value;fxTouch();return}
   if(e.target.dataset.rk==='fecha'){r.fecha=e.target.value;fxTouch();return}
   if(e.target.dataset.rk==='obs'){r.obs=e.target.value;fxTouch('rol');return}
   const sr=e.target.closest('[data-s]');
