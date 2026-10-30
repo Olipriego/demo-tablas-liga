@@ -242,7 +242,6 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.sk .mr.w .sc{background:var(--ptsbg);color:var(--ptsink)}
 .poster.sk .mr+.mr{border-color:var(--line1)}
 .poster.sk .bk{background:transparent;border:0;border-radius:0;margin:0}
-.poster.sk-retro,.poster.sk-retro *{font-family:Georgia,'Times New Roman',serif}
 .poster.sk-tv.h .rows .tr{transform:skewX(-8deg);margin:0 8px;border-left:6px solid var(--acc)}
 .poster.sk-tv.h .rows .tr>*{transform:skewX(8deg)}
 .poster.sk-tv.h h2.big{font-style:italic}
@@ -251,7 +250,6 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.sk-oro.h .rows .tr:nth-child(3){border-color:#c77d3a;background:linear-gradient(90deg,#3a2410,#17150e)}
 .poster.sk-oro.h h2.big{color:var(--gl);text-shadow:0 2px 14px rgba(0,0,0,.4)}
 .poster.sk-neon.h h2.big{text-shadow:0 0 26px var(--acc)}
-.poster.sk-retro.h .left:after{content:'';position:absolute;left:8px;right:8px;top:8px;bottom:8px;border:1.5px solid var(--ring);pointer-events:none}
 .poster.sk-cancha.h .t-card{border-radius:8px}
 .poster.sk .deco{position:absolute;inset:0;pointer-events:none;background:var(--deco)}
 
@@ -316,14 +314,12 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .ban{margin:14px auto 0;background:var(--banbg);color:var(--banink);font-weight:900;letter-spacing:.04em;text-transform:uppercase;padding:10px 60px;border-radius:10px;border:3px solid var(--banline);position:relative;z-index:2;display:flex;gap:18px;align-items:center;max-width:100%}
 .pq .ban i{font-style:normal;color:var(--banstar)}
 .pq .empty{padding:50px 0;text-align:center;font-weight:800;color:var(--ink2)}
-.poster.pq.sk-retro,.poster.pq.sk-retro *{font-family:Georgia,'Times New Roman',serif}
 .poster.pq.sk-tv .m{transform:skewX(-8deg);margin:0 8px}
 .poster.pq.sk-tv .m>*{transform:skewX(8deg)}
 .poster.pq.sk-tv .m .t{margin-left:-12px;padding-left:12px;width:128px}
 .poster.pq.sk-tv .ti h1{font-style:italic}
 .poster.pq.sk-oro .ti h1{color:var(--gl)}.poster.pq.sk-oro .ti h1 em{color:var(--gl)}
 .poster.pq.sk-neon .m .n,.poster.pq.sk-neon .ti h1{text-shadow:0 0 14px var(--acc)}
-.poster.pq.sk-retro .sec,.poster.pq.sk-retro .m .n,.poster.pq.sk-retro .ti h1,.poster.pq.sk-retro .ban{font-weight:700}
 .poster.sk .legend b,.poster.sk .foot b{color:var(--lgb,var(--acc))}
 .poster.pq.sk-moderno .sec.r{color:#fff}
 /* ===== Diseños v2: tipografía Oswald y detalles por estilo (tabla y rol) ===== */
@@ -356,13 +352,6 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.sk-tv.h .lg-wrap img{object-fit:contain;padding:8px}
 .poster.sk-tv.h .pill{border-radius:0;transform:skewX(-12deg)}
 .poster.sk-tv.h h2.big{transform:skewX(-8deg);transform-origin:left}
-/* retro: marco doble, panel inset y filas alternadas */
-.poster.sk-retro.h:before{content:"";position:absolute;left:8px;top:8px;right:8px;bottom:8px;border:3px double var(--acc);pointer-events:none;z-index:3}
-.poster.sk-retro.h .left{left:8px;top:8px;bottom:8px;width:372px}
-.poster.sk-retro.h .tr{border-width:0 0 1px 0;box-shadow:none;background:transparent}
-.poster.sk-retro.h .rows .tr:nth-child(even){background:var(--t3bg)}
-.poster.sk-retro.h .pos{font-style:italic;font-size:20px}
-.poster.sk-retro.h .head{border-bottom:2px solid var(--acc);margin-bottom:4px}
 .poster.sk-oro.h .head{border-bottom:1px solid var(--line1);margin-bottom:4px}
 /* logo principal: fondo transparente y borde fino; el color del borde lo da cada estilo (dorado en Verde y oro) */
 .poster .lg-wrap{background:transparent;box-shadow:none}
@@ -496,7 +485,45 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sk-estadio .pc .pj{background:var(--g2);color:#1b1405}
 .poster.pq.sk-estadio .ban{border-radius:12px;border-width:3px;padding:10px 70px}
 .poster.pq.sk-estadio .sk{border:1.5px solid var(--g2);border-left:6px solid var(--red)}
-.poster.pq.sk-retro .ti h1,.poster.pq.sk-retro .sec,.poster.pq.sk-retro .ban{font-weight:700}
+/* Cartelera (amarillo y azul): usa la piel de Estadio en tabla, goleo y sanciones; filas de dorado (local) a azul (visita) */
+.poster.sk-cartelera .tr,.poster.pq.sk-cartelera .m,.poster.pq.sk-cartelera .m:nth-child(even){border-color:#e0a100}
+.poster.pq.sk-cartelera .m:nth-child(even) .t{background:var(--gold);color:#2a1b00}
+/* Rol de juegos «Cartelera»: tarjetas por partido con logos grandes, hora al centro y VS dorado (.kv = vertical) */
+.poster.pk{width:1280px;padding:0 40px 26px;color:#fff;background:var(--kbg)}
+.poster.pk.kv{width:830px;padding:0 34px 26px}
+.pk .kt,.pk .kh b,.pk .kh small,.pk .vs,.pk .kf,.pk .kd small,.pk .kob b{font-family:'Oswald','Montserrat',sans-serif}
+.pk .khd{display:flex;align-items:center;gap:30px;padding:32px 10px 14px}
+.pk .klg{width:200px;height:200px;border-radius:50%;flex:none;background:#fff;border:6px solid #ffc93c;box-shadow:0 0 0 3px #e0a100,0 0 0 9px rgba(0,0,0,.35);overflow:hidden;display:grid;place-items:center}
+.pk .klg img{width:100%;height:100%;object-fit:cover}.pk .klg b{font-size:54px;font-weight:900;color:#0b2a6e}
+.pk .kt{flex:1;min-width:0;text-align:center}
+.pk .kt .s{font-weight:700;color:#e9eef6;line-height:1.05;transform:skewX(-10deg);white-space:nowrap}
+.pk .kt h1{margin:2px 0 8px;font-weight:700;line-height:.98;color:#ffc93c;text-shadow:3px 4px 0 #5a3b00;transform:skewX(-10deg);white-space:nowrap}
+.pk .krib{display:inline-block;background:linear-gradient(90deg,#b07800,#f8b500,#b07800);color:#0a1a3c;font-size:44px;font-weight:700;padding:0 36px;transform:skewX(-12deg);border-top:2px solid #ffe58a;border-bottom:2px solid #ffe58a;line-height:1.3}
+.pk .kt .c{font-size:22px;letter-spacing:.3em;margin-top:12px;font-weight:700;text-transform:uppercase}
+.pk .kf{margin:4px auto 18px;width:max-content;max-width:100%;font-weight:700;font-size:36px;color:#ffc93c;padding:2px 34px;border:2px solid #e0a100;background:rgba(0,0,0,.35);transform:skewX(-14deg);text-transform:uppercase;text-align:center}
+.pk .kgr{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+.pk.kv .kgr{grid-template-columns:1fr}
+.pk .kc{height:var(--kch,200px);border:3px solid #e0a100;border-radius:12px;background:linear-gradient(90deg,#8a5a00 0%,#4a3300 30%,#0b1f52 50%,#0d2f80 70%,#1650c0 100%);display:flex;align-items:center;min-width:0}
+.pk .kc .tm{width:var(--ktw,250px);flex:none;text-align:center;padding:0 6px}
+.pk .kc .lg,.pk .kd .lg{width:var(--klw,136px);height:var(--klw,136px);margin:0 auto;border-radius:50%;background:#fff;border:5px solid #ffc93c;overflow:hidden;display:grid;place-items:center}
+.pk .lg img{width:100%;height:100%;object-fit:cover}.pk .lg b.ini{font-size:34px;font-weight:900;color:#0b2a6e}
+.pk .kc .nm{display:block;text-align:center;margin-top:8px;font-weight:800;text-transform:uppercase;line-height:1.08;overflow-wrap:anywhere}
+.pk .kc .mid{flex:1;min-width:0;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.pk .kc .mid:before{content:"";position:absolute;left:-30px;right:-30px;top:var(--kln,150px);height:3px;background:linear-gradient(90deg,rgba(255,201,60,0),#ffc93c 30%,#4fb3ff 70%,rgba(79,179,255,0))}
+.pk .kh{background:#0a1530;border:2px solid #e0a100;text-align:center;font-weight:700;padding:0 22px 4px;white-space:nowrap;margin-top:-6px;position:relative}
+.pk .kh small{display:block;color:#ffc93c;font-size:22px;letter-spacing:.14em;padding-top:2px;text-transform:uppercase}
+.pk .kh b{display:block;font-size:var(--khf,44px);line-height:1;color:#fff}
+.pk .kh.pd{padding:6px 24px;background:linear-gradient(180deg,#3a2a00,#1c1400)}.pk .kh.pd b{color:#ffc93c;font-size:calc(var(--khf,44px) - 6px)}
+.pk .vs{font-weight:700;font-size:var(--kvs,76px);line-height:1;color:#ffc93c;text-shadow:3px 4px 0 #3a2600;transform:skewX(-10deg);margin-top:4px;position:relative}
+.pk .kd{grid-column:1/-1;min-height:128px;border:3px solid #e0a100;border-radius:12px;background:linear-gradient(90deg,#0a1530,#152a5c,#0a1530);display:flex;align-items:center;justify-content:center;gap:24px;padding:12px 24px}
+.pk .kd .lg{--klw:96px;border-width:4px;margin:0}
+.pk .kd small{display:block;font-weight:700;letter-spacing:.3em;font-size:28px;color:#ffc93c}
+.pk .kd b{display:block;font-size:34px;font-weight:800;text-transform:uppercase;line-height:1.1}
+.pk .kob{grid-column:1/-1;display:flex;align-items:stretch;border:3px solid #e0a100;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#ffe58a,#f8b500 55%,#c78000);color:#2a1b00}
+.pk .kob b{background:#0a1530;color:#ffc93c;padding:0 22px;display:flex;align-items:center;font-size:22px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;flex:none}
+.pk .kob span{padding:10px 20px;font-size:21px;font-weight:800;line-height:1.3;text-align:justify}
+.pk .kft{text-align:center;margin-top:18px;letter-spacing:.08em;font-weight:800;color:#ffc93c;white-space:nowrap;text-transform:uppercase}
+.pk .empty{grid-column:1/-1;padding:60px 0;text-align:center;font-weight:800;font-size:22px}
 
 /* ===== Versión 2: panel con pestañas y vista previa ajustable ===== */
 .app{grid-template-columns:minmax(620px,660px) 1fr}
@@ -1154,17 +1181,19 @@ function pendHtml(pend,c,c2,max=6){
   return `<div class="pend"><h5>Juegos pendientes${more>0?` (+${more} más)`:''}</h5><div class="pg${show.length===1?' one':''}">${show.map(item).join('')}</div></div>`;
 }
 /* ====================== ESTILOS DE DISEÑO ====================== */
-const ESTILOS=[['clasico','Original'],['neon','Noche neón'],['tv','Transmisión TV'],['oro','Oro y negro'],['moderno','Moderno a color'],['retro','Clásico retro'],['cancha','Cancha / verde'],['estadio','Estadio (azul y oro)']];
-const ESTILOS_OSCUROS=['neon','tv','oro','estadio'];
+const ESTILOS=[['clasico','Original'],['neon','Noche neón'],['tv','Transmisión TV'],['oro','Oro y negro'],['moderno','Moderno a color'],['cartelera','Cartelera (amarillo y azul)'],['cancha','Cancha / verde'],['estadio','Estadio (azul y oro)']];
+const ESTILOS_OSCUROS=['neon','tv','oro','estadio','cartelera'];
+/* «Clásico retro» se sustituyó por «Cartelera»: lo guardado como retro se muestra con el estilo nuevo */
+const estNorm=e=>e==='retro'?'cartelera':e;
 const hexRGB=h=>{h=h.replace('#','');const v=parseInt(h.length===3?h.replace(/./g,'$&$&'):h,16);return [v>>16,(v>>8)&255,v&255]};
 const rgba=(h,a)=>{const [r,g,b]=hexRGB(h);return `rgba(${r},${g},${b},${a})`};
 const lum=h=>{const [r,g,b]=hexRGB(h).map(x=>{x/=255;return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4)});return .2126*r+.7152*g+.0722*b};
 const onC=h=>lum(h)>.5?shade(h,-.86):'#ffffff';
 /* texto sobre la tira de observación: el que más contraste da (blanco u oscuro) según la luminosidad real del color */
 const onB=h=>lum(h)>.18?shade(h,-.86):'#ffffff';
-const estiloDe=th=>(ESTILOS.some(e=>e[0]===(th&&th.estilo))?th.estilo:'clasico');
+const estiloDe=th=>(ESTILOS.some(e=>e[0]===estNorm(th&&th.estilo))?estNorm(th.estilo):'clasico');
 /* El estilo de la categoría es independiente de los colores: si no elige uno, usa el de la liga */
-const estiloCat=(c,l)=>ESTILOS.some(e=>e[0]===(c&&c.estilo))?c.estilo:estiloDe(l);
+const estiloCat=(c,l)=>ESTILOS.some(e=>e[0]===estNorm(c&&c.estilo))?estNorm(c.estilo):estiloDe(l);
 /* Los colores personalizados (degradado, fondo, texto) solo valen para el tipo de estilo (claro/oscuro) con el que se eligieron */
 const coloresOk=(th,est)=>!!th.dk===ESTILOS_OSCUROS.includes(est);
 /* Variables CSS de cada estilo a partir de los 4 colores (principal c2, degradado c1, fondo B, texto I).
@@ -1186,6 +1215,19 @@ function stadiumBg(P){
   +'<ellipse cx="640" cy="900" rx="900" ry="260" fill="url(#d)"/>'
   +'<g fill="#ffffff" opacity=".35"><circle cx="40" cy="330" r="2"/><circle cx="130" cy="560" r="2.5"/><circle cx="1240" cy="300" r="2"/><circle cx="1180" cy="620" r="2.5"/><circle cx="1255" cy="820" r="2"/><circle cx="25" cy="760" r="2"/><circle cx="610" cy="120" r="1.8"/><circle cx="905" cy="95" r="2"/></g></svg>';
   return "url('data:image/svg+xml,"+encodeURIComponent(svg)+"') 0 0/100% 100% no-repeat "+bot;
+}
+/* Fondo «Cartelera»: azul noche con resplandor arriba y destellos dorados/azules a los lados (SVG incrustado) */
+function carteleraBg(){
+  const dot=(x,y,r,c,o)=>'<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+c+'" opacity="'+o+'"/>';
+  let pts='';[[30,420,3,'#ffd25a',.7],[60,700,2,'#ffd25a',.5],[1240,460,3,'#ffd25a',.7],[1210,250,2,'#ffd25a',.5],[1250,880,3,'#78beff',.8],[25,980,3,'#78beff',.8],
+    [90,1200,2,'#78beff',.6],[1190,1150,2.5,'#ffd25a',.6],[1260,1450,2,'#78beff',.6],[40,1500,2.5,'#ffd25a',.5],[640,40,2,'#ffffff',.5],[980,120,1.5,'#ffffff',.5]].forEach(p=>pts+=dot(...p));
+  const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1600" preserveAspectRatio="xMidYMid slice">'
+  +'<defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a2150"/><stop offset=".5" stop-color="#061436"/><stop offset="1" stop-color="#030b22"/></linearGradient>'
+  +'<radialGradient id="b" cx=".5" cy="0" r=".6"><stop offset="0" stop-color="#1d4fa8" stop-opacity=".9"/><stop offset="1" stop-color="#1d4fa8" stop-opacity="0"/></radialGradient>'
+  +'<radialGradient id="c" cx="0" cy=".6" r=".5"><stop offset="0" stop-color="#0b3a8a" stop-opacity=".7"/><stop offset="1" stop-color="#0b3a8a" stop-opacity="0"/></radialGradient>'
+  +'<radialGradient id="d" cx="1" cy=".45" r=".5"><stop offset="0" stop-color="#0b3a8a" stop-opacity=".6"/><stop offset="1" stop-color="#0b3a8a" stop-opacity="0"/></radialGradient></defs>'
+  +'<rect width="1280" height="1600" fill="url(#a)"/><rect width="1280" height="1600" fill="url(#b)"/><rect width="1280" height="1600" fill="url(#c)"/><rect width="1280" height="1600" fill="url(#d)"/>'+pts+'</svg>';
+  return "url('data:image/svg+xml,"+encodeURIComponent(svg)+"') center/cover no-repeat #061436";
 }
 function skinVars(est,tgt,c1,c2,B,I){
   const P=c2,S=c1,oP=onC(P),oS=onC(S),dk=lum(B)<.35;
@@ -1224,7 +1266,7 @@ function skinVars(est,tgt,c1,c2,B,I){
     obline:shade(P,-.35),obbg:`linear-gradient(180deg,${gl},${P})`,obink:dkg,banbg:`linear-gradient(180deg,${gl},${P})`,banink:dkg,banline:shade(P,.8),banstar:dkg,red:'#e0564f',
     left:'transparent',leftink:I,leftbd:`1px solid ${shade(P,-.35)}`,leftacc:P,hdink:Pb,posbg:'transparent',posink:dk&&lum(P)<.3?Pb:shade(P,-.1),
     ptsbg:`linear-gradient(180deg,${gl},${P})`,ptsink:dkg,ptsrad:'4px',ptssh:'none'});
-  else if(est==='estadio'){
+  else if(est==='estadio'||est==='cartelera'){
     const G1='#fceabb',G2='#f8b500',G3='#c78000',DK='#2a1b00',b1='#35d6ff',b2='#4facfe',gold='linear-gradient(180deg,#fceabb,#f8b500 55%,#c78000)',blue='linear-gradient(180deg,#00f2fe,#4facfe)',nv=shade(P,-.8);
     base({
     bg:stadiumBg(P),ink:'#ffffff',acc:G1,stripe:'linear-gradient(90deg,'+G3+','+G1+','+G3+')',ring:G1,ringsh:'0 0 0 4px '+rgba(G1,.3),
@@ -1235,7 +1277,10 @@ function skinVars(est,tgt,c1,c2,B,I){
     left:'transparent',leftink:'#ffffff',leftbd:'1px solid '+rgba(G1,.4),leftacc:G1,hdink:G1,posbg:'transparent',posink:G1,
     ptsbg:gold,ptsink:DK,ptsrad:'6px',ptssh:'none',t3bd:rgba(G1,.7),t3bg:'linear-gradient(90deg,'+rgba(G1,.22)+','+rgba(G1,.04)+')',t3sh:'none',
     muted:'rgba(255,255,255,.65)',ink2:'rgba(255,255,255,.85)',line:'rgba(255,255,255,.18)',soft:rgba(P,.3),upc:'#6fe39a',dnc:'#ff8a8a',
-    g1:G1,g2:G2,gold:gold,blue:blue,bl1:b1,bl2:b2,bink:'#04243b'})}
+    g1:G1,g2:G2,gold:gold,blue:blue,bl1:b1,bl2:b2,bink:'#04243b'});
+    /* Cartelera: colores fijos amarillo y azul, fondo de noche con destellos y filas de dorado a azul */
+    if(est==='cartelera')base({bg:carteleraBg(),kbg:carteleraBg(),card:'linear-gradient(90deg,#6e4800 0%,#3a2800 22%,#0b1f52 50%,#0d2f80 100%)',
+      rib:'linear-gradient(90deg,#b07800,#f8b500,#b07800)',ribink:'#0a1a3c',ja:gold,jainks:DK,jb:'rgba(10,21,48,.85)',vring:G2,vink:G1,lring:G1})}
   else if(est==='moderno'){const tx=lum(P)>.6?shade(P,-.8):'#ffffff';base({
     bg:`linear-gradient(120deg,${S} 0%,${P} 52%,${shade(P,-.45)} 100%)`,
     ink:tx,acc:shade(S,.8),stripe:bandas('#ffffff','rgba(255,255,255,0)',40),ring:'#ffffff',ringsh:'0 0 0 4px rgba(255,255,255,.35)',
@@ -1248,13 +1293,6 @@ function skinVars(est,tgt,c1,c2,B,I){
     ptsbg:`linear-gradient(135deg,${P},${shade(P,-.4)})`,ptsink:'#ffffff',ptsrad:'11px',ptssh:'none',upc:'#1a9d5c',dnc:'#d6184b',
     muted:shade(I,.45),ink2:tx,lgb:shade(S,.85),
     t3bg:`linear-gradient(90deg,#ffffff,${shade(S,.88)})`,t3bd:'#ffffff',t3sh:'none'})}
-  else if(est==='retro')base({
-    bg:`radial-gradient(rgba(120,80,30,.08) 1px,transparent 1.5px) 0 0/6px 6px ${B}`,
-    ink:I,acc:P,stripe:bandas(P,S,30),ring:S,ringsh:`0 0 0 3px ${P}`,
-    rib:P,ribink:B,ribline:S,ja:shade(S,.6),jainks:I,jb:S,jbink:I,jbsm:P,jsh:'none',pgbd:`1.5px solid ${S}`,
-    line1:shade(S,-.1),red:P,redline:shade(P,.6),card:shade(B,.6),cink:I,rad:'2px',cbd:`1.5px solid ${S}`,
-    tbg:P,tink:B,tsm:S,lring:S,vbg:S,vink:I,vring:P,chip:shade(S,.7),chipink:I,obline:P,obbg:P,obink:B,banbg:P,banink:B,banline:S,banstar:S,
-    left:P,leftink:B,leftacc:S,hdink:P,posbg:'transparent',posink:P,ptsbg:P,ptsink:B,ptsrad:'0',ptssh:'none',upc:'#2d6a3a',dnc:'#b3261e',t3bg:rgba(P,.06)});
   else if(est==='cancha'){
     const grass=bandas(shade(P,-.1),shade(P,-.18),70);
     if(tgt==='rol')base({
@@ -1296,7 +1334,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
   /* el recuadro de jornada/fecha crece con el texto: el titulo se ajusta al espacio que le queda (el de la fecha conserva su tamano) */
   const jbW=(jn?166:0)+(fecha?Math.min(400,fecha.length*15+48):0),availT=Math.min(600,1010-jbW-20);
-  const h1fs=Math.max(30,Math.min(66,Math.floor(availT/(big.length*(est==='retro'?0.85:0.62)))));
+  const h1fs=Math.max(30,Math.min(66,Math.floor(availT/(big.length*0.62))));
   const sfs=Math.max(15,Math.min(26,Math.floor(availT/(small.length*0.56||1))));
   const days=[...new Set(ms.map(m=>(m.day||'').trim()).filter(Boolean))],multi=days.length>1,dia='';
   const tm=m=>{
@@ -1326,12 +1364,52 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:28px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
   const obsH=obs?`<div class="ob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
   const cuerpo=solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${obsH}${pd}`;
-  return `<div class="poster pq${solo?' sancv':''} sk-${est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
+  return `<div class="poster pq${solo?' sancv':''} sk-${est==='cartelera'?'estadio sk-cartelera':est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
     <div class="hd"><div class="lgo">${lgo}</div>
       <div class="ti" style="--sfs:${sfs}px">${small?`<div class="s">${esc(small)}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(first)}${rest2?` <em>${esc(rest2)}</em>`:''}</h1>${(c.sub||catT)?(()=>{const nt=(c.name||'').trim()||(c.sub||''),st=(c.name&&c.sub)?c.sub:'';return `<span class="rib" style="font-size:${Math.max(24,Math.min(44,Math.floor(400/(nt.length*0.6))))}px">${esc(nt)}${st?`<small>${esc(st)}</small>`:''}</span>`})():''}</div>
       ${jb}</div>
     ${cuerpo}
     <div class="ban" style="font-size:${banfs}px"><i>★</i> ${esc(bantxt)} <i>★</i></div><div class="stripe b"></div></div>`;
+}
+
+/* Rol de juegos «Cartelera» (amarillo y azul): una tarjeta por partido con logos grandes, día y hora al centro y VS dorado.
+   Los juegos pendientes de otras jornadas salen como tarjetas «Pendiente · J#»; al final Descansa, observación y la liga. */
+function rolHtmlK(l,c,style,catT){
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?sortMs(r.m):[],T=id=>c.teams.find(t=>t.id===id),vert=S.fmt==='v';
+  const lg=t=>t&&t.logo?`<img src="${t.logo}">`:`<b class="ini">${esc(t?initials(t.name):'')}</b>`;
+  const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
+  const hb=(sm,big,pd)=>`<div class="kh${pd?' pd':''}">${sm?`<small>${esc(sm)}</small>`:''}<b>${esc(big)}</b></div>`;
+  const centro=m=>{
+    if(m.st==='post')return hb(m.day,'APLAZADO',1);
+    const g=matchGoals(m,c);if(g)return hb('Final',g[0]+' – '+g[1]);
+    const t=(m.time||'').trim().replace(/\s*([ap])\.?\s*m\.?$/i,(x,a)=>' '+a.toUpperCase()+'M'),d=(m.day||'').trim();
+    return t?hb(d,t):hb(d,'POR DEFINIR',1);
+  };
+  const cards=ms.map(m=>({h:T(m.h),a:T(m.a),mid:centro(m)}));
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[];
+  pend.slice(0,6).forEach(p=>cards.push({h:T(p.h),a:T(p.a),mid:p.when?hb('Pendiente'+(p.j?' · '+p.j:''),p.when):hb(p.j,'PENDIENTE',1)}));
+  /* tamaños: vertical una columna, horizontal dos; con muchas tarjetas se encogen */
+  const n=cards.length,filas=vert?n:Math.ceil(n/2),comp=filas>6?2:filas>4?1:0;
+  const tw=vert?[250,230,210][comp]:[200,190,180][comp],lw=[136,112,92][comp],ch=[214,180,152][comp];
+  const sz=`--kch:${ch}px;--klw:${lw}px;--ktw:${tw}px;--kln:${[150,126,106][comp]}px;--khf:${[44,36,30][comp]}px;--kvs:${[76,60,50][comp]}px;`;
+  const nfs=t=>{const s=(t&&t.name)||'',base=[20,18,16][comp]-(vert?0:2);return Math.max(12,Math.min(base,Math.floor(tw*1.7/(s.length*0.72||1))))};
+  const lado=t=>`<div class="tm"><div class="lg">${lg(t)}</div><div class="nm" style="font-size:${nfs(t)}px">${esc(t?t.name:'')}</div></div>`;
+  const body=n?cards.map(k=>`<div class="kc">${lado(k.h)}<div class="mid">${k.mid}<div class="vs">VS</div></div>${lado(k.a)}</div>`).join(''):'<div class="empty">Genera el calendario para ver el rol de juegos</div>';
+  const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
+  const rest=r&&c.restRol!==false?c.teams.filter(t=>!playing.has(t.id)&&t.name&&okJ(c,t.id,fx.sel)):[];
+  const ds=rest.length?`<div class="kd">${rest.slice(0,3).map(t=>`<div class="lg">${lg(t)}</div>`).join('')}<div><small>DESCANSA</small><b style="font-size:${rest.length>1?26:34}px">${esc(rest.map(t=>t.name).join(', '))}</b></div></div>`:'';
+  const obs=r&&(r.obs||'').trim(),ob=obs?`<div class="kob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
+  /* encabezado: categoría arriba, subtítulo (p. ej. «Torneo de Liga») en grande, cinta «Rol de juegos», cancha y jornada/fecha */
+  const cat=(c.name||catT||'').trim(),big=(c.sub||'').trim()||(l.short||'').trim()||'Rol de juegos',availT=vert?530:860;
+  const h1fs=Math.max(40,Math.min(vert?82:96,Math.floor(availT/(big.length*0.5)))),sfs=Math.max(22,Math.min(42,Math.floor(availT/(cat.length*0.5||1))));
+  const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
+  const jf=[jn?'Jornada '+jn:'',fecha].filter(Boolean).join(' · ');
+  const ln=(l.name||'').trim(),ffs=Math.max(10,Math.min(16,Math.floor((vert?760:1200)/(ln.length*0.78||1))));
+  return `<div class="poster pk${vert?' kv':''}" style="${style}${sz}">
+    <div class="khd"><div class="klg">${lgo}</div><div class="kt">${cat?`<div class="s" style="font-size:${sfs}px">${esc(cat.toUpperCase())}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(big.toUpperCase())}</h1><span class="krib">ROL DE JUEGOS</span>${(c.cancha||'').trim()?`<div class="c">${esc(c.cancha.trim())}</div>`:''}</div></div>
+    ${jf?`<div class="kf">${esc(jf)}</div>`:''}
+    <div class="kgr">${body}${ds}${ob}</div>
+    ${ln?`<div class="kft" style="font-size:${ffs}px">${esc(ln)}</div>`:''}</div>`;
 }
 
 /* Ajuste automatico: con muchos equipos la fila se encoge y tipografia/adornos la siguen (sin tope fijo de equipos) */
@@ -1343,7 +1421,7 @@ function bigFor(catT,c,l){return Math.max(34,Math.min(64,Math.floor(312/(catT.le
 function posterHtml(){
   let h=posterHtml0();const est=estiloCat(C(),L());
   const esV=h.indexOf('class="poster v"')>=0;
-  if(est!=='clasico'&&(esV||!(S.view==='rol'||S.view==='sanc')))h=h.replace('class="poster h"','class="poster h sk sk-'+est+'"').replace('class="poster v"','class="poster v sk sk-'+est+'"');
+  if(est!=='clasico'&&(esV||!(S.view==='rol'||S.view==='sanc'))){const k=est==='cartelera'?'estadio sk-cartelera':est;h=h.replace('class="poster h"','class="poster h sk sk-'+k+'"').replace('class="poster v"','class="poster v sk sk-'+k+'"')}
   if(S.fmt==='v'&&!esV)h=h.replace('class="poster h','class="poster h hv').replace('class="poster pq','class="poster pq pv');
   return h;
 }
@@ -1376,7 +1454,7 @@ function posterHtml0(){
   }
   // horizontal
   if(S.view==='goleo')return goleoHtml(l,c,style,c2,catT);
-  if(S.view==='rol'||S.view==='sanc'){const modo=S.view;return est==='clasico'?rolHtml(l,c,style,c2,catT,modo):rolHtmlQ(l,c,style,c2,catT,est,modo)}
+  if(S.view==='rol'||S.view==='sanc'){const modo=S.view;return est==='clasico'?rolHtml(l,c,style,c2,catT,modo):est==='cartelera'&&modo==='rol'?rolHtmlK(l,c,style,catT):rolHtmlQ(l,c,style,c2,catT,est,modo)}
   if(S.view==='lig')return ligHtml(l,c,style,c2,catT);
   const avail=545, rg=k>24?1:k>18?2:k>12?4:(est==='tv'?9:7); // TV: filas inclinadas, necesitan mas aire
   const rh=Math.max(12,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
@@ -1443,7 +1521,7 @@ function renderCatForm(){
   $('catName').value=c.name;$('catSub').value=c.sub;$('catJor').value=c.jor;$('catFecha').value=c.fecha;$('catCancha').value=c.cancha||'';
   $('ptsW').value=c.pw;$('ptsD').value=c.pd;
   const A=autoColors(c.color||L().color||ORANGE,estiloCat(c,L())),okC=coloresOk(c,estiloCat(c,L()));
-  $('catStyle').value=ESTILOS.some(e=>e[0]===c.estilo)?c.estilo:'';
+  $('catStyle').value=ESTILOS.some(e=>e[0]===estNorm(c.estilo))?estNorm(c.estilo):'';
   $('catOwn').checked=!!c.own;$('catColors').style.display=c.own?'flex':'none';
   $('catColor').value=c.color||L().color||ORANGE;$('catColor2').value=(okC&&c.color2)||A.c1;$('catBg').value=(okC&&c.bg)||A.cream;$('catInk').value=(okC&&c.ink)||A.ink;
 }
