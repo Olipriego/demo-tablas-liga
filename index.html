@@ -806,7 +806,16 @@ function defaultState(){
 let S=load();
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.leagues&&s.leagues.length){s.fmt=s.fmt==='v'?'v':'h';return s}}catch(e){}return defaultState()}
 let saveWarned=false;
-function save(){S._guardado=Math.max(Date.now(),(S._guardado||0)+1);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){if(!saveWarned){saveWarned=true;toast('No se pudo guardar (logos muy pesados). Usa «Guardar / compartir respaldo».')}}if(typeof bkSchedule==='function')bkSchedule();if(typeof nubeSchedule==='function')nubeSchedule()}
+/* Los datos se guardan en IndexedDB (no tiene el límite de ~5 MB de localStorage, que con muchos logos se llena) y,
+   si caben, también en localStorage. Si no caben, localStorage guarda solo una marca para no cargar después datos viejos.
+   Mientras arranca la página (ARRANQUE) no se guarda nada: primero se lee lo que hay en IndexedDB. */
+let ARRANQUE=null,arrancando=true;
+function save(){
+  if(arrancando)return;
+  S._guardado=Math.max(Date.now(),(S._guardado||0)+1);const txt=JSON.stringify(S);
+  idbSet(KEY,txt).catch(e=>{console.error(e);if(!saveWarned){saveWarned=true;toast('No se pudo guardar en este navegador. Usa «Guardar / compartir respaldo».')}});
+  try{localStorage.setItem(KEY,txt)}catch(e){try{localStorage.removeItem(KEY);localStorage.setItem(KEY,JSON.stringify({enIdb:true,_guardado:S._guardado}))}catch(_){}}
+if(typeof bkSchedule==='function')bkSchedule();if(typeof nubeSchedule==='function')nubeSchedule()}
 const L=()=>S.leagues[S.selL];
 const C=()=>{const l=L();if(S.selC>=l.cats.length)S.selC=Math.max(0,l.cats.length-1);return l.cats[S.selC]};
 const $=id=>document.getElementById(id);
@@ -2254,7 +2263,9 @@ const bkConfiar=()=>{BK.base=Math.max(Date.now(),BK.conf?BK.conf.fm:0,S._guardad
 const LASTBK_KEY=KEY+'_lastbk';
 const lastBk=()=>{try{return +localStorage.getItem(LASTBK_KEY)||0}catch(e){return 0}};
 const markBk=()=>{try{localStorage.setItem(LASTBK_KEY,String(Date.now()))}catch(e){}};
-function idb(){return new Promise((res,rej)=>{const q=indexedDB.open('tabla_general_demo_db',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)})}
+let idbP=null;
+function idb(){return idbP||(idbP=new Promise((res,rej)=>{const q=indexedDB.open('tabla_general_demo_db',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>res(q.result);q.onerror=()=>{idbP=null;rej(q.error)}}))}
+const leerJson=v=>{try{const d=typeof v==='string'?JSON.parse(v):v;return d&&d.leagues&&d.leagues.length?d:null}catch(e){return null}};
 async function idbGet(k){const d=await idb();return new Promise((res,rej)=>{const r=d.transaction('kv').objectStore('kv').get(k);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
 async function idbSet(k,v){const d=await idb();return new Promise((res,rej)=>{const t=d.transaction('kv','readwrite');if(v===undefined)t.objectStore('kv').delete(k);else t.objectStore('kv').put(v,k);t.oncomplete=()=>res();t.onerror=()=>rej(t.error)})}
 async function bkInit(){
@@ -2276,7 +2287,7 @@ function bkSchedule(){if(!BK||!BK.h||!BK.perm)return;clearTimeout(BK.t);BK.t=set
 function hasData(){return false}
 /* protección contra pérdida de datos: una app vacía nunca se guarda encima de una copia con datos (ni en la nube, ni en el archivo automático, ni en la copia de «Deshacer restablecer») */
 function tieneEquipos(){return S.leagues.some(l=>l.cats.some(c=>c.teams.length))}
-function guardarPrevio(){try{if(tieneEquipos())localStorage.setItem(KEY+'_backup',JSON.stringify(S))}catch(_){}}
+function guardarPrevio(){if(!tieneEquipos())return;const t=JSON.stringify(S);idbSet(KEY+'_backup',t).catch(()=>{});try{localStorage.setItem(KEY+'_backup',t)}catch(_){try{localStorage.removeItem(KEY+'_backup')}catch(e){}}}
 function renderBk(){
   const b=$('bkBanner'),st=$('bkStatus'),lb=lastBk(),days=Math.floor((Date.now()-lb)/864e5);
   let html='',cls='bk';
@@ -2327,6 +2338,7 @@ function nubeLoad(d,t){
   save();renderAll();toast('Datos cargados desde la nube');
 }
 async function nubeInit(){
+  if(ARRANQUE)await ARRANQUE;
   if(NUBE.started||!LICENCIA||!/^https?:$/.test(location.protocol))return;NUBE.started=true;
   try{
     const c=await nubeReq('GET');NUBE.on=true;NUBE.err='';
@@ -2398,14 +2410,16 @@ $('resetAll').onclick=()=>{
   guardarPrevio();
   S=defaultState();save();renderAll();toast('Datos restablecidos · puedes usar «Deshacer restablecer»');
 };
-$('undoReset').onclick=()=>{
+$('undoReset').onclick=async()=>{
   let b=null;try{b=JSON.parse(localStorage.getItem(KEY+'_backup'))}catch(e){}
+  try{const i=leerJson(await idbGet(KEY+'_backup'));if(i&&(!b||(i._guardado||0)>=(b._guardado||0)))b=i}catch(e){}
   if(!b||!b.leagues||!b.leagues.some(l=>l.cats.some(c=>c.teams.length))){toast('No hay nada que recuperar');return}
   S=b;S.selL=0;S.selC=0;bkConfiar();save();renderAll();toast('Datos recuperados');
 };
 
+const SEMILLAS=[];
 /* Liga de ejemplo con equipos y logos (lib/semilla.js): sustituye a «Segunda Liga» si está vacía */
-(function(){
+SEMILLAS.push(function(){
   if(!window.SEED_LEAGUE||S.seedDone)return;
   if(S.leagues.some(l=>l.id===SEED_LEAGUE.id)){S.seedDone=true;save();return}
   S.seedDone=true;
@@ -2413,9 +2427,9 @@ $('undoReset').onclick=()=>{
   const i=S.leagues.findIndex(l=>l.name==='Segunda Liga'&&l.cats.every(c=>!c.teams.length));
   if(i>=0)S.leagues[i]=seed;else S.leagues.push(seed);
   S.selL=S.leagues.indexOf(seed);S.selC=0;save();
-})();
+});
 /* Categorías de ejemplo (lib/semilla.js): se agregan una sola vez a la liga que corresponda */
-(function(){
+SEMILLAS.push(function(){
   if(!window.SEED_CATS)return;S.seedCats=S.seedCats||[];
   SEED_CATS.forEach(sc=>{
     if(S.seedCats.includes(sc.id))return;
@@ -2426,9 +2440,9 @@ $('undoReset').onclick=()=>{
     S.selL=li;S.selC=lg.cats.findIndex(c=>c.id===sc.cat.id);
   });
   save();
-})();
+});
 /* Logos de ejemplo para equipos ya existentes (lib/semilla.js): una sola vez, solo si el equipo no tiene logo */
-(function(){
+SEMILLAS.push(function(){
   if(!window.SEED_LOGOS)return;S.seedLogos=S.seedLogos||[];
   const norm=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/s+/g,' ').trim();
   SEED_LOGOS.forEach(sl=>{
@@ -2440,9 +2454,16 @@ $('undoReset').onclick=()=>{
     cat.teams.forEach(t=>{if(!t.logo&&map[norm(t.name)])t.logo=map[norm(t.name)]});
   });
   save();
+});
+/* arranque: se usa lo más reciente entre IndexedDB y localStorage; luego semillas, guardado y respaldos */
+ARRANQUE=(async()=>{
+  try{const d=leerJson(await idbGet(KEY));if(d&&(d._guardado||0)>=(S._guardado||0)){d.fmt=d.fmt==='v'?'v':'h';S=d}}catch(e){console.error(e)}
+  BK.base=S._guardado||0;arrancando=false;
+  SEMILLAS.forEach(f=>f());save();
 })();
-renderAll();bkInit();if(LIC.ok())nubeInit();
-window.addEventListener('storage',e=>{if(e.key!==KEY||!e.newValue)return;try{const d=JSON.parse(e.newValue);if(!d.leagues)return;const sl=S.selL,sc=S.selC;S=d;S.selL=sl<S.leagues.length?sl:0;S.selC=S.leagues[S.selL]&&sc<S.leagues[S.selL].cats.length?sc:0;BK.base=Math.max(BK.base,S._guardado||0);if(BK.conf&&BK.base>=BK.conf.fm)BK.conf=null;renderAll();renderBk();toast('Datos actualizados desde otra pestaña')}catch(_){}});
+renderAll();
+ARRANQUE.then(()=>{renderAll();bkInit();if(LIC.ok())nubeInit()});
+window.addEventListener('storage',async e=>{if(e.key!==KEY||!e.newValue||arrancando)return;try{let d=JSON.parse(e.newValue);if(d.enIdb)d=leerJson(await idbGet(KEY));if(!d||!d.leagues||(d._guardado||0)<=(S._guardado||0))return;const sl=S.selL,sc=S.selC;S=d;S.selL=sl<S.leagues.length?sl:0;S.selC=S.leagues[S.selL]&&sc<S.leagues[S.selL].cats.length?sc:0;BK.base=Math.max(BK.base,S._guardado||0);if(BK.conf&&BK.base>=BK.conf.fm)BK.conf=null;renderAll();renderBk();toast('Datos actualizados desde otra pestaña')}catch(_){}});
 document.fonts&&document.fonts.ready.then(renderPreview);
 
 /* ===== Versión 2: agrupa el panel en pestañas ===== */
