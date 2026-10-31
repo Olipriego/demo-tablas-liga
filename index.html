@@ -500,7 +500,10 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pk .kt h1{margin:2px 0 8px;font-weight:700;line-height:.98;color:#ffc93c;text-shadow:3px 4px 0 #5a3b00;transform:skewX(-10deg);white-space:nowrap}
 .pk .krib{display:inline-block;background:linear-gradient(90deg,#b07800,#f8b500,#b07800);color:#0a1a3c;font-size:44px;font-weight:700;padding:0 36px;transform:skewX(-12deg);border-top:2px solid #ffe58a;border-bottom:2px solid #ffe58a;line-height:1.3}
 .pk .kt .c{font-size:22px;letter-spacing:.3em;margin-top:12px;font-weight:700;text-transform:uppercase}
-.pk .kf{margin:4px auto 18px;width:max-content;max-width:100%;font-weight:700;font-size:36px;color:#ffc93c;padding:2px 34px;border:2px solid #e0a100;background:rgba(0,0,0,.35);transform:skewX(-14deg);text-transform:uppercase;text-align:center}
+.pk .kfs{display:flex;justify-content:center;align-items:stretch;gap:22px;flex-wrap:wrap;margin:4px auto 18px}
+.pk .kf{font-weight:700;font-size:36px;color:#ffc93c;padding:2px 34px;border:2px solid #e0a100;background:rgba(0,0,0,.35);transform:skewX(-14deg);text-transform:uppercase;text-align:center;white-space:nowrap}
+.pk.kv .kfs{gap:16px}.pk.kv .kf{font-size:28px;padding:2px 24px}
+.pk .kf.kj{background:linear-gradient(90deg,#b07800,#f8b500,#b07800);color:#0a1a3c;border-color:#ffe58a}
 .pk .kgr{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
 .pk.kv .kgr{grid-template-columns:1fr}
 .pk .kc{height:var(--kch,200px);border:3px solid #e0a100;border-radius:12px;background:linear-gradient(90deg,#8a5a00 0%,#4a3300 30%,#0b1f52 50%,#0d2f80 70%,#1650c0 100%);display:flex;align-items:center;min-width:0}
@@ -1401,13 +1404,13 @@ function rolHtmlK(l,c,style,catT){
   const obs=r&&(r.obs||'').trim(),ob=obs?`<div class="kob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
   /* encabezado: categoría arriba, subtítulo (p. ej. «Torneo de Liga») en grande, cinta «Rol de juegos», cancha y jornada/fecha */
   const cat=(c.name||catT||'').trim(),big=(c.sub||'').trim()||(l.short||'').trim()||'Rol de juegos',availT=vert?530:860;
-  const h1fs=Math.max(40,Math.min(vert?82:96,Math.floor(availT/(big.length*0.5)))),sfs=Math.max(22,Math.min(42,Math.floor(availT/(cat.length*0.5||1))));
+  const h1fs=Math.max(30,Math.min(vert?44:56,Math.floor(availT/(big.length*0.62)))),sfs=Math.max(32,Math.min(vert?60:76,Math.floor(availT/(cat.length*0.62||1))));
   const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
-  const jf=[jn?'Jornada '+jn:'',fecha].filter(Boolean).join(' · ');
+  const jf=[jn?`<div class="kf kj">Jornada ${esc(String(jn))}</div>`:'',fecha?`<div class="kf">${esc(fecha)}</div>`:''].join('');
   const ln=(l.name||'').trim(),ffs=Math.max(10,Math.min(16,Math.floor((vert?760:1200)/(ln.length*0.78||1))));
   return `<div class="poster pk${vert?' kv':''}" style="${style}${sz}">
     <div class="khd"><div class="klg">${lgo}</div><div class="kt">${cat?`<div class="s" style="font-size:${sfs}px">${esc(cat.toUpperCase())}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(big.toUpperCase())}</h1><span class="krib">ROL DE JUEGOS</span>${(c.cancha||'').trim()?`<div class="c">${esc(c.cancha.trim())}</div>`:''}</div></div>
-    ${jf?`<div class="kf">${esc(jf)}</div>`:''}
+    ${jf?`<div class="kfs">${jf}</div>`:''}
     <div class="kgr">${body}${ds}${ob}</div>
     ${ln?`<div class="kft" style="font-size:${ffs}px">${esc(ln)}</div>`:''}</div>`;
 }
