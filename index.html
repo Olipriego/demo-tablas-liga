@@ -291,6 +291,8 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .l b.ini{display:grid;place-items:center;width:100%;height:100%;background:var(--vbg);color:var(--vink);font-size:18px;font-weight:900}
 .pq .m .v{min-width:36px;height:36px;padding:0 8px;border-radius:999px;background:var(--vbg);color:var(--vink);border:2px solid var(--vring);font-size:13px;font-weight:900;display:grid;place-items:center;margin:0 14px;flex:none;white-space:nowrap}
 .pq .m .v.sc{font-size:17px}.pq .m .v.ap{font-size:9px;letter-spacing:.04em}
+.pq .m .v.df{display:flex!important;flex-direction:column;align-items:center;justify-content:center;height:56px!important;border-radius:14px!important;padding:0 12px;line-height:1}
+.pq .m .v.df small{display:block;font-size:11px;letter-spacing:.08em;font-weight:800;margin-top:3px}
 .pq .sg{display:grid;gap:12px;position:relative;z-index:2}
 .pq .sk{background:var(--card);border-left:6px solid var(--red);border-radius:6px;padding:8px 12px 10px;box-shadow:var(--csh);border-top:var(--cbd);min-height:104px;min-width:0}
 .pq .sk .st{display:flex;align-items:center;gap:8px;font-weight:900;font-size:15px;text-transform:uppercase;color:var(--cink);border-bottom:1.5px dashed var(--line1);padding-bottom:5px;margin-bottom:4px}
@@ -1358,7 +1360,8 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const vq=m=>{
     if(m.st==='post')return '<div class="v ap">APLAZADO</div>';
     const g=matchGoals(m,c);
-    return g?`<div class="v sc">${g[0]}–${g[1]}</div>`:'<div class="v">VS</div>';
+    const df=m.st==='dfh'||m.st==='dfa';
+    return g?`<div class="v sc${df?' df':''}">${g[0]}–${g[1]}${df?'<small>DEFAULT</small>':''}</div>`:'<div class="v">VS</div>';
   };
   const rows=ms.length?ms.map(m=>{const h=T(m.h),a=T(m.a);
     return `<div class="m">${tm(m)}<div class="n h${h&&h.name.length>20?' lg':''}">${esc(h?h.name:'')}</div><div class="l">${lg(h)}</div>${vq(m)}<div class="l">${lg(a)}</div><div class="n a${a&&a.name.length>20?' lg':''}">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
