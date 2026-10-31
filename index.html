@@ -806,7 +806,7 @@ function defaultState(){
 let S=load();
 function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.leagues&&s.leagues.length){s.fmt=s.fmt==='v'?'v':'h';return s}}catch(e){}return defaultState()}
 let saveWarned=false;
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){if(!saveWarned){saveWarned=true;toast('No se pudo guardar (logos muy pesados). Usa «Guardar / compartir respaldo».')}}if(typeof bkSchedule==='function')bkSchedule();if(typeof nubeSchedule==='function')nubeSchedule()}
+function save(){S._guardado=Math.max(Date.now(),(S._guardado||0)+1);try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){if(!saveWarned){saveWarned=true;toast('No se pudo guardar (logos muy pesados). Usa «Guardar / compartir respaldo».')}}if(typeof bkSchedule==='function')bkSchedule();if(typeof nubeSchedule==='function')nubeSchedule()}
 const L=()=>S.leagues[S.selL];
 const C=()=>{const l=L();if(S.selC>=l.cats.length)S.selC=Math.max(0,l.cats.length-1);return l.cats[S.selC]};
 const $=id=>document.getElementById(id);
@@ -2248,7 +2248,9 @@ $('dlPdf').onclick=async()=>{
 
 /* ====================== RESPALDO ====================== */
 /* Respaldo automático: guarda el .json en el archivo que elijas cada vez que cambias algo (Chrome/Edge) */
-var BK={h:null,perm:false,t:null};
+var BK={h:null,perm:false,t:null,base:S._guardado||0,conf:null};
+/* datos cargados a propósito (respaldo, nube, deshacer, conflicto): lo de esta ventana manda sobre el archivo */
+const bkConfiar=()=>{BK.base=Math.max(Date.now(),BK.conf?BK.conf.fm:0,S._guardado||0);BK.conf=null};
 const LASTBK_KEY=KEY+'_lastbk';
 const lastBk=()=>{try{return +localStorage.getItem(LASTBK_KEY)||0}catch(e){return 0}};
 const markBk=()=>{try{localStorage.setItem(LASTBK_KEY,String(Date.now()))}catch(e){}};
@@ -2261,8 +2263,12 @@ async function bkInit(){
   renderBk();
 }
 async function bkWrite(){
-  if(!BK||!BK.h||!BK.perm||!tieneEquipos())return;
-  try{const w=await BK.h.createWritable();await w.write(JSON.stringify(S));await w.close();markBk()}
+  if(!BK||!BK.h||!BK.perm||!tieneEquipos()||BK.conf)return;
+  /* protección contra datos viejos: si otra ventana o navegador guardó en el archivo algo más nuevo que la versión
+     de la que parte esta ventana, no se sobrescribe; se avisa y se deja elegir */
+  try{const txt=await (await BK.h.getFile()).text(),m=/"_guardado":(\d+)/.exec(txt),fm=m?+m[1]:0;
+    if(fm>BK.base&&fm!==S._guardado){BK.conf={fm};renderBk();return}}catch(e){console.error(e)}
+  try{const w=await BK.h.createWritable();await w.write(JSON.stringify(S));await w.close();BK.base=S._guardado||0;markBk()}
   catch(e){BK.perm=false;console.error(e)}
   renderBk();
 }
@@ -2274,7 +2280,8 @@ function guardarPrevio(){try{if(tieneEquipos())localStorage.setItem(KEY+'_backup
 function renderBk(){
   const b=$('bkBanner'),st=$('bkStatus'),lb=lastBk(),days=Math.floor((Date.now()-lb)/864e5);
   let html='',cls='bk';
-  if(BK.h&&BK.perm){cls='bk ok';html='✔ Respaldo automático activo en <b>'+esc(BK.h.name)+'</b>'+(lb?' · último: '+new Date(lb).toLocaleString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'')}
+  if(BK.conf){html='⚠ El respaldo automático NO se guardó: el archivo <b>'+esc(BK.h?BK.h.name:'')+'</b> tiene datos más recientes ('+new Date(BK.conf.fm).toLocaleString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})+') guardados desde otra ventana o navegador. Lo de esta ventana puede estar desactualizado.<br><button class="btn sm pri" data-bk="cargar">Cargar los del archivo</button><button class="btn sm" data-bk="forzar">Reemplazarlos con los de aquí</button>'}
+  else if(BK.h&&BK.perm){cls='bk ok';html='✔ Respaldo automático activo en <b>'+esc(BK.h.name)+'</b>'+(lb?' · último: '+new Date(lb).toLocaleString('es-MX',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'')}
   else if(BK.h){html='⚠ El respaldo automático está en pausa (el navegador pide permiso al abrir la página).<br><button class="btn sm pri" data-bk="auto">Reactivar</button>'}
   else if(hasData()&&(!lb||days>=7)&&!(NUBE.on&&!NUBE.pause&&!NUBE.err&&Date.now()-NUBE.last<864e5)){html='⚠ '+(lb?'Hace '+days+' días que no respaldas tus datos.':'Todavía no has respaldado tus datos.')+'<br><button class="btn sm pri" data-bk="now">Respaldar ahora</button><button class="btn sm" data-bk="auto">Activar respaldo automático</button>'}
   b.style.display=html?'block':'none';b.className=cls;b.innerHTML=html;
@@ -2316,7 +2323,7 @@ async function nubeSave(force){
 function nubeSchedule(){if(!NUBE||!NUBE.on||NUBE.pause)return;clearTimeout(NUBE.t);NUBE.t=setTimeout(nubeSave,45000)}
 function nubeLoad(d,t){
   guardarPrevio();
-  S=d;S.selL=0;S.selC=0;NUBE.sent=JSON.stringify(S);NUBE.last=t;nubeSetMark(t);NUBE.pause=false;
+  S=d;S.selL=0;S.selC=0;bkConfiar();NUBE.sent=JSON.stringify(S);NUBE.last=t;nubeSetMark(t);NUBE.pause=false;
   save();renderAll();toast('Datos cargados desde la nube');
 }
 async function nubeInit(){
@@ -2345,7 +2352,7 @@ $('nubeGet').onclick=async()=>{
   catch(e){toast('No se pudo conectar con la nube')}
 };
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&NUBE.t){clearTimeout(NUBE.t);NUBE.t=null;nubeSave()}});
-$('bkBanner').addEventListener('click',e=>{const b=e.target.closest('[data-bk]');if(!b)return;if(b.dataset.bk==='now')$('exportJson').click();else $('bkAuto').click()});
+$('bkBanner').addEventListener('click',e=>{const b=e.target.closest('[data-bk]');if(!b)return;if(b.dataset.bk==='cargar')bkCargar();else if(b.dataset.bk==='forzar'){if(confirm('Esto reemplaza los datos más recientes del archivo con los de esta ventana. ¿Continuar?')){bkConfiar();bkWrite();toast('Respaldo guardado con los datos de esta ventana')}}else if(b.dataset.bk==='now')$('exportJson').click();else $('bkAuto').click()});
 $('bkAuto').onclick=async()=>{
   if(!window.showSaveFilePicker){toast(NUBE.on?'Este equipo usa el respaldo en la nube (automático).':'Este navegador no permite respaldo automático. Usa Chrome o Edge.');return}
   if(BK.h&&!BK.perm){
@@ -2357,6 +2364,10 @@ $('bkAuto').onclick=async()=>{
     BK.h=h;BK.perm=true;await idbSet('bkHandle',h);await bkWrite();toast('Respaldo automático activado: '+h.name);
   }catch(e){if(e.name!=='AbortError'){console.error(e);toast('No se pudo activar el respaldo automático')}}
 };
+async function bkCargar(){
+  try{const d=JSON.parse(await (await BK.h.getFile()).text());if(!d.leagues)throw 0;guardarPrevio();S=d;S.selL=0;S.selC=0;bkConfiar();save();renderAll();toast('Datos cargados del archivo de respaldo')}
+  catch(e){toast('No se pudo leer el archivo de respaldo')}
+}
 $('bkOff').onclick=async()=>{BK.h=null;BK.perm=false;try{await idbSet('bkHandle',undefined)}catch(e){}renderBk();toast('Respaldo automático desactivado')};
 
 $('exportJson').onclick=async()=>{
@@ -2379,7 +2390,7 @@ $('exportJson').onclick=async()=>{
 $('importJson').onclick=()=>$('fileJson').click();
 $('fileJson').onchange=e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.leagues)throw 0;guardarPrevio();S=s;S.selL=0;S.selC=0;save();renderAll();toast('Datos cargados')}catch(_){toast('Archivo no válido')}};
+  r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.leagues)throw 0;guardarPrevio();S=s;S.selL=0;S.selC=0;bkConfiar();save();renderAll();toast('Datos cargados')}catch(_){toast('Archivo no válido')}};
   r.readAsText(f);e.target.value='';
 };
 $('resetAll').onclick=()=>{
@@ -2390,7 +2401,7 @@ $('resetAll').onclick=()=>{
 $('undoReset').onclick=()=>{
   let b=null;try{b=JSON.parse(localStorage.getItem(KEY+'_backup'))}catch(e){}
   if(!b||!b.leagues||!b.leagues.some(l=>l.cats.some(c=>c.teams.length))){toast('No hay nada que recuperar');return}
-  S=b;S.selL=0;S.selC=0;save();renderAll();toast('Datos recuperados');
+  S=b;S.selL=0;S.selC=0;bkConfiar();save();renderAll();toast('Datos recuperados');
 };
 
 /* Liga de ejemplo con equipos y logos (lib/semilla.js): sustituye a «Segunda Liga» si está vacía */
@@ -2431,6 +2442,7 @@ $('undoReset').onclick=()=>{
   save();
 })();
 renderAll();bkInit();if(LIC.ok())nubeInit();
+window.addEventListener('storage',e=>{if(e.key!==KEY||!e.newValue)return;try{const d=JSON.parse(e.newValue);if(!d.leagues)return;const sl=S.selL,sc=S.selC;S=d;S.selL=sl<S.leagues.length?sl:0;S.selC=S.leagues[S.selL]&&sc<S.leagues[S.selL].cats.length?sc:0;BK.base=Math.max(BK.base,S._guardado||0);if(BK.conf&&BK.base>=BK.conf.fm)BK.conf=null;renderAll();renderBk();toast('Datos actualizados desde otra pestaña')}catch(_){}});
 document.fonts&&document.fonts.ready.then(renderPreview);
 
 /* ===== Versión 2: agrupa el panel en pestañas ===== */
