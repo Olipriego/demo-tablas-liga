@@ -1051,7 +1051,7 @@ function ligHtml(l,c,style,c2,catT){
 function vsHtml(m,c){
   if(m.st==='post')return '<div class="vs ap">APLAZADO</div>';
   const g=matchGoals(m,c);
-  if(g)return '<div class="vs sc">'+g[0]+'–'+g[1]+(m.st?'<small>W.O.</small>':'')+'</div>';
+  if(g)return '<div class="vs sc">'+g[0]+'–'+g[1]+(m.st==='dfh'||m.st==='dfa'?'<small>DEFAULT</small>':'')+'</div>';
   return '<div class="vs">VS</div>';
 }
 /* Sanciones de la jornada, agrupadas por equipo (en el orden en que se capturaron) */
@@ -1393,7 +1393,7 @@ function rolHtmlK(l,c,style,catT){
   const hb=(sm,big,pd)=>`<div class="kh${pd?' pd':''}">${sm?`<small>${esc(sm)}</small>`:''}<b>${esc(big)}</b></div>`;
   const centro=m=>{
     if(m.st==='post')return hb(m.day,'APLAZADO',1);
-    const g=matchGoals(m,c);if(g)return hb('Final',g[0]+' – '+g[1]);
+    const g=matchGoals(m,c);if(g)return hb(m.st==='dfh'||m.st==='dfa'?'Default':'Final',g[0]+' – '+g[1]);
     const t=(m.time||'').trim().replace(/\s*([ap])\.?\s*m\.?$/i,(x,a)=>' '+a.toUpperCase()+'M'),d=(m.day||'').trim();
     return t?hb(d,t):hb(d,'POR DEFINIR',1);
   };
