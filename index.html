@@ -1085,7 +1085,7 @@ function ligHtml(l,c,style,c2,catT){
   </div>`;
 }
 function vsHtml(m,c){
-  if(m.st==='post')return '<div class="vs ap">APLAZADO</div>';
+  if(m.st==='post')return '<div class="vs ap">PENDIENTE</div>';
   const g=matchGoals(m,c);
   if(g)return '<div class="vs sc">'+g[0]+'–'+g[1]+(m.st==='dfh'||m.st==='dfa'?'<small>DEFAULT</small>':'')+'</div>';
   return '<div class="vs">VS</div>';
@@ -1142,7 +1142,7 @@ function rolHtml(l,c,style,c2,catT,modo){
   }
   gr=[];
   const sH=sancAlto(gr,obs),oH=0;
-  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[],np=Math.min(pend.length,6),pH=np?10+52+Math.ceil(np/2)*46:0;
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.post||p.j!=='J'+(fx.sel+1)):[],np=Math.min(pend.length,6),pH=np?10+52+Math.ceil(np/2)*46:0;
   const avail=545-sH-oH-pH,rg=k>14?2:k>8?5:8;
   const rh=Math.max(18,Math.min(70,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
   const fs=rh<44?Math.min(14,fsFor(rh)):rh<56?17:20,nfs=rh<44?Math.min(13,nfsFor(rh)):rh<56?16:19,hx=hxVars(rh);
@@ -1216,7 +1216,7 @@ function pendingList(c){
   if(c.fx)c.fx.rounds.forEach((r,i)=>r.m.forEach(m=>{
     if(!m.h||!m.a)return;
     const jugado=!!matchGoals(m,c)||m.st==='dfh'||m.st==='dfa';
-    if(m.st==='post'||(r.done&&!jugado)){out.push({j:'J'+(i+1),h:m.h,a:m.a,when:man[pairKey(m.h,m.a)]||''});seen.add(pairKey(m.h,m.a))}
+    if(m.st==='post'||(r.done&&!jugado)){out.push({j:'J'+(i+1),h:m.h,a:m.a,when:man[pairKey(m.h,m.a)]||'',post:m.st==='post'});seen.add(pairKey(m.h,m.a))}
   }));
   (c.pend||[]).forEach(p=>{if(!p.h||!p.a||seen.has(pairKey(p.h,p.a)))return;out.push({j:p.j||'',h:p.h,a:p.a,when:p.when||''})});
   return out.sort((a,b)=>num(a.j)-num(b.j));
@@ -1392,7 +1392,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
     return `<div class="t"><b>${esc(b)}</b>${lab?`<i>${esc(lab)}</i>`:''}</div>`;
   };
   const vq=m=>{
-    if(m.st==='post')return '<div class="v ap">APLAZADO</div>';
+    if(m.st==='post')return '<div class="v ap">PENDIENTE</div>';
     const g=matchGoals(m,c);
     const df=m.st==='dfh'||m.st==='dfa';
     return g?`<div class="v sc${df?' df':''}">${g[0]}–${g[1]}${df?'<small>DEFAULT</small>':''}</div>`:'<div class="v">VS</div>';
@@ -1401,7 +1401,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
     return `<div class="m">${tm(m)}<div class="n h${h&&h.name.length>20?' lg':''}">${esc(h?h.name:'')}</div><div class="l">${lg(h)}</div>${vq(m)}<div class="l">${lg(a)}</div><div class="n a${a&&a.name.length>20?' lg':''}">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
   const gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
   const sg=gr.length?`${solo?'':'<div class="sec r" style="margin-top:12px">Sanciones</div>'}<div class="sg" style="grid-template-columns:repeat(${Math.max(2,Math.min(solo?3:4,gr.length))},1fr)">${gr.map(x=>`<div class="sk"><div class="st"><div class="l">${lg(x.team)}</div><span>${esc(x.team?x.team.name:'Sin equipo')}</span></div>${x.list.map(s=>`<div class="sp"><span class="nm">${esc(s.p)}</span>${sancCausal(s.c)?`<span class="c">${esc(sancCausal(s.c))}</span>`:''}${sancJuegos(s.g)?`<span class="j">${esc(sancJuegos(s.g))}</span>`:''}</div>`).join('')}</div>`).join('')}</div>`:'';
-  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[];
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.post||p.j!=='J'+(fx.sel+1)):[];
   const pshow=pend.slice(0,solo?0:8),pmore=pend.length-pshow.length;
   const pd=pshow.length?`<div class="sec sm">Juegos pendientes${pmore>0?` (+${pmore} más)`:''}</div><div class="pgr">${pshow.map(p=>{const h=T(p.h),a=T(p.a);
     return `<div class="pc">${p.j?`<span class="pj">${esc(p.j)}</span>`:''}<span class="pn r">${esc(h?h.name:'')}</span><div class="l">${lg(h)}</div><span class="pv">VS</span><div class="l">${lg(a)}</div><span class="pn">${esc(a?a.name:'')}</span>${p.when?`<span class="pw">${esc(p.when)}</span>`:''}</div>`}).join('')}</div>`:'';
@@ -1429,13 +1429,13 @@ function rolHtmlK(l,c,style,catT){
   const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
   const hb=(sm,big,pd)=>`<div class="kh${pd?' pd':''}">${sm?`<small>${esc(sm)}</small>`:''}<b>${esc(big)}</b></div>`;
   const centro=m=>{
-    if(m.st==='post')return hb(m.day,'APLAZADO',1);
+    if(m.st==='post')return hb(m.day,'PENDIENTE',1);
     const g=matchGoals(m,c);if(g)return hb(m.st==='dfh'||m.st==='dfa'?'Default':'Final',g[0]+' – '+g[1]);
     const t=(m.time||'').trim().replace(/\s*([ap])\.?\s*m\.?$/i,(x,a)=>' '+a.toUpperCase()+'M'),d=(m.day||'').trim();
     return t?hb(d,t):hb(d,'POR DEFINIR',1);
   };
   const cards=ms.map(m=>({h:T(m.h),a:T(m.a),mid:centro(m)}));
-  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.j!=='J'+(fx.sel+1)):[];
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.post||p.j!=='J'+(fx.sel+1)):[];
   pend.slice(0,6).forEach(p=>cards.push({h:T(p.h),a:T(p.a),mid:p.when?hb('Pendiente'+(p.j?' · '+p.j:''),p.when):hb(p.j,'PENDIENTE',1)}));
   /* tamaños: vertical una columna, horizontal dos; con muchas tarjetas se encogen */
   const n=cards.length,filas=vert?n:Math.ceil(n/2),comp=filas>6?2:filas>4?1:0;
@@ -1842,7 +1842,7 @@ function parseJornadas(txt,c,create){
     if(m){h=m[1];gh=m[2];ga=m[3];a=m[4]}
     else{m=/^(.+?)\s+(?:vs\.?|v\/s|contra)\s+(.+?)\s*(?:\((.*)\))?$/i.exec(line);
       if(!m){errors.push('Línea '+(ln+1)+': no entendí «'+line+'»');return}
-      h=m[1];a=m[2];if(/aplaz/i.test(m[3]||''))st='post'}
+      h=m[1];a=m[2];if(/aplaz|pendient/i.test(m[3]||''))st='post'}
     const H=findTeam(c,h,create),A=findTeam(c,a,create);
     if(H.err||A.err){errors.push('Línea '+(ln+1)+': '+(H.err||A.err));return}
     if(H.created)created.push(H.t.name);if(A.created)created.push(A.t.name);
@@ -1906,7 +1906,7 @@ function renderFixtures(){
     return '<div class="fm" data-m="'+m.id+'">'
       +'<div class="fr"><select data-k="h">'+opts(m.h)+'</select><b>vs</b><select data-k="a">'+opts(m.a)+'</select><button class="btn sm del" data-act="delm" title="Quitar partido">✕</button></div>'
       +'<div class="fr"><input type="number" min="0" class="g" data-k="gh" placeholder="–" value="'+esc(m.gh==null?'':m.gh)+'"><b>–</b><input type="number" min="0" class="g" data-k="ga" placeholder="–" value="'+esc(m.ga==null?'':m.ga)+'">'
-      +'<select data-k="st" class="st">'+so('','Normal')+so('post','Aplazado')+so('dfh','Gana local por default')+so('dfa','Gana visitante por default')+'</select>'
+      +'<select data-k="st" class="st">'+so('','Normal')+so('post','Pendiente (aplazado)')+so('dfh','Gana local por default')+so('dfa','Gana visitante por default')+'</select>'
       +'<input type="text" class="sm" data-k="day" placeholder="Día" value="'+esc(m.day)+'"><input type="text" class="sm" data-k="time" placeholder="Hora" value="'+esc(m.time)+'"></div>'
       +'<div class="fr"><span style="font-size:11px;font-weight:700;color:var(--muted)">Mover a jornada</span><select data-k="mv"><option value="">—</option>'+ro+'</select>'+(m.from?'<span style="font-size:11px;font-weight:700;color:var(--muted)">↪ reprogramado de J'+m.from+'</span>':'')+'</div>'
       +(w?'<div class="warn">⚠ '+w+'</div>':'')+'</div>';
