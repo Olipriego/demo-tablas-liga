@@ -1481,8 +1481,8 @@ function sponsHtml(h){
   const m=h.match(/^\s*<div class="([^"]*)"/);if(!m)return h;
   const cls=m[1].split(/\s+/),has=k=>cls.includes(k);
   const fijo=has('h')&&!has('hv'),narrow=has('v')||has('hv')||has('kv')||has('pv');
-  const W=(fijo?1200:narrow?(has('pv')?770:has('kv')?762:754):(has('pk')?1200:1204))-32,G=26,maxRows=narrow?4:2;
-  let hh=narrow?48:64,rows=1;
+  const W=(fijo?1200:narrow?(has('pv')?770:has('kv')?762:754):(has('pk')?1200:1204))-32,G=26,maxRows=narrow?4:3;
+  let hh=narrow?64:72,rows=1;
   for(;hh>=30;hh-=2){
     rows=1;let x=0;
     sp.forEach(s=>{const w=Math.min(W,s.w/s.h*hh);if(x&&x+G+w>W){rows++;x=0}x+=(x?G:0)+w});
