@@ -174,6 +174,22 @@ input::placeholder,textarea::placeholder{color:#64748b}
 
 /* horizontal */
 .poster.h{width:1280px;height:720px}
+/* Franja de patrocinadores (fija al pie de todas las tablas) */
+.spl{display:flex;flex-wrap:wrap;gap:8px}
+.spl .sp1{position:relative;width:74px;height:54px;border:1px solid var(--line);border-radius:8px;background:#fff center/contain no-repeat;background-origin:content-box;padding:4px}
+.spl .sp1 button{position:absolute;border:0;background:#0f172a;color:#fff;border-radius:50%;width:18px;height:18px;line-height:16px;font-size:11px;cursor:pointer;padding:0}
+.spl .sp1 .x{top:-6px;right:-6px;background:#b3261e}.spl .sp1 .l{bottom:-6px;left:-6px}.spl .sp1 .r{bottom:-6px;right:-6px}
+.poster .spons{background:#fff;color:#6b7280;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 16px 12px;border-top:1px solid #e5e7eb;gap:6px}
+.poster .spons .spt{font-size:10px;font-weight:800;letter-spacing:.3em;text-transform:uppercase;line-height:12px}
+.poster .spons .spr{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;width:100%}
+.poster .spons .spr img{width:auto;display:block}
+.poster.h.hsp{height:calc(720px + var(--sph))}
+.poster.h.hsp>.left,.poster.h.hsp>.right{bottom:var(--sph)}
+.poster.h.hsp>.spons{position:absolute;left:0;right:0;top:720px;height:var(--sph)}
+.poster.v>.spons{margin:8px 38px 26px;border-radius:14px;border:1px solid #e5e7eb}
+.poster.h.hv>.spons{margin:0 38px 26px;border-radius:14px;border:1px solid #e5e7eb}
+.poster.pq>.spons,.poster.pk>.spons{margin-top:18px;border-radius:14px}
+.poster.pv>.spons{margin-top:16px;border-radius:14px}
 .poster.h .left{position:absolute;left:0;top:0;bottom:0;width:380px;background:linear-gradient(160deg,var(--c1),var(--c2));padding:36px 34px 30px;display:flex;flex-direction:column;color:#fff}
 .poster.h .lg-wrap{width:218px;height:218px;border:6px solid rgba(255,255,255,.7);margin:0 auto 26px}
 .poster.h .lg-ph{font-size:26px}
@@ -604,6 +620,17 @@ input::placeholder,textarea::placeholder{color:#64748b}
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="card" id="sponsCard">
+    <div class="f" style="margin-bottom:6px">Patrocinadores (salen fijos al pie de todas las tablas de esta liga)</div>
+    <div id="sponsList" class="spl"></div>
+    <div class="row" style="margin-top:8px;align-items:center">
+      <button class="btn sm" id="sponsAdd">+ Agregar patrocinador</button>
+      <label style="font-size:12px;display:flex;gap:6px;align-items:center"><input type="checkbox" id="sponsOn"> Mostrar en las tablas</label>
+    </div>
+    <div class="hint" style="margin-top:6px">Puedes elegir varias imágenes a la vez. Se recortan solas (sin bordes en blanco) y se acomodan en una franja blanca.</div>
+    <input type="file" id="fileSpons" accept="image/*" multiple hidden>
   </div>
 
   <h2>2 · Categoría</h2>
@@ -1445,6 +1472,30 @@ function posterHtml(){
   const esV=h.indexOf('class="poster v"')>=0;
   if(est!=='clasico'&&(esV||!(S.view==='rol'||S.view==='sanc'))){const k=est==='cartelera'?'estadio sk-cartelera':est;h=h.replace('class="poster h"','class="poster h sk sk-'+k+'"').replace('class="poster v"','class="poster v sk sk-'+k+'"')}
   if(S.fmt==='v'&&!esV)h=h.replace('class="poster h','class="poster h hv').replace('class="poster pq','class="poster pq pv');
+  return sponsHtml(h);
+}
+/* Franja de patrocinadores: al pie de cualquier tabla; el alto de las imágenes se ajusta solo para que quepan en pocas filas */
+function sponsHtml(h){
+  const l=L(),sp=(l.spons||[]).filter(x=>x&&x.d);
+  if(!sp.length||l.sponsOff)return h;
+  const m=h.match(/^\s*<div class="([^"]*)"/);if(!m)return h;
+  const cls=m[1].split(/\s+/),has=k=>cls.includes(k);
+  const fijo=has('h')&&!has('hv'),narrow=has('v')||has('hv')||has('kv')||has('pv');
+  const W=(fijo?1200:narrow?(has('pv')?770:has('kv')?762:754):(has('pk')?1200:1204))-32,G=26,maxRows=narrow?4:2;
+  let hh=narrow?48:64,rows=1;
+  for(;hh>=30;hh-=2){
+    rows=1;let x=0;
+    sp.forEach(s=>{const w=Math.min(W,s.w/s.h*hh);if(x&&x+G+w>W){rows++;x=0}x+=(x?G:0)+w});
+    if(rows<=maxRows)break;
+  }
+  if(hh<30)hh=30;
+  const sph=10+12+6+rows*hh+(rows-1)*12+12;
+  const strip=`<div class="spons"${fijo?'':` style="height:${sph}px"`}><div class="spt">Patrocinadores</div><div class="spr" style="gap:12px ${G}px">${sp.map(s=>`<img src="${s.d}" style="height:${hh}px;max-width:${W}px">`).join('')}</div></div>`;
+  const i=h.lastIndexOf('</div>');if(i<0)return h;
+  h=h.slice(0,i)+strip+h.slice(i);
+  if(fijo&&/^\s*<div class="[^"]*"[^>]*style="/.test(h)){
+    h=h.replace('class="poster h','class="poster h hsp').replace('style="','style="--sph:'+sph+'px;');
+  }
   return h;
 }
 function posterHtml0(){
@@ -1540,6 +1591,7 @@ function renderLeagueForm(){
   const okL=coloresOk(l,estiloDe(l));
   $('leagueColor').value=l.color||ORANGE;$('leagueColor2').value=(okL&&l.color2)||A.c1;$('leagueBg').value=(okL&&l.bg)||A.cream;$('leagueInk').value=(okL&&l.ink)||A.ink;
   const lp=$('leagueLogo');lp.style.backgroundImage=l.logo?`url(${l.logo})`:'';lp.textContent=l.logo?'':'Logo liga';
+  renderSpons();
 }
 function renderCatForm(){
   const c=C();
@@ -2163,6 +2215,54 @@ $('teamRows').addEventListener('click',e=>{
   }
   if(act.dataset.act==='logo')pickLogo(dataUrl=>{c.teams[i].logo=dataUrl;save();renderTeams();renderPreview()},c.teams[i].logo);
 });
+/* ---- patrocinadores ---- */
+function renderSpons(){
+  const l=L(),sp=l.spons||[];
+  $('sponsList').innerHTML=sp.length?sp.map((s,i)=>`<div class="sp1" style="background-image:url(${s.d})" data-i="${i}"><button class="x" data-a="del" title="Quitar">×</button>${i>0?'<button class="l" data-a="left" title="Mover a la izquierda">‹</button>':''}${i<sp.length-1?'<button class="r" data-a="right" title="Mover a la derecha">›</button>':''}</div>`).join(''):'<div class="hint">Todavía no hay patrocinadores.</div>';
+  $('sponsOn').checked=!l.sponsOff;
+}
+/* Recorta los bordes en blanco, limpia el blanco casi puro del fondo y reduce el tamaño */
+function sponsPrep(img){
+  const k0=Math.min(1,1600/Math.max(img.naturalWidth,img.naturalHeight));
+  const w=Math.max(1,Math.round(img.naturalWidth*k0)),h=Math.max(1,Math.round(img.naturalHeight*k0));
+  const cv=document.createElement('canvas');cv.width=w;cv.height=h;const g=cv.getContext('2d',{willReadFrequently:true});
+  g.fillStyle='#fff';g.fillRect(0,0,w,h);g.drawImage(img,0,0,w,h);
+  const d=g.getImageData(0,0,w,h),p=d.data;let x0=w,y0=h,x1=-1,y1=-1;
+  for(let y=0;y<h;y++)for(let x=0;x<w;x++){
+    const i=(y*w+x)*4,r=p[i],gg=p[i+1],b=p[i+2];
+    if(r>=232&&gg>=232&&b>=232){p[i]=p[i+1]=p[i+2]=255;continue}
+    if(r<225||gg<225||b<225){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+  }
+  g.putImageData(d,0,0);
+  if(x1<0){x0=0;y0=0;x1=w-1;y1=h-1}
+  const m=6;x0=Math.max(0,x0-m);y0=Math.max(0,y0-m);x1=Math.min(w-1,x1+m);y1=Math.min(h-1,y1+m);
+  const cw=x1-x0+1,ch=y1-y0+1,k=Math.min(1,700/cw,300/ch),ow=Math.max(1,Math.round(cw*k)),oh=Math.max(1,Math.round(ch*k));
+  const o=document.createElement('canvas');o.width=ow;o.height=oh;const og=o.getContext('2d');
+  og.imageSmoothingQuality='high';og.drawImage(cv,x0,y0,cw,ch,0,0,ow,oh);
+  return {d:o.toDataURL('image/png'),w:ow,h:oh};
+}
+$('sponsAdd').onclick=()=>{const f=$('fileSpons');f.value='';f.click()};
+$('fileSpons').onchange=async e=>{
+  const files=[...e.target.files];if(!files.length)return;
+  const l=L();l.spons=l.spons||[];
+  for(const file of files){
+    await new Promise(res=>{
+      const img=new Image(),url=URL.createObjectURL(file);
+      img.onload=()=>{URL.revokeObjectURL(url);try{l.spons.push(sponsPrep(img))}catch(err){console.error(err)}res()};
+      img.onerror=()=>{URL.revokeObjectURL(url);res()};
+      img.src=url;
+    });
+  }
+  save();renderSpons();renderPreview();
+};
+$('sponsList').onclick=e=>{
+  const b=e.target.closest('button[data-a]');if(!b)return;
+  const l=L(),i=+b.closest('.sp1').dataset.i,a=b.dataset.a;
+  if(a==='del')l.spons.splice(i,1);
+  else{const j=a==='left'?i-1:i+1;if(l.spons[j])[l.spons[i],l.spons[j]]=[l.spons[j],l.spons[i]]}
+  save();renderSpons();renderPreview();
+};
+$('sponsOn').onchange=e=>{L().sponsOff=!e.target.checked;save();renderPreview()};
 $('leagueLogo').onclick=()=>pickLogo(d=>{L().logo=d;save();renderLeagueForm();renderPreview()},L().logo);
 
 /* ---- logos ---- */
@@ -2206,6 +2306,7 @@ function fileBase(){const c=C();return `${({goleo:'goleo',rol:'rol',sanc:'sancio
 async function cuadrarImagenes(el){
   await Promise.all([...el.querySelectorAll('img')].map(async im=>{
     try{
+      if(im.closest('.spons'))return;
       if(!im.complete)await new Promise(r=>{im.onload=im.onerror=r});
       const w=im.naturalWidth,h=im.naturalHeight;if(!w||!h||w===h)return;
       const contain=getComputedStyle(im).objectFit==='contain',side=contain?Math.max(w,h):Math.min(w,h);
