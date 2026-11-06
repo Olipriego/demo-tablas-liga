@@ -178,7 +178,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .spl{display:flex;flex-wrap:wrap;gap:8px}
 .spl .sp1{position:relative;width:74px;height:54px;border:1px solid var(--line);border-radius:8px;background:#fff center/contain no-repeat;background-origin:content-box;padding:4px}
 .spl .sp1 button{position:absolute;border:0;background:#0f172a;color:#fff;border-radius:50%;width:18px;height:18px;line-height:16px;font-size:11px;cursor:pointer;padding:0}
-.spl .sp1 .x{top:-6px;right:-6px;background:#b3261e}.spl .sp1 .l{bottom:-6px;left:-6px}.spl .sp1 .r{bottom:-6px;right:-6px}
+.spl .sp1 .x{top:-6px;right:-6px;background:#b3261e}.spl .sp1 .mn{top:-6px;left:-6px;background:#2563eb}.spl .sp1 .pl{top:-6px;left:15px;background:#2563eb}.spl .sp1 .zt{position:absolute;bottom:1px;left:0;right:0;text-align:center;font-size:9px;font-weight:800;color:#2563eb;pointer-events:none}.spl .sp1 .l{bottom:-6px;left:-6px}.spl .sp1 .r{bottom:-6px;right:-6px}
 .poster .spons{background:#fff;color:#6b7280;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 16px 12px;border-top:1px solid #e5e7eb;gap:6px}
 .poster .spons .spt{font-size:10px;font-weight:800;letter-spacing:.3em;text-transform:uppercase;line-height:12px}
 .poster .spons .spr{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;width:100%}
@@ -1482,15 +1482,17 @@ function sponsHtml(h){
   const cls=m[1].split(/\s+/),has=k=>cls.includes(k);
   const fijo=has('h')&&!has('hv'),narrow=has('v')||has('hv')||has('kv')||has('pv');
   const W=(fijo?1200:narrow?(has('pv')?770:has('kv')?762:754):(has('pk')?1200:1204))-32,G=26,maxRows=narrow?4:3;
-  let hh=narrow?64:72,rows=1;
+  const ih=(s,hh)=>Math.round(Math.min(hh*(s.z||1),W/(s.w/s.h)));
+  let hh=narrow?64:72,rows=1,tot=0;
   for(;hh>=30;hh-=2){
-    rows=1;let x=0;
-    sp.forEach(s=>{const w=Math.min(W,s.w/s.h*hh);if(x&&x+G+w>W){rows++;x=0}x+=(x?G:0)+w});
+    rows=1;tot=0;let x=0,mx=0;
+    sp.forEach(s=>{const hi=ih(s,hh),w=hi*s.w/s.h;if(x&&x+G+w>W){rows++;tot+=mx;x=0;mx=0}x+=(x?G:0)+w;mx=Math.max(mx,hi)});
+    tot+=mx;
     if(rows<=maxRows)break;
   }
   if(hh<30)hh=30;
-  const sph=10+12+6+rows*hh+(rows-1)*12+12;
-  const strip=`<div class="spons"${fijo?'':` style="height:${sph}px"`}><div class="spt">Patrocinadores</div><div class="spr" style="gap:12px ${G}px">${sp.map(s=>`<img src="${s.d}" style="height:${hh}px;max-width:${W}px">`).join('')}</div></div>`;
+  const sph=10+12+6+tot+(rows-1)*12+12;
+  const strip=`<div class="spons"${fijo?'':` style="height:${sph}px"`}><div class="spt">Patrocinadores</div><div class="spr" style="gap:12px ${G}px">${sp.map(s=>`<img src="${s.d}" style="height:${ih(s,hh)}px">`).join('')}</div></div>`;
   const i=h.lastIndexOf('</div>');if(i<0)return h;
   h=h.slice(0,i)+strip+h.slice(i);
   if(fijo&&/^\s*<div class="[^"]*"[^>]*style="/.test(h)){
@@ -2218,7 +2220,7 @@ $('teamRows').addEventListener('click',e=>{
 /* ---- patrocinadores ---- */
 function renderSpons(){
   const l=L(),sp=l.spons||[];
-  $('sponsList').innerHTML=sp.length?sp.map((s,i)=>`<div class="sp1" style="background-image:url(${s.d})" data-i="${i}"><button class="x" data-a="del" title="Quitar">×</button>${i>0?'<button class="l" data-a="left" title="Mover a la izquierda">‹</button>':''}${i<sp.length-1?'<button class="r" data-a="right" title="Mover a la derecha">›</button>':''}</div>`).join(''):'<div class="hint">Todavía no hay patrocinadores.</div>';
+  $('sponsList').innerHTML=sp.length?sp.map((s,i)=>`<div class="sp1" style="background-image:url(${s.d})" data-i="${i}"><button class="x" data-a="del" title="Quitar">×</button><button class="mn" data-a="menos" title="Hacer más chico">−</button><button class="pl" data-a="mas" title="Hacer más grande">+</button>${(s.z||1)!==1?`<span class="zt">×${s.z}</span>`:""}${i>0?'<button class="l" data-a="left" title="Mover a la izquierda">‹</button>':''}${i<sp.length-1?'<button class="r" data-a="right" title="Mover a la derecha">›</button>':''}</div>`).join(''):'<div class="hint">Todavía no hay patrocinadores.</div>';
   $('sponsOn').checked=!l.sponsOff;
 }
 /* Recorta los bordes en blanco, limpia el blanco casi puro del fondo y reduce el tamaño */
@@ -2259,6 +2261,7 @@ $('sponsList').onclick=e=>{
   const b=e.target.closest('button[data-a]');if(!b)return;
   const l=L(),i=+b.closest('.sp1').dataset.i,a=b.dataset.a;
   if(a==='del')l.spons.splice(i,1);
+  else if(a==='mas'||a==='menos'){const Z=[.5,.75,1,1.25,1.5,1.75,2,2.5,3],k=Z.indexOf(l.spons[i].z||1),n=Math.max(0,Math.min(Z.length-1,(k<0?2:k)+(a==='mas'?1:-1)));l.spons[i].z=Z[n]}
   else{const j=a==='left'?i-1:i+1;if(l.spons[j])[l.spons[i],l.spons[j]]=[l.spons[j],l.spons[i]]}
   save();renderSpons();renderPreview();
 };
