@@ -2233,7 +2233,7 @@ function sponsPrep(img){
   for(let y=0;y<h;y++)for(let x=0;x<w;x++){
     const i=(y*w+x)*4,r=p[i],gg=p[i+1],b=p[i+2];
     if(r>=232&&gg>=232&&b>=232){p[i]=p[i+1]=p[i+2]=255;continue}
-    if(r<225||gg<225||b<225){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
+    if((r<225||gg<225||b<225)&&x>2&&y>2&&x<w-3&&y<h-3){if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y}
   }
   g.putImageData(d,0,0);
   if(x1<0){x0=0;y0=0;x1=w-1;y1=h-1}
