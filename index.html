@@ -1510,7 +1510,7 @@ function posterHtml0(){
   const catT=(c.name||'Categoría').toUpperCase();
 
   /* Juegos pendientes al pie de la tabla general (misma casilla que el rol de juegos) */
-  const pendL=c.pendRol!==false?pendingList(c):[],pendTab=pendHtml(pendL,c,c2,6),npT=Math.min(pendL.length,6),pHT=npT?10+52+Math.ceil(npT/2)*46:0;
+  const pendL=[],pendTab=pendHtml(pendL,c,c2,6),npT=Math.min(pendL.length,6),pHT=npT?10+52+Math.ceil(npT/2)*46:0;
   if(S.fmt==='v'&&(S.view||'tabla')==='tabla'){
     const big=Math.max(40,Math.min(68,Math.floor(560/ (('TABLA GENERAL').length*0.74))));
     // hasta 12 equipos tamano normal; con mas, las filas se reducen para que el cartel no crezca sin limite
@@ -1926,7 +1926,7 @@ function renderFixtures(){
     +'<p class="hint" style="margin:3px 0 8px">Salen en la imagen «Sanciones» (pestaña de la vista previa), agrupadas por equipo. En «Juegos» puedes escribir un número (2) o un texto (Expulsión definitiva).</p>'
     +sancRows+'<button class="btn sm" data-act="adds">+ Sanción</button>'
     +'<label class="f" style="margin-top:10px">Observación (sale en la imagen «Sanciones»)<textarea data-rk="obs" rows="2" style="border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;resize:vertical" placeholder="Ej.: Por favor háganle llegar a sus jugadores el Reglamento de Competencia">'+esc(r.obs||'')+'</textarea></label>'
-    +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="pendrol"'+(c.pendRol!==false?' checked':'')+'> Mostrar los juegos pendientes en el rol de juegos y en la tabla general</label>'
+    +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="pendrol"'+(c.pendRol!==false?' checked':'')+'> Mostrar los juegos pendientes en el rol de juegos</label>'
     +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="restrol"'+(c.restRol!==false?' checked':'')+'> Mostrar los equipos que descansan en la tira del rol de juegos</label></div>'
     +(rest.length?'<div class="hint" style="margin:8px 0 0">Descansa: '+esc(rest.join(', '))+'</div>':'')+'</div>';
 }
