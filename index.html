@@ -180,7 +180,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .spl .sp1 button{position:absolute;border:0;background:#0f172a;color:#fff;border-radius:50%;width:18px;height:18px;line-height:16px;font-size:11px;cursor:pointer;padding:0}
 .spl .sp1 .x{top:-6px;right:-6px;background:#b3261e}.spl .sp1 .mn{top:-6px;left:-6px;background:#2563eb}.spl .sp1 .pl{top:-6px;left:15px;background:#2563eb}.spl .sp1 .zt{position:absolute;bottom:1px;left:0;right:0;text-align:center;font-size:9px;font-weight:800;color:#2563eb;pointer-events:none}.spl .sp1 .l{bottom:-6px;left:-6px}.spl .sp1 .r{bottom:-6px;right:-6px}
 .poster .spons{background:#fff;color:#6b7280;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 16px 12px;border-top:1px solid #e5e7eb;gap:6px}
-.poster .spons .spt{font-size:10px;font-weight:800;letter-spacing:.3em;text-transform:uppercase;line-height:12px}
+.poster .spons .spt{font-size:12px;font-weight:800;letter-spacing:.3em;text-transform:uppercase;line-height:14px}
 .poster .spons .spr{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;width:100%}
 .poster .spons .spr img{width:auto;display:block}
 .poster.h.hsp{height:calc(720px + var(--sph))}
@@ -1485,7 +1485,7 @@ function sponsHtml(h){
   const fijo=has('h')&&!has('hv'),narrow=has('v')||has('hv')||has('kv')||has('pv');
   const W=(fijo?1200:narrow?(has('pv')?770:has('kv')?762:754):(has('pk')?1200:1204))-32,G=26,maxRows=narrow?4:3;
   const ih=(s,hh)=>Math.round(Math.min(hh*(s.z||1),W/(s.w/s.h)));
-  let hh=narrow?64:72,rows=1,tot=0;
+  let hh=narrow?96:110,rows=1,tot=0;
   for(;hh>=30;hh-=2){
     rows=1;tot=0;let x=0,mx=0;
     sp.forEach(s=>{const hi=ih(s,hh),w=hi*s.w/s.h;if(x&&x+G+w>W){rows++;tot+=mx;x=0;mx=0}x+=(x?G:0)+w;mx=Math.max(mx,hi)});
@@ -1493,7 +1493,7 @@ function sponsHtml(h){
     if(rows<=maxRows)break;
   }
   if(hh<30)hh=30;
-  const sph=10+12+6+tot+(rows-1)*12+12;
+  const sph=10+14+6+tot+(rows-1)*12+12;
   const strip=`<div class="spons"${fijo?'':` style="height:${sph}px"`}><div class="spt">Patrocinadores</div><div class="spr" style="gap:12px ${G}px">${sp.map(s=>`<img src="${s.d}" style="height:${ih(s,hh)}px">`).join('')}</div></div>`;
   const i=h.lastIndexOf('</div>');if(i<0)return h;
   h=h.slice(0,i)+strip+h.slice(i);
