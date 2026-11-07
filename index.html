@@ -1116,8 +1116,8 @@ function timeMin(s){
   if(ap==='p'&&h<12)h+=12;if(ap==='a'&&h===12)h=0;
   return h*60+mi;
 }
-/* Rol de juegos: si ya hay horarios, los partidos sin hora (por definir) siguen pendientes en el calendario pero no salen en la imagen */
-function rolMs(ms,c){const s=sortMs(ms);if(!s.some(m=>(m.time||'').trim()))return s;return s.filter(m=>(m.time||'').trim()||(m.st!=='post'&&(matchGoals(m,c)||m.st==='dfh'||m.st==='dfa')))}
+/* Rol de juegos: con la casilla «Ocultar los partidos por definir» (c.ocultaPD) y ya con horarios, los partidos sin hora siguen pendientes en el calendario pero no salen en la imagen ni en el panel de pendientes */
+function rolMs(ms,c){const s=sortMs(ms);if(!c.ocultaPD||!s.some(m=>(m.time||'').trim()))return s;return s.filter(m=>(m.time||'').trim()||(m.st!=='post'&&(matchGoals(m,c)||m.st==='dfh'||m.st==='dfa')))}
 function sortMs(ms){return ms.map((m,i)=>[m,i]).sort((x,y)=>dayIdx(x[0].day)-dayIdx(y[0].day)||timeMin(x[0].time)-timeMin(y[0].time)||x[1]-y[1]).map(x=>x[0])}
 /* modo 'rol': rol de juegos + juegos pendientes · modo 'sanc': solo sanciones y observación de la jornada */
 function rolHtml(l,c,style,c2,catT,modo){
@@ -1144,7 +1144,7 @@ function rolHtml(l,c,style,c2,catT,modo){
   }
   gr=[];
   const sH=sancAlto(gr,obs),oH=0;
-  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.when&&p.j!=='J'+(fx.sel+1)):[],np=Math.min(pend.length,6),pH=np?10+52+Math.ceil(np/2)*46:0;
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>(p.post||p.j!=='J'+(fx.sel+1))&&(!c.ocultaPD||p.when)):[],np=Math.min(pend.length,6),pH=np?10+52+Math.ceil(np/2)*46:0;
   const avail=545-sH-oH-pH,rg=k>14?2:k>8?5:8;
   const rh=Math.max(18,Math.min(70,Math.floor((avail-(Math.max(k,1)-1)*rg)/Math.max(k,1))));
   const fs=rh<44?Math.min(14,fsFor(rh)):rh<56?17:20,nfs=rh<44?Math.min(13,nfsFor(rh)):rh<56?16:19,hx=hxVars(rh);
@@ -1403,7 +1403,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
     return `<div class="m">${tm(m)}<div class="n h${h&&h.name.length>20?' lg':''}">${esc(h?h.name:'')}</div><div class="l">${lg(h)}</div>${vq(m)}<div class="l">${lg(a)}</div><div class="n a${a&&a.name.length>20?' lg':''}">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
   const gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
   const sg=gr.length?`${solo?'':'<div class="sec r" style="margin-top:12px">Sanciones</div>'}<div class="sg" style="grid-template-columns:repeat(${Math.max(2,Math.min(solo?3:4,gr.length))},1fr)">${gr.map(x=>`<div class="sk"><div class="st"><div class="l">${lg(x.team)}</div><span>${esc(x.team?x.team.name:'Sin equipo')}</span></div>${x.list.map(s=>`<div class="sp"><span class="nm">${esc(s.p)}</span>${sancCausal(s.c)?`<span class="c">${esc(sancCausal(s.c))}</span>`:''}${sancJuegos(s.g)?`<span class="j">${esc(sancJuegos(s.g))}</span>`:''}</div>`).join('')}</div>`).join('')}</div>`:'';
-  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.when&&p.j!=='J'+(fx.sel+1)):[];
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>(p.post||p.j!=='J'+(fx.sel+1))&&(!c.ocultaPD||p.when)):[];
   const pshow=pend.slice(0,solo?0:8),pmore=pend.length-pshow.length;
   const pd=pshow.length?`<div class="sec sm">Juegos pendientes${pmore>0?` (+${pmore} más)`:''}</div><div class="pgr">${pshow.map(p=>{const h=T(p.h),a=T(p.a);
     return `<div class="pc">${p.j?`<span class="pj">${esc(p.j)}</span>`:''}<span class="pn r">${esc(h?h.name:'')}</span><div class="l">${lg(h)}</div><span class="pv">VS</span><div class="l">${lg(a)}</div><span class="pn">${esc(a?a.name:'')}</span>${p.when?`<span class="pw">${esc(p.when)}</span>`:''}</div>`}).join('')}</div>`:'';
@@ -1437,7 +1437,7 @@ function rolHtmlK(l,c,style,catT){
     return t?hb(d,t):hb(d,'POR DEFINIR',1);
   };
   const cards=ms.map(m=>({h:T(m.h),a:T(m.a),mid:centro(m)}));
-  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>p.when&&p.j!=='J'+(fx.sel+1)):[];
+  const pend=(r&&c.pendRol!==false)?pendingList(c).filter(p=>(p.post||p.j!=='J'+(fx.sel+1))&&(!c.ocultaPD||p.when)):[];
   pend.slice(0,6).forEach(p=>cards.push({h:T(p.h),a:T(p.a),mid:p.when?hb('Pendiente'+(p.j?' · '+p.j:''),p.when):hb(p.j,'PENDIENTE',1)}));
   /* tamaños: vertical una columna, horizontal dos; con muchas tarjetas se encogen */
   const n=cards.length,filas=vert?n:Math.ceil(n/2),comp=filas>6?2:filas>4?1:0;
@@ -1929,6 +1929,7 @@ function renderFixtures(){
     +sancRows+'<button class="btn sm" data-act="adds">+ Sanción</button>'
     +'<label class="f" style="margin-top:10px">Observación (sale en la imagen «Sanciones»)<textarea data-rk="obs" rows="2" style="border:1px solid var(--line);border-radius:8px;padding:7px 9px;font:inherit;resize:vertical" placeholder="Ej.: Por favor háganle llegar a sus jugadores el Reglamento de Competencia">'+esc(r.obs||'')+'</textarea></label>'
     +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="pendrol"'+(c.pendRol!==false?' checked':'')+'> Mostrar los juegos pendientes en el rol de juegos</label>'
+    +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="ocultapd"'+(c.ocultaPD?' checked':'')+'> Ocultar los partidos por definir (sin hora) en el rol de juegos; siguen pendientes</label>'
     +'<label class="chk" style="margin-top:8px"><input type="checkbox" data-rk="restrol"'+(c.restRol!==false?' checked':'')+'> Mostrar los equipos que descansan en la tira del rol de juegos</label></div>'
     +(rest.length?'<div class="hint" style="margin:8px 0 0">Descansa: '+esc(rest.join(', '))+'</div>':'')+'</div>';
 }
@@ -1983,6 +1984,7 @@ $('fxRound').addEventListener('change',e=>{
   if(tr&&(k==='day'||k==='time')){r.m=sortMs(r.m);save();renderFixtures();renderPreview();return}
   if(e.target.dataset.rk==='done'){r.done=e.target.checked;if(r.done)autoOn();save();renderFixtures();if(C().autoTable)renderTeams();renderPend();renderPreview();return}
   if(e.target.dataset.rk==='pendrol'){C().pendRol=e.target.checked;fxTouch();return}
+  if(e.target.dataset.rk==='ocultapd'){C().ocultaPD=e.target.checked;fxTouch();return}
   if(e.target.dataset.rk==='restrol'){C().restRol=e.target.checked;fxTouch();return}
   const sr=e.target.closest('[data-s]');
   if(sr&&e.target.dataset.sk==='t'){r.sanc.find(s=>s.id===sr.dataset.s).t=e.target.value;save();fxTouch('sanc');return}
