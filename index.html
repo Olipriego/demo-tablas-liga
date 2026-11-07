@@ -1116,10 +1116,12 @@ function timeMin(s){
   if(ap==='p'&&h<12)h+=12;if(ap==='a'&&h===12)h=0;
   return h*60+mi;
 }
+/* Rol de juegos: si ya hay horarios, los partidos sin hora (por definir) siguen pendientes en el calendario pero no salen en la imagen */
+function rolMs(ms,c){const s=sortMs(ms);if(!s.some(m=>(m.time||'').trim()))return s;return s.filter(m=>(m.time||'').trim()||m.st==='post'||matchGoals(m,c)||m.st==='dfh'||m.st==='dfa')}
 function sortMs(ms){return ms.map((m,i)=>[m,i]).sort((x,y)=>dayIdx(x[0].day)-dayIdx(y[0].day)||timeMin(x[0].time)-timeMin(y[0].time)||x[1]-y[1]).map(x=>x[0])}
 /* modo 'rol': rol de juegos + juegos pendientes · modo 'sanc': solo sanciones y observación de la jornada */
 function rolHtml(l,c,style,c2,catT,modo){
-  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?sortMs(r.m):[],k=ms.length,solo=modo==='sanc';
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?rolMs(r.m,c):[],k=ms.length,solo=modo==='sanc';
   let gr=sancGroups(c,r),obs=r&&(r.obs||'').trim();
   const jn0=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha0=(r&&r.fecha)||c.fecha;
   if(solo){
@@ -1153,7 +1155,7 @@ function rolHtml(l,c,style,c2,catT,modo){
       <div class="hn">${esc(h?h.name:'')}</div><div class="lgc">${h?teamLogo(h,c2):''}</div>
       ${vsHtml(m,c)}
       <div class="lgc">${a?teamLogo(a,c2):''}</div><div class="an">${esc(a?a.name:'')}</div></div>`}).join(''):`<div class="empty">Genera el calendario para ver el rol de juegos</div>`;
-  const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
+  const playing=new Set();(r?r.m:[]).forEach(m=>{playing.add(m.h);playing.add(m.a)});
   const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name&&okJ(c,t.id,fx.sel)).map(t=>t.name):[];
   const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||'');const fecha=(r&&r.fecha)||c.fecha;
   return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
@@ -1372,7 +1374,7 @@ function skinVars(est,tgt,c1,c2,B,I){
 
 /* Rol de juegos con encabezado arriba (para los estilos nuevos): rol, sanciones, observación, pendientes y banner */
 function rolHtmlQ(l,c,style,c2,catT,est,modo){
-  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?sortMs(r.m):[],T=id=>c.teams.find(t=>t.id===id),solo=modo==='sanc';
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?rolMs(r.m,c):[],T=id=>c.teams.find(t=>t.id===id),solo=modo==='sanc';
   const A=color=>color;
   const lg=t=>t&&t.logo?`<img src="${t.logo}">`:`<b class="ini">${esc(t?initials(t.name):'')}</b>`;
   const words=(l.name||'').trim().split(/\s+/).filter(Boolean);
@@ -1405,7 +1407,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const pshow=pend.slice(0,solo?0:8),pmore=pend.length-pshow.length;
   const pd=pshow.length?`<div class="sec sm">Juegos pendientes${pmore>0?` (+${pmore} más)`:''}</div><div class="pgr">${pshow.map(p=>{const h=T(p.h),a=T(p.a);
     return `<div class="pc">${p.j?`<span class="pj">${esc(p.j)}</span>`:''}<span class="pn r">${esc(h?h.name:'')}</span><div class="l">${lg(h)}</div><span class="pv">VS</span><div class="l">${lg(a)}</div><span class="pn">${esc(a?a.name:'')}</span>${p.when?`<span class="pw">${esc(p.when)}</span>`:''}</div>`}).join('')}</div>`:'';
-  const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
+  const playing=new Set();(r?r.m:[]).forEach(m=>{playing.add(m.h);playing.add(m.a)});
   const rest=r?c.teams.filter(t=>!playing.has(t.id)&&t.name&&okJ(c,t.id,fx.sel)).map(t=>t.name):[];
   const bantxt=solo?'¡Puntualidad, respeto y juego limpio!':rest.length&&c.restRol!==false?'Descansa: '+rest.join(', '):'¡Puntualidad y juego limpio!';
   const banfs=bantxt.length>46?17:bantxt.length>30?21:25;
@@ -1424,7 +1426,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
 /* Rol de juegos «Cartelera» (amarillo y azul): una tarjeta por partido con logos grandes, día y hora al centro y VS dorado.
    Los juegos pendientes de otras jornadas salen como tarjetas «Pendiente · J#»; al final Descansa, observación y la liga. */
 function rolHtmlK(l,c,style,catT){
-  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?sortMs(r.m):[],T=id=>c.teams.find(t=>t.id===id),vert=S.fmt==='v';
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?rolMs(r.m,c):[],T=id=>c.teams.find(t=>t.id===id),vert=S.fmt==='v';
   const lg=t=>t&&t.logo?`<img src="${t.logo}">`:`<b class="ini">${esc(t?initials(t.name):'')}</b>`;
   const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
   const hb=(sm,big,pd)=>`<div class="kh${pd?' pd':''}">${sm?`<small>${esc(sm)}</small>`:''}<b>${esc(big)}</b></div>`;
@@ -1444,7 +1446,7 @@ function rolHtmlK(l,c,style,catT){
   const nfs=t=>{const s=(t&&t.name)||'',base=[20,18,16][comp]-(vert?0:2);return Math.max(12,Math.min(base,Math.floor(tw*1.7/(s.length*0.72||1))))};
   const lado=t=>`<div class="tm"><div class="lg">${lg(t)}</div><div class="nm" style="font-size:${nfs(t)}px">${esc(t?t.name:'')}</div></div>`;
   const body=n?cards.map(k=>`<div class="kc">${lado(k.h)}<div class="mid">${k.mid}<div class="vs">VS</div></div>${lado(k.a)}</div>`).join(''):'<div class="empty">Genera el calendario para ver el rol de juegos</div>';
-  const playing=new Set();ms.forEach(m=>{playing.add(m.h);playing.add(m.a)});
+  const playing=new Set();(r?r.m:[]).forEach(m=>{playing.add(m.h);playing.add(m.a)});
   const rest=r&&c.restRol!==false?c.teams.filter(t=>!playing.has(t.id)&&t.name&&okJ(c,t.id,fx.sel)):[];
   const ds=rest.length?`<div class="kd">${rest.slice(0,3).map(t=>`<div class="lg">${lg(t)}</div>`).join('')}<div><small>DESCANSA</small><b style="font-size:${rest.length>1?26:34}px">${esc(rest.map(t=>t.name).join(', '))}</b></div></div>`:'';
   const obs=r&&(r.obs||'').trim(),ob=obs?`<div class="kob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
