@@ -1537,7 +1537,7 @@ function posterHtml0(){
   /* Juegos pendientes al pie de la tabla general (misma casilla que el rol de juegos) */
   const pendL=[],pendTab=pendHtml(pendL,c,c2,6),npT=Math.min(pendL.length,6),pHT=npT?10+52+Math.ceil(npT/2)*46:0;
   if(S.fmt==='v'&&(S.view||'tabla')==='tabla'){
-    const cb=catBig(catT,520,estiloCat(c,l)==='clasico'?0.76:0.6,84,38),big=cb.fs;
+    const cb=catBig(catT,520,estiloCat(c,l)==='clasico'?0.76:0.6,58,32),big=cb.fs;
     // hasta 12 equipos tamano normal; con mas, las filas se reducen para que el cartel no crezca sin limite
     const unit=k>12?Math.max(24,Math.floor(12*81/k)):81, vrg=Math.max(2,Math.round(unit*.11)), vrh=unit-vrg, vsc=vrh/72;
     const vx=k>12?`--vrh:${vrh}px;--vrg:${vrg}px;--vfs:${Math.max(10,Math.round(21*vsc))}px;--vnfs:${Math.max(10,Math.round(19*vsc))}px;--vpfs:${Math.max(10,Math.round(19*vsc))}px;--vptf:${Math.max(11,Math.round(26*vsc))}px;`:'';
@@ -1562,7 +1562,7 @@ function posterHtml0(){
   const avail=545-pHT, rg=k>24?1:k>18?2:k>12?4:(est==='tv'?9:7); // TV: filas inclinadas, necesitan mas aire
   const rh=Math.max(12,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
   const fs=fsFor(rh), nfs=nfsFor(rh), hx=hxVars(rh);
-  const cbh=catBig(catT,312,estiloCat(c,l)==='clasico'?0.76:0.6,80,34),bigfs=cbh.fs;
+  const cbh=catBig(catT,312,estiloCat(c,l)==='clasico'?0.76:0.6,54,30),bigfs=cbh.fs;
   return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
     <div class="left">
       ${leagueLogo(l)}
