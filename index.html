@@ -154,12 +154,14 @@ input::placeholder,textarea::placeholder{color:#64748b}
 
 /* vertical */
 .poster.v{width:830px;min-height:900px}
-.poster.v .top{background:linear-gradient(135deg,var(--c1),var(--c2));padding:50px 46px 84px;display:flex;gap:34px;align-items:center;position:relative}
+.poster.v .top{background:linear-gradient(135deg,var(--c1),var(--c2));padding:44px 46px 74px;display:flex;flex-direction:column;gap:26px;align-items:stretch;position:relative}
+.poster.v .hrow{display:flex;align-items:center;gap:28px}
+.poster.v .hcat{display:flex;flex-direction:column;align-items:flex-start}
 .poster.v .top:after{content:"";position:absolute;left:-10%;right:-10%;bottom:-70px;height:110px;background:var(--cream);border-radius:50%/100% 100% 0 0;transform:scaleY(.55);transform-origin:bottom}
-.poster.v .lg-wrap{width:190px;height:190px;border:5px solid rgba(255,255,255,.65)}
+.poster.v .lg-wrap{width:150px;height:150px;border:5px solid rgba(255,255,255,.65)}
 .poster.v .lg-ph{font-size:20px}
 .poster.v .sub{color:rgba(255,255,255,.9);font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase}
-.poster.v .sub.lgv{font-family:'Oswald','Montserrat',sans-serif;font-size:46px;line-height:1.1;letter-spacing:.06em;font-weight:700;color:#ffe066;text-shadow:0 2px 8px rgba(0,0,0,.28);margin-bottom:4px}
+.poster.v .sub.lgv{font-family:'Oswald','Montserrat',sans-serif;font-size:40px;line-height:1.1;letter-spacing:.06em;font-weight:700;color:#ffe066;text-shadow:0 2px 8px rgba(0,0,0,.28);margin-bottom:4px}
 .poster.v .sub.tgv{font-size:24px;letter-spacing:.16em;margin:0 0 22px}
 .poster.v h2.big{margin:12px 0 12px;font-size:68px;line-height:1;font-weight:800;color:#fff;letter-spacing:.015em;text-transform:uppercase;font-size:var(--bigfs,68px)}
 .poster.v .pill{padding:11px 26px;font-size:18px;margin-right:10px}
@@ -1538,15 +1540,14 @@ function posterHtml0(){
   /* Juegos pendientes al pie de la tabla general (misma casilla que el rol de juegos) */
   const pendL=[],pendTab=pendHtml(pendL,c,c2,6),npT=Math.min(pendL.length,6),pHT=npT?10+52+Math.ceil(npT/2)*46:0;
   if(S.fmt==='v'&&(S.view||'tabla')==='tabla'){
-    const cb=catBig(catT,520,estiloCat(c,l)==='clasico'?0.76:0.6,58,32),big=cb.fs;
+    const cb=catBig(catT,692,estiloCat(c,l)==='clasico'?0.76:0.6,68,36),big=cb.fs;
     // hasta 12 equipos tamano normal; con mas, las filas se reducen para que el cartel no crezca sin limite
     const unit=k>12?Math.max(24,Math.floor(12*81/k)):81, vrg=Math.max(2,Math.round(unit*.11)), vrh=unit-vrg, vsc=vrh/72;
     const vx=k>12?`--vrh:${vrh}px;--vrg:${vrg}px;--vfs:${Math.max(10,Math.round(21*vsc))}px;--vnfs:${Math.max(10,Math.round(19*vsc))}px;--vpfs:${Math.max(10,Math.round(19*vsc))}px;--vptf:${Math.max(11,Math.round(26*vsc))}px;`:'';
     return `<div class="poster v" style="${style}--bigfs:${big}px;${vx}">
       <div class="top">
-        ${leagueLogo(l)}
-        <div>
-          <div class="sub lgv">${esc(l.name)}</div>
+        <div class="hrow">${leagueLogo(l)}<div class="sub lgv">${esc(l.name)}</div></div>
+        <div class="hcat">
           <h2 class="big">${cb.html}</h2>
           <div class="sub tgv">Tabla General${c.sub?' · '+esc(c.sub):''}</div>
           <div>${jor}${fec}</div>
