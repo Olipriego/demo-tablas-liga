@@ -159,7 +159,9 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.v .lg-wrap{width:150px;height:150px;border:5px solid rgba(255,255,255,.65)}
 .poster.v .lg-ph{font-size:20px}
 .poster.v .sub{color:rgba(255,255,255,.9);font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase}
-.poster.v h2.big{margin:6px 0 14px;font-size:68px;line-height:1;font-weight:800;color:#fff;letter-spacing:.015em;text-transform:uppercase;font-size:var(--bigfs,68px)}
+.poster.v .sub.lgv{font-size:19px;letter-spacing:.14em;font-weight:800}
+.poster.v .sub.tgv{font-size:16px;margin:0 0 14px}
+.poster.v h2.big{margin:6px 0 8px;font-size:68px;line-height:1;font-weight:800;color:#fff;letter-spacing:.015em;text-transform:uppercase;font-size:var(--bigfs,68px)}
 .poster.v .pill{padding:9px 24px;font-size:15px;margin-right:10px}
 .poster.v .body{padding:0 38px 20px;margin-top:-34px;position:relative;z-index:1}
 .poster.v .t-card{border-radius:28px;padding:20px 20px 12px}
@@ -193,11 +195,11 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.h .left{position:absolute;left:0;top:0;bottom:0;width:380px;background:linear-gradient(160deg,var(--c1),var(--c2));padding:36px 34px 30px;display:flex;flex-direction:column;color:#fff}
 .poster.h .lg-wrap{width:218px;height:218px;border:6px solid rgba(255,255,255,.7);margin:0 auto 26px}
 .poster.h .lg-ph{font-size:26px}
-.poster.h .sub1{font-size:25px;letter-spacing:.16em;white-space:nowrap;font-weight:600;text-transform:uppercase}
+.poster.h .sub1{font-size:20px;letter-spacing:.16em;white-space:nowrap;font-weight:600;text-transform:uppercase}
 .poster.h h2.big{white-space:nowrap;color:#fff;letter-spacing:.01em;margin:6px 0 2px;font-size:var(--bigfs,64px);line-height:1;font-weight:800;text-transform:uppercase}
 .poster.h .sub2{font-size:20px;letter-spacing:.25em;font-weight:700;text-transform:uppercase;margin-bottom:22px}
 .poster.h .pill{padding:10px 12px;font-size:17px;white-space:normal;line-height:1.25;width:100%;text-align:center;margin-bottom:12px;max-width:100%}
-.poster.h .lgn{margin-top:auto;font-size:17px;font-weight:800;line-height:1.35;text-transform:uppercase;letter-spacing:.07em;text-shadow:0 2px 6px rgba(0,0,0,.18)}
+.poster.h .lgn{margin:-8px 0 16px;text-align:center;font-size:21px;font-weight:800;line-height:1.25;text-transform:uppercase;letter-spacing:.07em;text-shadow:0 2px 6px rgba(0,0,0,.18)}
 .poster.h .right{position:absolute;left:380px;right:0;top:0;bottom:0;padding:26px 38px 14px 36px;display:flex;flex-direction:column}
 .poster.h .t-card{border-radius:26px;padding:12px 18px;flex:1;display:flex;flex-direction:column;min-height:0}
 .poster.h .grid{grid-template-columns:64px 1fr 46px 46px 46px 46px 46px 46px 64px 84px;column-gap:6px}
@@ -1469,6 +1471,16 @@ function fsFor(rh){return rh<20?Math.max(8,rh-6):rh<26?12:rh<40?14:rh<46?17:20}
 function nfsFor(rh){return rh<20?Math.max(8,rh-7):rh<26?11:rh<40?13:rh<46?16:19}
 /* tamano del titulo lateral: con los estilos nuevos (Oswald, mas angosta) cabe una letra mas grande */
 function bigFor(catT,c,l){return Math.max(34,Math.min(64,Math.floor(312/(catT.length*(estiloCat(c,l)==='clasico'?0.76:0.56)))))}
+/* Titulo grande de la categoria: una linea si cabe a buen tamaño; si no, se parte en dos lineas equilibradas */
+function catBig(t,w,f,mx,mn){
+  const one=Math.floor(w/(t.length*f));
+  if(one>=mx*.7||t.indexOf(' ')<0)return{fs:Math.max(mn,Math.min(mx,one)),html:esc(t)};
+  const ws=t.split(' ');let best=null;
+  for(let i=1;i<ws.length;i++){const a=ws.slice(0,i).join(' '),b=ws.slice(i).join(' '),m=Math.max(a.length,b.length);if(!best||m<best.m)best={m,a,b}}
+  const two=Math.floor(w/(best.m*f));
+  if(two<=one)return{fs:Math.max(mn,Math.min(mx,one)),html:esc(t)};
+  return{fs:Math.max(mn,Math.min(mx,two)),html:esc(best.a)+'<br>'+esc(best.b)};
+}
 function posterHtml(){
   let h=posterHtml0();const est=estiloCat(C(),L());
   const esV=h.indexOf('class="poster v"')>=0;
@@ -1525,7 +1537,7 @@ function posterHtml0(){
   /* Juegos pendientes al pie de la tabla general (misma casilla que el rol de juegos) */
   const pendL=[],pendTab=pendHtml(pendL,c,c2,6),npT=Math.min(pendL.length,6),pHT=npT?10+52+Math.ceil(npT/2)*46:0;
   if(S.fmt==='v'&&(S.view||'tabla')==='tabla'){
-    const big=Math.max(40,Math.min(68,Math.floor(560/ (('TABLA GENERAL').length*0.74))));
+    const cb=catBig(catT,520,estiloCat(c,l)==='clasico'?0.76:0.6,84,38),big=cb.fs;
     // hasta 12 equipos tamano normal; con mas, las filas se reducen para que el cartel no crezca sin limite
     const unit=k>12?Math.max(24,Math.floor(12*81/k)):81, vrg=Math.max(2,Math.round(unit*.11)), vrh=unit-vrg, vsc=vrh/72;
     const vx=k>12?`--vrh:${vrh}px;--vrg:${vrg}px;--vfs:${Math.max(10,Math.round(21*vsc))}px;--vnfs:${Math.max(10,Math.round(19*vsc))}px;--vpfs:${Math.max(10,Math.round(19*vsc))}px;--vptf:${Math.max(11,Math.round(26*vsc))}px;`:'';
@@ -1533,8 +1545,9 @@ function posterHtml0(){
       <div class="top">
         ${leagueLogo(l)}
         <div>
-          <div class="sub">${esc(c.name)}${c.sub?' · '+esc(c.sub):''}</div>
-          <h2 class="big">Tabla General</h2>
+          <div class="sub lgv">${esc(l.name)}</div>
+          <h2 class="big">${cb.html}</h2>
+          <div class="sub tgv">Tabla General${c.sub?' · '+esc(c.sub):''}</div>
           <div>${jor}${fec}</div>
         </div>
       </div>
@@ -1549,16 +1562,16 @@ function posterHtml0(){
   const avail=545-pHT, rg=k>24?1:k>18?2:k>12?4:(est==='tv'?9:7); // TV: filas inclinadas, necesitan mas aire
   const rh=Math.max(12,Math.min(58,Math.floor((avail-(k-1)*rg)/Math.max(k,1))));
   const fs=fsFor(rh), nfs=nfsFor(rh), hx=hxVars(rh);
-  const bigfs=bigFor(catT,c,l);
+  const cbh=catBig(catT,312,estiloCat(c,l)==='clasico'?0.76:0.6,80,34),bigfs=cbh.fs;
   return `<div class="poster h" style="${style}--rh:${rh}px;--rg:${rg}px;--fs:${fs}px;--nfs:${nfs}px;--bigfs:${bigfs}px;${hx}">
     <div class="left">
       ${leagueLogo(l)}
+      <div class="lgn">${esc(l.name)}</div>
       <div class="sub1">Tabla General</div>
-      <h2 class="big">${esc(catT)}</h2>
+      <h2 class="big">${cbh.html}</h2>
       <div class="sub2">${esc(c.sub)}</div>
       ${c.jor?`<span class="pill w">Jornada ${esc(c.jor)}</span>`:''}
       ${c.fecha?`<span class="pill g">${esc(c.fecha)}</span>`:''}
-      <div class="lgn">${esc(l.name)}</div>
     </div>
     <div class="right">
       <div class="t-card">${headHtml}<div class="rows">${rowsHtml(list,c2)}</div></div>
