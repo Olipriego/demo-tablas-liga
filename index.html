@@ -154,16 +154,16 @@ input::placeholder,textarea::placeholder{color:#64748b}
 
 /* vertical */
 .poster.v{width:830px;min-height:900px}
-.poster.v .top{background:linear-gradient(135deg,var(--c1),var(--c2));padding:40px 46px 22px;display:flex;flex-direction:row;gap:30px;align-items:center;position:relative}
+.poster.v .top{background:linear-gradient(135deg,var(--c1),var(--c2));padding:40px 46px 22px;display:flex;flex-direction:row;gap:40px;align-items:center;position:relative}
 .poster.v .hrow{display:flex;align-items:center;justify-content:center;gap:28px}
 .poster.v .hcat{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-width:0}
-.poster.v .hcat .pill{margin:0 10px 0 0;padding:13px 30px;font-size:21px;display:inline-block}
+.poster.v .hcat .pill{margin:0 8px 0 0;padding:12px 24px;font-size:19px;display:inline-block}
 .poster.v .top:after{content:"";position:absolute;left:-10%;right:-10%;bottom:-70px;height:110px;background:var(--cream);border-radius:50%/100% 100% 0 0;transform:scaleY(.55);transform-origin:bottom}
-.poster.v .lg-wrap{width:150px;height:150px;border:5px solid rgba(255,255,255,.65)}
+.poster.v .lg-wrap{width:180px;height:180px;border:5px solid rgba(255,255,255,.65)}
 .poster.v .lg-ph{font-size:20px}
 .poster.v .sub{color:rgba(255,255,255,.9);font-weight:700;font-size:14px;letter-spacing:.2em;text-transform:uppercase}
 .poster.v .sub.lgv{font-family:'Oswald','Montserrat',sans-serif;font-size:40px;line-height:1.1;letter-spacing:.06em;font-weight:700;color:#ffe066;text-shadow:0 2px 8px rgba(0,0,0,.28);margin-bottom:6px;text-align:left}
-.poster.v .sub.tgv{font-size:22px;letter-spacing:.14em;margin:0 0 14px}
+.poster.v .sub.tgv{font-size:19px;letter-spacing:.1em;margin:0 0 14px}
 .poster.v h2.big{margin:6px 0 4px;font-size:68px;line-height:1;font-weight:800;color:#fff;letter-spacing:.015em;text-transform:uppercase;font-size:var(--bigfs,68px)}
 .poster.v .pill{padding:15px 36px;font-size:23px;margin-right:10px}
 .poster.v .body{padding:0 38px 20px;margin-top:0;position:relative;z-index:1}
@@ -437,12 +437,12 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sk-oro .rib{border:1.5px solid var(--ribink)}
 /* ===== Formato vertical para goleo, rol, sanciones y liguilla (.hv = diseño con panel lateral, .pv = rol con encabezado arriba) ===== */
 .poster.h.hv{width:830px;height:auto;min-height:820px;display:flex;flex-direction:column;--rh:66px!important;--rg:9px!important;--fs:21px!important;--nfs:19px!important;--pd:14px!important;--pd2:12px!important;--pfs:17px!important;--rad:16px!important;--rad2:10px!important}
-.poster.h.hv .left{position:relative;width:auto;left:auto;top:auto;bottom:auto;display:grid;grid-template-columns:150px 1fr;column-gap:30px;align-items:center;padding:40px 46px 28px}
-.poster.h.hv .lg-wrap{grid-row:1/8;width:150px;height:150px;margin:0;border-width:5px}
+.poster.h.hv .left{position:relative;width:auto;left:auto;top:auto;bottom:auto;display:grid;grid-template-columns:180px 1fr;column-gap:40px;align-items:center;padding:40px 46px 28px}
+.poster.h.hv .lg-wrap{grid-row:1/8;width:180px;height:180px;margin:0;border-width:5px}
 .poster.h.hv .left>*:not(.lg-wrap):not(.lgn){grid-column:2;margin-left:0;margin-right:0}
 .poster.h.hv h2.big{font-size:min(var(--bigfs,64px),56px);margin:4px 0 2px}
 .poster.h.hv .sub1{font-size:22px}.poster.h.hv .sub2{font-size:17px;margin-bottom:14px}
-.poster.h.hv .pill{width:auto;display:inline-block;justify-self:start;font-size:21px;padding:13px 30px;margin-bottom:10px}
+.poster.h.hv .pill{width:auto;display:inline-block;justify-self:start;font-size:19px;padding:12px 24px;margin-bottom:10px}
 .poster.h.hv .lgn{order:-1;grid-column:2;margin:0 0 6px;text-align:left;font-size:34px;line-height:1.1;letter-spacing:.05em}
 .poster.h.hv .right{position:relative;left:auto;right:auto;top:auto;bottom:auto;padding:24px 38px 26px;flex:1}
 .poster.h.hv .t-card{flex:1}
@@ -483,7 +483,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.v.sk .body{margin-top:0;padding-top:4px}
 .poster.v.sk-estadio .sub{color:#fff;letter-spacing:.14em;font-size:17px}
 .poster.v.sk-estadio .sub.lgv{font-size:34px;letter-spacing:.05em;color:#ffe066;text-shadow:0 2px 8px rgba(0,0,0,.45)}
-.poster.v.sk-estadio .sub.tgv{font-size:22px;letter-spacing:.14em;color:#fff}
+.poster.v.sk-estadio .sub.tgv{font-size:19px;letter-spacing:.1em;color:#fff}
 .poster.v.sk-estadio h2.big{color:var(--g1);text-shadow:2px 3px 0 rgba(0,0,0,.5)}
 .poster.v.sk-estadio .head{color:var(--g1)}
 .poster.v.sk-estadio .tr{border:2px solid var(--g2);border-radius:14px;background:var(--card)}
@@ -1543,7 +1543,7 @@ function posterHtml0(){
   /* Juegos pendientes al pie de la tabla general (misma casilla que el rol de juegos) */
   const pendL=[],pendTab=pendHtml(pendL,c,c2,6),npT=Math.min(pendL.length,6),pHT=npT?10+52+Math.ceil(npT/2)*46:0;
   if(S.fmt==='v'&&(S.view||'tabla')==='tabla'){
-    const cb=catBig(catT,560,estiloCat(c,l)==='clasico'?0.76:0.6,68,36),big=cb.fs;
+    const cb=catBig(catT,520,estiloCat(c,l)==='clasico'?0.76:0.6,68,36),big=cb.fs;
     // hasta 12 equipos tamano normal; con mas, las filas se reducen para que el cartel no crezca sin limite
     const unit=k>12?Math.max(24,Math.floor(12*81/k)):81, vrg=Math.max(2,Math.round(unit*.11)), vrh=unit-vrg, vsc=vrh/72;
     const vx=k>12?`--vrh:${vrh}px;--vrg:${vrg}px;--vfs:${Math.max(10,Math.round(21*vsc))}px;--vnfs:${Math.max(10,Math.round(19*vsc))}px;--vpfs:${Math.max(10,Math.round(19*vsc))}px;--vptf:${Math.max(11,Math.round(26*vsc))}px;`:'';
