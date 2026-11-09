@@ -591,6 +591,12 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sk-estadio:not(.sk-cartelera) .stripe{display:none}
 .poster.sk-estadio:not(.sk-cartelera) .foot{border-top:0!important}
 .poster.sk-estadio:not(.sk-cartelera) .tr{border:0!important}
+.poster.pq.sk-estadio .ban.nb{display:none}
+.poster.sk-estadio:not(.sk-cartelera) .pill.w,.poster.pq.sk-estadio .jb .a{background:linear-gradient(180deg,#ffd75e,#e0a100);color:#2a1a00;text-shadow:none;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.poster.pq.sk-estadio .jb{background:transparent;border:0;box-shadow:none;overflow:visible;gap:14px}
+.poster.pq.sk-estadio .jb .a{border:0;border-radius:16px}
+.poster.pq.sk-estadio .jb .b{border-radius:16px;background:linear-gradient(180deg,#27c3ff,#0a7fd8);color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.poster.pq.sk-estadio .jb .b small{color:#fff}
 .poster.sk-estadio:not(.sk-cartelera).h .left{border-right:0!important}
 
 /* ===== Versión 2: panel con pestañas y vista previa ajustable ===== */
@@ -1464,7 +1470,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
       <div class="ti" style="--sfs:${sfs}px">${small?`<div class="s">${esc(small)}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(first)}${rest2?` <em>${esc(rest2)}</em>`:''}</h1>${(c.sub||catT)?(()=>{const nt=(c.name||'').trim()||(c.sub||''),st=(c.name&&c.sub)?c.sub:'';return `<span class="rib" style="font-size:${Math.max(24,Math.min(44,Math.floor(400/(nt.length*0.6))))}px">${esc(nt)}${st?`<small>${esc(st)}</small>`:''}</span>`})():''}</div>
       ${jb}</div>
     ${cuerpo}
-    <div class="ban" style="font-size:${banfs}px"><i>★</i> ${esc(bantxt)} <i>★</i></div><div class="stripe b"></div></div>`;
+    <div class="ban${est==='estadio'&&!/^Descansa/.test(bantxt)?' nb':''}" style="font-size:${banfs}px"><i>★</i> ${esc(bantxt)} <i>★</i></div><div class="stripe b"></div></div>`;
 }
 
 /* Rol de juegos «Cartelera» (amarillo y azul): una tarjeta por partido con logos grandes, día y hora al centro y VS dorado.
