@@ -287,8 +287,8 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pq .stripe{position:absolute;left:0;right:0;top:0;height:10px;background:var(--stripe);z-index:3}
 .pq .stripe.b{top:auto;bottom:0}
 .pq .deco{position:absolute;inset:0;z-index:1;pointer-events:none;background:var(--deco)}
-.pq .hd{display:flex;align-items:center;gap:22px;min-height:196px;padding-top:22px;position:relative;z-index:2}
-.pq .lgo{width:150px;height:150px;border-radius:50%;flex:none;overflow:hidden;background:#fff;border:6px solid var(--ring);box-shadow:var(--ringsh);display:grid;place-items:center}
+.pq .hd{display:flex;align-items:center;gap:40px;min-height:196px;padding-top:22px;position:relative;z-index:2}
+.pq .lgo{width:180px;height:180px;border-radius:50%;flex:none;overflow:hidden;background:#fff;border:6px solid var(--ring);box-shadow:var(--ringsh);display:grid;place-items:center}
 .pq .lgo img{width:100%;height:100%;object-fit:cover}
 .pq .lgo b{font-size:42px;font-weight:900;color:var(--acc)}
 .pq .ti{flex:1;min-width:0}
@@ -351,6 +351,8 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sk-tv .ti h1{font-style:italic}
 .poster.pq.sk-oro .ti h1{color:var(--gl)}.poster.pq.sk-oro .ti h1 em{color:var(--gl)}
 .poster.pq.sk-neon .m .n,.poster.pq.sk-neon .ti h1{text-shadow:0 0 14px var(--acc)}
+.poster.pq .ti .s,.poster.pq .ti h1,.poster.pq .ti h1 em{color:#ffe066!important}
+.poster.pq.sk-moderno .ti .s,.poster.pq.sk-moderno .ti h1,.poster.pq.sk-cancha .ti .s,.poster.pq.sk-cancha .ti h1{text-shadow:0 2px 8px rgba(0,0,0,.38)}
 .poster.sk .legend b,.poster.sk .foot b{color:var(--lgb,var(--acc))}
 .poster.pq.sk-moderno .sec.r{color:#fff}
 /* ===== Diseños v2: tipografía Oswald y detalles por estilo (tabla y rol) ===== */
@@ -455,8 +457,8 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.h.hv .bk{flex:none;min-height:640px;gap:14px}
 .poster.h.hv .mr{font-size:12.5px}
 .poster.pv{width:830px;padding:0 30px 30px}
-.poster.pv .hd{height:auto;flex-wrap:wrap;gap:14px 22px;padding:28px 0 6px}
-.poster.pv .lgo{width:118px;height:118px}
+.poster.pv .hd{height:auto;flex-wrap:wrap;gap:14px 36px;padding:28px 0 6px}
+.poster.pv .lgo{width:150px;height:150px}
 .poster.pv .ti{flex:1 1 380px}
 .poster.pv .ti .s{font-size:21px;white-space:normal}
 .poster.pv .ti h1{font-size:min(54px,var(--h1,54px))!important;white-space:normal}
@@ -1391,7 +1393,7 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const bw=big.split(' '),first=bw[0],rest2=bw.slice(1).join(' ');
   const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
   /* el recuadro de jornada/fecha crece con el texto: el titulo se ajusta al espacio que le queda (el de la fecha conserva su tamano) */
-  const jbW=(jn?166:0)+(fecha?Math.min(400,fecha.length*15+48):0),availT=Math.min(600,1010-jbW-20);
+  const jbW=(jn?166:0)+(fecha?Math.min(400,fecha.length*15+48):0),availT=Math.min(600,1010-jbW-20-70);
   const h1fs=Math.max(30,Math.min(66,Math.floor(availT/(big.length*0.62))));
   const sfs=Math.max(15,Math.min(26,Math.floor(availT/(small.length*0.56||1))));
   const days=[...new Set(ms.map(m=>(m.day||'').trim()).filter(Boolean))],multi=days.length>1,dia='';
