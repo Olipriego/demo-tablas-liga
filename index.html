@@ -203,7 +203,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.h .sub2{font-size:20px;letter-spacing:.25em;font-weight:700;text-transform:uppercase;margin-bottom:22px}
 .poster.h .pill{padding:10px 12px;font-size:17px;white-space:normal;line-height:1.25;width:100%;text-align:center;margin-bottom:12px;max-width:100%}
 .poster.h .lgn{margin:-8px 0 18px;text-align:center;font-family:'Oswald','Montserrat',sans-serif;font-size:26px;font-weight:700;line-height:1.1;text-transform:uppercase;letter-spacing:.05em;color:#ffe066;text-shadow:0 2px 8px rgba(0,0,0,.3)}
-.poster.sk.h .lgn{color:var(--leftacc,#ffe066)}
+.poster.sk.h .lgn{color:#ffe066}
 .poster.h .right{position:absolute;left:380px;right:0;top:0;bottom:0;padding:26px 38px 14px 36px;display:flex;flex-direction:column}
 .poster.h .t-card{border-radius:26px;padding:12px 18px;flex:1;display:flex;flex-direction:column;min-height:0}
 .poster.h .grid{grid-template-columns:64px 1fr 46px 46px 46px 46px 46px 46px 64px 84px;column-gap:6px}
@@ -250,7 +250,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 /* ===== Estilos de diseño (selector «Estilo»): usan los 4 colores de la liga/categoría ===== */
 .poster.sk{background:var(--bg)}
 .poster.sk.h .left{background:var(--left);color:var(--leftink);border-right:var(--leftbd)}
-.poster.sk.h h2.big,.poster.sk.h .sub2,.poster.sk.h .lgn{color:var(--leftink)}
+.poster.sk.h h2.big,.poster.sk.h .sub2{color:var(--leftink)}
 .poster.sk.h .sub1{color:var(--leftacc)}
 .poster.sk.h .lg-wrap{border-color:var(--ring);box-shadow:var(--ringsh)}
 .poster.sk .pill.w{background:var(--ja);color:var(--jainks)}
@@ -437,13 +437,13 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sk-oro .rib{border:1.5px solid var(--ribink)}
 /* ===== Formato vertical para goleo, rol, sanciones y liguilla (.hv = diseño con panel lateral, .pv = rol con encabezado arriba) ===== */
 .poster.h.hv{width:830px;height:auto;min-height:820px;display:flex;flex-direction:column;--rh:66px!important;--rg:9px!important;--fs:21px!important;--nfs:19px!important;--pd:14px!important;--pd2:12px!important;--pfs:17px!important;--rad:16px!important;--rad2:10px!important}
-.poster.h.hv .left{position:relative;width:auto;left:auto;top:auto;bottom:auto;display:grid;grid-template-columns:176px 1fr;column-gap:26px;align-items:center;padding:34px 40px 34px}
-.poster.h.hv .lg-wrap{grid-row:1/8;width:176px;height:176px;margin:0;border-width:5px}
+.poster.h.hv .left{position:relative;width:auto;left:auto;top:auto;bottom:auto;display:grid;grid-template-columns:150px 1fr;column-gap:30px;align-items:center;padding:40px 46px 28px}
+.poster.h.hv .lg-wrap{grid-row:1/8;width:150px;height:150px;margin:0;border-width:5px}
 .poster.h.hv .left>*:not(.lg-wrap):not(.lgn){grid-column:2;margin-left:0;margin-right:0}
 .poster.h.hv h2.big{font-size:min(var(--bigfs,64px),56px);margin:4px 0 2px}
 .poster.h.hv .sub1{font-size:22px}.poster.h.hv .sub2{font-size:17px;margin-bottom:14px}
-.poster.h.hv .pill{width:auto;display:inline-block;justify-self:start;font-size:16px;padding:9px 20px;margin-bottom:10px}
-.poster.h.hv .lgn{grid-column:1/-1;margin-top:16px;text-align:center;font-size:15px}
+.poster.h.hv .pill{width:auto;display:inline-block;justify-self:start;font-size:21px;padding:13px 30px;margin-bottom:10px}
+.poster.h.hv .lgn{order:-1;grid-column:2;margin:0 0 6px;text-align:left;font-size:34px;line-height:1.1;letter-spacing:.05em}
 .poster.h.hv .right{position:relative;left:auto;right:auto;top:auto;bottom:auto;padding:24px 38px 26px;flex:1}
 .poster.h.hv .t-card{flex:1}
 .poster.h.hv .rows{flex:none}
