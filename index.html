@@ -488,7 +488,7 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.v.sk-estadio .sub.tgv{font-size:19px;letter-spacing:.1em;color:#fff}
 .poster.v.sk-estadio h2.big{color:var(--g1);text-shadow:2px 3px 0 rgba(0,0,0,.5)}
 .poster.v.sk-estadio .head{color:var(--g1)}
-.poster.v.sk-estadio .tr{border:2px solid var(--g2);border-radius:14px;background:var(--card)}
+.poster.v.sk-estadio .tr{border:0;border-radius:14px;background:var(--card)}
 .poster.v.sk-estadio .pts{border-radius:8px}
 .poster.v.sk .nm{font-size:calc(var(--vnfs,19px) - 3px);line-height:1.1}
 .poster.v.sk .grid{grid-template-columns:54px minmax(0,1fr) 40px 40px 40px 40px 42px 42px 52px 72px}
@@ -571,6 +571,27 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .pk .kob span{padding:10px 20px;font-size:21px;font-weight:800;line-height:1.3;text-align:justify}
 .pk .kft{text-align:center;margin-top:18px;letter-spacing:.08em;font-weight:800;color:#ffc93c;white-space:nowrap;text-transform:uppercase}
 .pk .empty{grid-column:1/-1;padding:60px 0;text-align:center;font-weight:800;font-size:22px}
+/* Rol de Estadio: mismas tarjetas de enfrentamiento que Cartelera (.kc), sin el borde amarillo de la tarjeta */
+.poster.pq.sk-estadio .kgr{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px;position:relative;z-index:2}
+.poster.pq.pv.sk-estadio .kgr{grid-template-columns:1fr}
+.poster.pq.sk-estadio .kc{height:var(--kch,200px);border:0;border-radius:12px;background:linear-gradient(90deg,#8a5a00 0%,#4a3300 30%,#0b1f52 50%,#0d2f80 70%,#1650c0 100%);display:flex;align-items:center;min-width:0}
+.poster.pq.sk-estadio .kc .tm{width:var(--ktw,250px);flex:none;text-align:center;padding:0 6px}
+.poster.pq.sk-estadio .kc .lg{width:var(--klw,136px);height:var(--klw,136px);margin:0 auto;border-radius:50%;background:#fff;border:5px solid #ffc93c;overflow:hidden;display:grid;place-items:center}
+.poster.pq.sk-estadio .kc .lg img{width:100%;height:100%;object-fit:cover}.poster.pq.sk-estadio .kc .lg b.ini{font-size:34px;font-weight:900;color:#0b2a6e}
+.poster.pq.sk-estadio .kc .nm{display:block;text-align:center;margin-top:8px;font-weight:800;text-transform:uppercase;line-height:1.08;overflow-wrap:anywhere;color:#fff;font-family:'Oswald','Montserrat',sans-serif}
+.poster.pq.sk-estadio .kc .mid{flex:1;min-width:0;align-self:stretch;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.poster.pq.sk-estadio .kc .mid:before{content:"";position:absolute;left:-30px;right:-30px;top:var(--kln,150px);height:3px;background:linear-gradient(90deg,rgba(255,201,60,0),#ffc93c 30%,#4fb3ff 70%,rgba(79,179,255,0))}
+.poster.pq.sk-estadio .kh{background:#0a1530;border:2px solid #e0a100;text-align:center;font-weight:700;padding:0 22px 4px;white-space:nowrap;margin-top:-6px;position:relative;font-family:'Oswald','Montserrat',sans-serif}
+.poster.pq.sk-estadio .kh small{display:block;color:#ffc93c;font-size:22px;letter-spacing:.14em;padding-top:2px;text-transform:uppercase}
+.poster.pq.sk-estadio .kh b{display:block;font-size:var(--khf,44px);line-height:1;color:#fff}
+.poster.pq.sk-estadio .kh.pd{padding:6px 24px;background:linear-gradient(180deg,#3a2a00,#1c1400)}.poster.pq.sk-estadio .kh.pd b{color:#ffc93c;font-size:calc(var(--khf,44px) - 6px)}
+.poster.pq.sk-estadio .vs{font-weight:700;font-size:var(--kvs,76px);line-height:1;color:#ffc93c;text-shadow:3px 4px 0 #3a2600;transform:skewX(-10deg);margin-top:4px;position:relative;font-family:'Oswald','Montserrat',sans-serif}
+.poster.pq.sk-estadio .empty{grid-column:1/-1}
+/* Estadio: sin las barras amarillas de arriba y abajo ni la linea amarilla sobre el pie */
+.poster.pq.sk-estadio:not(.sk-cartelera) .stripe{display:none}
+.poster.sk-estadio:not(.sk-cartelera) .foot{border-top:0!important}
+.poster.sk-estadio:not(.sk-cartelera) .tr{border:0!important}
+.poster.sk-estadio:not(.sk-cartelera).h .left{border-right:0!important}
 
 /* ===== Versión 2: panel con pestañas y vista previa ajustable ===== */
 .app{grid-template-columns:minmax(620px,660px) 1fr}
@@ -1436,8 +1457,9 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
   const lgo=l.logo?`<img src="${l.logo}">`:`<b>${esc(initials(l.name)).slice(0,3)}</b>`;
   const jb=`<div class="jb">${jn?`<div class="a"><small>JORNADA</small><b>${esc(jn)}</b></div>`:''}${(dia||fecha)?`<div class="b">${dia?`<small>${esc(dia)}</small>`:''}${fecha?`<b style="font-size:28px">${esc(fecha)}</b>`:''}</div>`:''}</div>`;
   const obsH=obs?`<div class="ob"><b>Observación</b><span>${esc(obs)}</span></div>`:'';
-  const cuerpo=solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${obsH}${pd}`;
-  return `<div class="poster pq${solo?' sancv':''} sk-${est==='cartelera'?'estadio sk-cartelera':est}" style="${style}"><div class="stripe"></div><div class="deco"></div>
+  const useK=est==='estadio'&&!solo,kc=useK?kCards(c,r,fx,ms,S.fmt==='v'):null;
+  const cuerpo=useK?`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="kgr">${kc.body}</div>${obsH}`:solo?((sg||obsH)?`<div class="sec r">Sanciones y observaciones</div>${sg}${obsH}`:'<div class="empty">Captura las sanciones y la observación de la jornada en la pestaña «Calendario»</div>'):`<div class="sec">Rol de juegos${(c.cancha||'').trim()?' · '+esc(c.cancha.trim()):''}</div><div class="rows">${rows}</div>${obsH}${pd}`;
+  return `<div class="poster pq${solo?' sancv':''} sk-${est==='cartelera'?'estadio sk-cartelera':est}" style="${style}${useK?kc.sz:''}"><div class="stripe"></div><div class="deco"></div>
     <div class="hd"><div class="lgo">${lgo}</div>
       <div class="ti" style="--sfs:${sfs}px">${small?`<div class="s">${esc(small)}</div>`:''}<h1 style="font-size:${h1fs}px">${esc(first)}${rest2?` <em>${esc(rest2)}</em>`:''}</h1>${(c.sub||catT)?(()=>{const nt=(c.name||'').trim()||(c.sub||''),st=(c.name&&c.sub)?c.sub:'';return `<span class="rib" style="font-size:${Math.max(24,Math.min(44,Math.floor(400/(nt.length*0.6))))}px">${esc(nt)}${st?`<small>${esc(st)}</small>`:''}</span>`})():''}</div>
       ${jb}</div>
@@ -1447,10 +1469,10 @@ function rolHtmlQ(l,c,style,c2,catT,est,modo){
 
 /* Rol de juegos «Cartelera» (amarillo y azul): una tarjeta por partido con logos grandes, día y hora al centro y VS dorado.
    Los juegos pendientes de otras jornadas salen como tarjetas «Pendiente · J#»; al final Descansa, observación y la liga. */
-function rolHtmlK(l,c,style,catT){
-  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?rolMs(r.m,c):[],T=id=>c.teams.find(t=>t.id===id),vert=S.fmt==='v';
+/* Tarjetas de enfrentamiento de Cartelera (una por partido, logos grandes, hora al centro y VS): las usan Cartelera y Estadio */
+function kCards(c,r,fx,ms,vert){
+  const T=id=>c.teams.find(t=>t.id===id);
   const lg=t=>t&&t.logo?`<img src="${t.logo}">`:`<b class="ini">${esc(t?initials(t.name):'')}</b>`;
-  const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
   const hb=(sm,big,pd)=>`<div class="kh${pd?' pd':''}">${sm?`<small>${esc(sm)}</small>`:''}<b>${esc(big)}</b></div>`;
   const centro=m=>{
     if(m.st==='post')return hb(m.day,'PENDIENTE',1);
@@ -1468,6 +1490,13 @@ function rolHtmlK(l,c,style,catT){
   const nfs=t=>{const s=(t&&t.name)||'',base=[20,18,16][comp]-(vert?0:2);return Math.max(12,Math.min(base,Math.floor(tw*1.7/(s.length*0.72||1))))};
   const lado=t=>`<div class="tm"><div class="lg">${lg(t)}</div><div class="nm" style="font-size:${nfs(t)}px">${esc(t?t.name:'')}</div></div>`;
   const body=n?cards.map(k=>`<div class="kc">${lado(k.h)}<div class="mid">${k.mid}<div class="vs">VS</div></div>${lado(k.a)}</div>`).join(''):'<div class="empty">Genera el calendario para ver el rol de juegos</div>';
+  return {sz,body,n};
+}
+function rolHtmlK(l,c,style,catT){
+  const fx=c.fx,r=fx&&fx.rounds[fx.sel],ms=r?rolMs(r.m,c):[],T=id=>c.teams.find(t=>t.id===id),vert=S.fmt==='v';
+  const lg=t=>t&&t.logo?`<img src="${t.logo}">`:`<b class="ini">${esc(t?initials(t.name):'')}</b>`;
+  const jn=r?((r.jl||'').trim()||fx.sel+1):(c.jor||''),fecha=((r&&r.fecha)||c.fecha||'').trim();
+  const {sz,body}=kCards(c,r,fx,ms,vert);
   const playing=new Set();(r?r.m:[]).forEach(m=>{playing.add(m.h);playing.add(m.a)});
   const rest=r&&c.restRol!==false?c.teams.filter(t=>!playing.has(t.id)&&t.name&&okJ(c,t.id,fx.sel)):[];
   const ds=rest.length?`<div class="kd">${rest.slice(0,3).map(t=>`<div class="lg">${lg(t)}</div>`).join('')}<div><small>DESCANSA</small><b style="font-size:${rest.length>1?26:34}px">${esc(rest.map(t=>t.name).join(', '))}</b></div></div>`:'';
