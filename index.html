@@ -522,7 +522,13 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster.pq.sk-estadio .pc .pj{font-size:13px;padding:4px 9px}.poster.pq.sk-estadio .pgr{gap:10px}
 .poster.pq.sk-estadio .pc .pj{background:var(--g2);color:#1b1405}
 .poster.pq.sk-estadio .ban{border-radius:12px;border-width:3px;padding:10px 70px}
-.poster.pq.sk-estadio .sk{border:1.5px solid var(--g2);border-left:6px solid var(--red)}
+/* Estadio: sin lineas amarillas en rol de juegos y sanciones (filas, tarjetas, encabezados de seccion y observacion) */
+.poster.pq.sk-estadio:not(.sk-cartelera) .sk{border:0;border-left:6px solid var(--red)}
+.poster.pq.sk-estadio:not(.sk-cartelera) .m,.poster.pq.sk-estadio:not(.sk-cartelera) .m:nth-child(even){border:0}
+.poster.pq.sk-estadio:not(.sk-cartelera) .pc{border:0}
+.poster.pq.sk-estadio:not(.sk-cartelera) .ob{border:0}
+.poster.pq.sk-estadio:not(.sk-cartelera) .sec{justify-content:center}
+.poster.pq.sk-estadio:not(.sk-cartelera) .sec:before,.poster.pq.sk-estadio:not(.sk-cartelera) .sec:after{display:none}
 /* Cartelera (amarillo y azul): usa la piel de Estadio en tabla, goleo y sanciones; filas de dorado (local) a azul (visita) */
 .poster.sk-cartelera .tr,.poster.pq.sk-cartelera .m,.poster.pq.sk-cartelera .m:nth-child(even){border-color:#e0a100}
 .poster.pq.sk-cartelera .m:nth-child(even) .t{background:var(--gold);color:#2a1b00}
@@ -1337,7 +1343,7 @@ function skinVars(est,tgt,c1,c2,B,I){
     base({
     bg:est==='estadio'?estadioFoto():stadiumBg(P),ink:'#ffffff',acc:G1,stripe:'linear-gradient(90deg,'+G3+','+G1+','+G3+')',ring:G1,ringsh:'0 0 0 4px '+rgba(G1,.3),
     rib:rgba(nv,.7),ribink:G1,ribline:G2,ja:blue,jainks:'#ffffff',jb:rgba(nv,.75),jbink:'#ffffff',jbsm:G1,jsh:'none',pgbd:'1px solid '+G2,
-    line1:G2,red:'#ff7a7a',redline:rgba('#ff7a7a',.5),card:'linear-gradient(180deg,'+rgba(shade(P,-.66),.97)+','+rgba(shade(P,-.82),.97)+')',cink:'#ffffff',rad:'12px',cbd:'2px solid '+G2,csh:'none',
+    line1:G2,red:'#ff7a7a',redline:rgba('#ff7a7a',.5),card:'linear-gradient(90deg,#6e4800 0%,#3a2800 22%,#0b1f52 50%,#0d2f80 100%)',cink:'#ffffff',rad:'12px',cbd:'2px solid '+G2,csh:'none',
     tbg:gold,tink:DK,tsm:DK,lring:'#ffffff',vbg:rgba(nv,.9),vink:b1,vring:'#aeb9c7',chip:rgba(G1,.2),chipink:G1,
     obline:G2,obbg:gold,obink:DK,banbg:'linear-gradient(180deg,#f7fafd,#aab6c6)',banink:'#101a30',banline:'#dbe4ef',banstar:'#101a30',deco:'none',
     left:'transparent',leftink:'#ffffff',leftbd:'1px solid '+rgba(G1,.4),leftacc:G1,hdink:G1,posbg:'transparent',posink:G1,
