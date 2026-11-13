@@ -151,8 +151,8 @@ input::placeholder,textarea::placeholder{color:#64748b}
 .poster .up{color:#3f8f4c}.poster .dn{color:#c0552d}
 .poster .legend b{color:var(--c2)}
 /* Marca de clasificados a liguilla en la tabla general (casilla en la pestaña Liguilla) */
-.poster .tr.q{border:3px solid #16a34a!important}
-.poster .legend .qd,.poster .foot .qd{display:inline-block;width:.9em;height:.7em;border:2px solid #16a34a;border-radius:3px;vertical-align:-.05em}
+.poster .tr.q{border:3px solid var(--c2)!important}
+.poster .legend .qd,.poster .foot .qd{display:inline-block;width:.9em;height:.7em;border:2px solid var(--c2);border-radius:3px;vertical-align:-.05em}
 .poster .empty{text-align:center;padding:60px 0;color:var(--muted);font-weight:700}
 
 /* vertical */
@@ -1594,7 +1594,7 @@ function posterHtml0(){
   const catT=(c.name||'Categoría').toUpperCase();
 
   /* Juegos pendientes al pie de la tabla general (misma casilla que el rol de juegos) */
-  const mkQ=(c.lig&&c.lig.marca)?new Set((c.lig.seeds||[]).filter(Boolean)):null,qLeg=mkQ&&mkQ.size?'<span class="qd"></span> Clasificados a liguilla':'';
+  const mkQ=(c.lig&&c.lig.marca!==false)?new Set((c.lig.seeds||[]).filter(Boolean)):null,qLeg=mkQ&&mkQ.size?'<span class="qd"></span> Clasificados a liguilla':'';
   const pendL=[],pendTab=pendHtml(pendL,c,c2,6),npT=Math.min(pendL.length,6),pHT=npT?10+52+Math.ceil(npT/2)*46:0;
   if(S.fmt==='v'&&(S.view||'tabla')==='tabla'){
     const cb=catBig(catT,520,estiloCat(c,l)==='clasico'?0.76:0.6,68,36),big=cb.fs;
@@ -2133,7 +2133,7 @@ function renderLig(){
   const opts=sel=>'<option value="">—</option>'+c.teams.map(t=>'<option value="'+t.id+'"'+(t.id===sel?' selected':'')+'>'+esc(t.name||'(sin nombre)')+'</option>').join('');
   const dup=L.seeds.filter((id,i)=>id&&L.seeds.indexOf(id)!==i).length;
   let h='<div class="card"><div class="row"><label class="chk"><input type="checkbox" data-o="double"'+(L.double?' checked':'')+'> Cuartos y semifinales a ida y vuelta</label></div>'
-   +'<div class="row" style="margin-top:6px"><label class="chk"><input type="checkbox" data-o="marca"'+(L.marca?' checked':'')+'> Marcar en la tabla general a los clasificados (recuadro verde alrededor de su fila)</label></div>'
+   +'<div class="row" style="margin-top:6px"><label class="chk"><input type="checkbox" data-o="marca"'+(L.marca!==false?' checked':'')+'> Marcar en la tabla general a los clasificados (recuadro con el color de la liga alrededor de su fila)</label></div>'
    +'<div class="row" style="margin-top:6px"><label class="chk"><input type="checkbox" data-o="tieSeed"'+(L.tieSeed?' checked':'')+'> Si empatan sin penales, avanza el mejor posicionado</label></div>'
    +'<div class="row" style="margin-top:10px"><button class="btn sm" data-act="fill">Llenar clasificados desde la tabla general</button><button class="btn sm del" data-act="delete">Borrar liguilla</button></div></div>'
    +'<div class="card" style="margin-top:8px"><b style="font-size:12px">Clasificados</b>'+(dup?'<div class="warn">⚠ Hay un equipo repetido en la lista</div>':'')
