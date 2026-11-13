@@ -2158,7 +2158,7 @@ $('ligBox').addEventListener('click',e=>{
 });
 $('ligBox').addEventListener('change',e=>{
   const c=C(),L=c.lig;if(!L)return;
-  if(e.target.dataset.o){L[e.target.dataset.o]=e.target.checked;if(e.target.dataset.o!=='marca')S.view='lig';save();renderLig();renderTabs();renderPreview();return}
+  if(e.target.dataset.o){L[e.target.dataset.o]=e.target.checked;S.view=e.target.dataset.o==='marca'?'tabla':'lig';save();renderLig();renderTabs();renderPreview();return}
   const tr=e.target.closest('tr[data-s]');
   if(tr){L.seeds[+tr.dataset.s]=e.target.value;S.view='lig';save();renderLig();renderTabs();renderPreview();return}
   if(e.target.closest('.lm'))renderLig();
